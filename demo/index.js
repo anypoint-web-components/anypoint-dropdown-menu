@@ -6,6 +6,8 @@ import '@anypoint-web-components/anypoint-item/anypoint-item.js';
 import '@anypoint-web-components/anypoint-listbox/anypoint-listbox.js';
 import '../anypoint-dropdown-menu.js';
 
+const hasFormAssociatedElements = 'attachInternals' in document.createElement('span');
+
 class ComponentDemo extends ArcDemoPage {
   constructor() {
     super();
@@ -38,6 +40,16 @@ class ComponentDemo extends ArcDemoPage {
       'yandusaurus',
       'zephyrosaurus'
     ];
+
+    this._formSubmit = this._formSubmit.bind(this);
+  }
+
+  get formData() {
+    return this._formData;
+  }
+
+  set formData(value) {
+    this._setObservableProperty('formData', value);
   }
 
   _mdHandler(e) {
@@ -46,6 +58,19 @@ class ComponentDemo extends ArcDemoPage {
     } else {
       document.body.classList.remove('material');
     }
+  }
+
+  _formSubmit(e) {
+    e.preventDefault();
+    const result = {};
+    for (let i = 0; i < e.target.elements.length; i++) {
+      const node = e.target.elements[i];
+      if (!node.name) {
+        continue;
+      }
+      result[node.name] = node.value;
+    }
+    this.formData = JSON.stringify(result, null, 2);
   }
 
 
@@ -160,6 +185,37 @@ class ComponentDemo extends ArcDemoPage {
           ${this.items.map((item) => html`<anypoint-item>${item}</anypoint-item>`)}
           </anypoint-listbox>
         </anypoint-dropdown-menu>
+      </div>
+
+      <div class="card">
+        <h3>Form-associated custom elements</h3>
+        <p>
+          Form-associated custom elements enable web authors to define and create
+          custom elements which participate in form submission.
+
+          Learn more: <a href="https://www.chromestatus.com/feature/4708990554472448" target="_blank">Chrome status</a>
+        </p>
+        ${hasFormAssociatedElements ?
+          html`<p>Your browser support this API</p>` :
+          html`<p>Your browser <b>does not</b> support this API</p>`}
+
+        <form enctype="application/json" @submit="${this._formSubmit}">
+          <fieldset name="form-fiels">
+            <legend>Form fields</legend>
+            <anypoint-dropdown-menu required name="dino">
+              <label slot="label">Select a dinosaur</label>
+              <anypoint-listbox slot="dropdown-content" tabindex="-1">
+              ${this.items.map((item) => html`<anypoint-item>${item}</anypoint-item>`)}
+              </anypoint-listbox>
+            </anypoint-dropdown-menu>
+
+            <input type="text" name="textInput" />
+          </fieldset>
+          <input type="reset" value="Reset">
+          <input type="submit" value="Submit">
+        </form>
+
+        ${this.formData ? html`<b>Form values</b><output>${this.formData}</output>`:undefined}
       </div>
     `;
   }

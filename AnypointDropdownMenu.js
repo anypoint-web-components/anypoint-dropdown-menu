@@ -15,14 +15,14 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       position: relative;
       text-align: left;
       cursor: pointer;
-      border: 1px #E0E0E0 solid;
+      border: 1px var(--anypoint-dropdown-menu-border-color, #E0E0E0) solid;
       -webkit-tap-highlight-color: rgba(0,0,0,0);
       -webkit-tap-highlight-color: transparent;
       background-color: var(--anypoint-dropdown-menu-background-color, #F5F5F5);
       border-radius: 3px;
-      padding: 0 4px;
       box-sizing: border-box;
       margin: 12px 8px;
+      outline: none;
     }
 
     :host([disabled]) anypoint-icon-button {
@@ -43,6 +43,13 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       border-bottom: 2px solid var(--anypoint-dropdown-error-color, var(--error-color));
     }
 
+    :host([opened]),
+    :host([focused]),
+    :host(:focus) {
+      background-color: var(--anypoint-dropdown-menu-focus-background-color, #fff);
+      border-color: var(--anypoint-dropdown-menu-hover-border-color, var(--anypoint-color-coreBlue3));
+    }
+
     .input-wrapper {
       display: flex;
       flex-direction: row;
@@ -51,7 +58,21 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
 
     .input {
       flex: 1;
-      padding: 2px 4px;
+      margin: 0px 0px 0px 8px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      max-width: calc(100% - 40px);
+      overflow: auto;
+    }
+
+    :host(:dir(rtl)) .input {
+      text-align: right;
+      margin: 0px 8px 0px 0px;
+    }
+
+    :host([dir="rtl"]) .input {
+      text-align: right;
+      margin: 0px 8px 0px 0px;
     }
 
     .input-spacer {
@@ -69,22 +90,36 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       transition: top 0.12s ease-in-out;
       will-change: top;
       border-radius: 3px;
-      padding: 2px;
-      left: 6px;
+      margin: 0;
+      padding: 0;
+      left: 8px;
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
       max-width: calc(100% - 40px);
     }
 
+    :host(:dir(rtl)) .label {
+      text-align: right;
+      right: 8px;
+      left: auto;
+    }
+    /* Not every browser support syntax above and for those who doesn't
+      this style has to be repeated or it won't be applied. */
+    :host([dir="rtl"]) .label {
+      text-align: right;
+      right: 8px;
+      left: auto;
+    }
+
     .label.without-value {
-      top: calc(100% / 2 - 11px);
+      top: calc(100% / 2 - 8px);
       font-size: 14px;
     }
 
     .label.with-value {
       background-color: var(--anypoint-dropdown-menu-label-background-color, white);
-      top: -12px;
+      top: -8px;
     }
 
     .trigger-icon {
@@ -96,7 +131,26 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     .trigger-icon.opened {
       transform: rotate(-180deg);
     }
+
+    anypoint-dropdown {
+      border-bottom: 2px var(--anypoint-dropdown-menu-border-color, #E0E0E0) solid;
+      border-top: 2px var(--anypoint-dropdown-menu-border-color, #E0E0E0) solid;
+      margin-top: 41px;
+    }
+
+    :host([verticalalign="bottom"]) anypoint-dropdown {
+      margin-bottom: 41px;
+      margin-top: auto;
+    }
     `;
+  }
+
+  static get formAssociated() {
+    return true;
+  }
+
+  get form() {
+    return this._internals && this._internals.form || null;
   }
 
   static get properties() {
@@ -138,6 +192,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       dynamicAlign: { type: Boolean, reflect: true },
       opened: { type: Boolean, reflect: true },
       value: { type: String },
+      name: { type: String },
       required: { type: Boolean, reflect: true },
       autoValidate: { type: Boolean, reflect: true }
     };
@@ -158,22 +213,6 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     }
     this.__selectedItem = value;
     this._selectedItemChanged(value);
-  }
-
-  get selectedItemLabel() {
-    return this._selectedItemLabel;
-  }
-
-  get _selectedItemLabel() {
-    return this.__selectedItemLabel;
-  }
-
-  set _selectedItemLabel(value) {
-    const old = this.__selectedItemLabel;
-    if (old === value) {
-      return;
-    }
-    this.__selectedItemLabel = value;
   }
 
   get opened() {
@@ -206,6 +245,22 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     return null;
   }
 
+  get value() {
+    return this._value;
+  }
+
+  set value(value) {
+    const old = this._value;
+    if (old === value) {
+      return;
+    }
+    this._value = value;
+    this.requestUpdate('value', old);
+    if (this._internals) {
+      this._internals.setFormValue(value);
+    }
+  }
+
   constructor() {
     super();
     this.horizontalAlign = 'left';
@@ -221,6 +276,10 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
 
     this._clickHandler = this._clickHandler.bind(this);
     this._onKeydown = this._onKeydown.bind(this);
+    this._focusHandler = this._focusHandler.bind(this);
+    if (this.attachInternals) {
+      this._internals = this.attachInternals();
+    }
   }
 
   connectedCallback() {
@@ -244,6 +303,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     }
     this.addEventListener('click', this._clickHandler);
     this.addEventListener('keydown', this._onKeydown);
+    this.addEventListener('focus', this._focusHandler);
   }
 
   disconnectedCallback() {
@@ -252,6 +312,24 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     }
     this.removeEventListener('click', this._clickHandler);
     this.removeEventListener('keydown', this._onKeydown);
+    this.removeEventListener('focus', this._focusHandler);
+  }
+
+  formDisabledCallback(disabled) {
+    this.disabled = disabled;
+  }
+
+  formResetCallback() {
+    this.value = '';
+    const node = this.contentElement;
+    if (node) {
+      node.selected = undefined;
+    }
+    this._internals.setFormValue('');
+  }
+
+  formStateRestoreCallback(state) {
+    this._internals.setFormValue(state);
   }
 
   firstUpdated() {
@@ -263,8 +341,27 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
   }
 
   _clickHandler(e) {
-    if (e.path.indexOf(this) !== -1 && !this.opened) {
+    const path = e.path || e.composedPath && e.composedPath();
+    if (!path) {
+      return;
+    }
+    if (path.indexOf(this) !== -1 && !this.opened) {
       this.opened = true;
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  }
+
+  _focusContent() {
+    const node = this.contentElement;
+    if (node) {
+      node.focus();
+    }
+  }
+
+  _focusHandler() {
+    if (this.opened) {
+      this._focusContent();
     }
   }
   /**
@@ -281,16 +378,24 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     }
   }
 
-  _onDownKey() {
+  _onDownKey(e) {
     if (!this.opened) {
       this.opened = true;
+    } else {
+      this._focusContent();
     }
+    e.preventDefault();
+    e.stopPropagation();
   }
 
-  _onUpKey() {
+  _onUpKey(e) {
     if (!this.opened) {
       this.opened = true;
+    } else {
+      this._focusContent();
     }
+    e.preventDefault();
+    e.stopPropagation();
   }
 
   _onEscKey() {
@@ -306,14 +411,11 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
    */
   _selectedItemChanged(selectedItem) {
     let value = '';
-    if (!selectedItem) {
-      value = '';
-    } else {
+    if (selectedItem) {
       value = selectedItem.label || selectedItem.getAttribute('label') ||
         selectedItem.textContent.trim();
     }
     this.value = value;
-    this._selectedItemLabel = value;
   }
 
   toggle(e) {
@@ -341,11 +443,26 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     this.opened = false;
     if (this.autoValidate) {
       this.validate();
+      this._updateNativeValidationState();
+    }
+    this.focus();
+  }
+
+  _updateNativeValidationState() {
+    if (!this._internals) {
+      return;
+    }
+    if (this.invalid) {
+      this._internals.setValidity({
+        customError: true
+      }, 'Please select a value.');
+    } else {
+      this._internals.setValidity({});
     }
   }
 
   _dropdownOpened() {
-    this.contentElement.focus();
+    this._focusContent();
   }
 
   _activateHandler(e) {
@@ -375,6 +492,10 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     }
   }
 
+  checkValidity() {
+    return this._getValidity() && ((this._internals && this._internals.checkValidity()) || true);
+  }
+
   render() {
     const {
       opened,
@@ -391,6 +512,8 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       restoreFocusOnClose,
       value
     } = this;
+
+    const renderValue = opened ? '' : value || '';
     return html`
     <div class="label ${value && !opened ? 'with-value' : 'without-value'}">
       <slot name="label"></slot>
@@ -398,11 +521,11 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
 
     <div class="input-wrapper">
       <div class="input">
-        <span class="input-spacer">a</span>
-        ${value || ' '}
+        ${renderValue}
+        <span class="input-spacer">&nbsp;</span>
       </div>
-      <anypoint-icon-button @click="${this.toggle}">
-        <button tabindex="-1">
+      <anypoint-icon-button @click="${this.toggle}" aria-label="Toggles dropdown menu">
+        <button tabindex="-1" aria-label="Toggles dropdown menu">
           <iron-icon
             class="trigger-icon ${opened ? 'opened' : ''}"
             icon="paper-dropdown-menu:arrow-drop-down"></iron-icon>
