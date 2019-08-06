@@ -23,7 +23,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       display: inline-block;
       position: relative;
       text-align: left;
-      cursor: pointer;
+      cursor: default;
       border: 1px var(--anypoint-dropdown-menu-border-color, #E0E0E0) solid;
       -webkit-tap-highlight-color: rgba(0,0,0,0);
       -webkit-tap-highlight-color: transparent;
