@@ -290,6 +290,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
 
   set _selectedItem(value) {
     const old = this.__selectedItem;
+    /* istanbul ignore if */
     if (old === value) {
       return;
     }
@@ -338,6 +339,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     }
     this._value = value;
     this.requestUpdate('value', old);
+    /* istanbul ignore else */
     if (this._internals) {
       this._internals.setFormValue(value);
     }
@@ -359,12 +361,14 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     this._clickHandler = this._clickHandler.bind(this);
     this._onKeydown = this._onKeydown.bind(this);
     this._focusHandler = this._focusHandler.bind(this);
+    /* istanbul ignore else */
     if (this.attachInternals) {
       this._internals = this.attachInternals();
     }
   }
 
   connectedCallback() {
+    /* istanbul ignore else */
     if (super.connectedCallback) {
       super.connectedCallback();
     }
@@ -404,6 +408,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
   formResetCallback() {
     this.value = '';
     const node = this.contentElement;
+    /* istanbul ignore else */
     if (node) {
       node.selected = undefined;
     }
@@ -433,9 +438,11 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
    */
   _clickHandler(e) {
     const path = e.path || e.composedPath && e.composedPath();
+    /* istanbul ignore if */
     if (!path) {
       return;
     }
+    /* istanbul ignore else */
     if (path.indexOf(this) !== -1 && !this.opened) {
       this.opened = true;
       e.preventDefault();
@@ -530,10 +537,14 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     }
     this.value = value;
   }
-
+  /**
+   * Toggles `opened` state.
+   *
+   * @param {?MouseEvent} e When set it cancels the event
+   */
   toggle(e) {
     this.opened = !this.opened;
-    if (e) {
+    if (e && e.preventDefault) {
       e.preventDefault();
       e.stopPropagation();
     }
