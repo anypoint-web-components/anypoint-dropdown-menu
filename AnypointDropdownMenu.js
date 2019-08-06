@@ -578,12 +578,12 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     this._focusContent();
   }
 
-  _activateHandler(e) {
+  _selectHandler(e) {
     this.opened = false;
     this._selectedItem = e.detail.item;
   }
 
-  _deactivateHandler() {
+  _deselectHandler() {
     this._selectedItem = null;
   }
   /**
@@ -662,8 +662,8 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       .restoreFocusOnClose="${restoreFocusOnClose}"
       @overlay-closed="${this._dropdownClosed}"
       @overlay-opened="${this._dropdownOpened}"
-      @activate="${this._activateHandler}"
-      @deactivate="${this._deactivateHandler}">
+      @select="${this._selectHandler}"
+      @deselect="${this._deselectHandler}">
       <div slot="dropdown-content" class="dropdown-content">
         <slot id="content" name="dropdown-content"></slot>
       </div>
