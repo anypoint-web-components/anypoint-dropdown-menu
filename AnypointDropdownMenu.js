@@ -286,17 +286,11 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     if (super.connectedCallback) {
       super.connectedCallback();
     }
-    if (!this.hasAttribute('role')) {
-      this.setAttribute('role', 'combobox');
-    }
     if (!this.hasAttribute('tabindex')) {
       this.setAttribute('tabindex', '0');
     }
-    if (!this.hasAttribute('aria-autocomplete')) {
-      this.setAttribute('aria-autocomplete', 'none');
-    }
     if (!this.hasAttribute('aria-haspopup')) {
-      this.setAttribute('aria-haspopup', 'true');
+      this.setAttribute('aria-haspopup', 'listbox');
     }
     if (!this.hasAttribute('aria-expanded')) {
       this.setAttribute('aria-expanded', 'false');
@@ -486,6 +480,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
 
   _openedChanged(opened) {
     const openState = opened ? 'true' : 'false';
+    this.setAttribute('aria-expanded', openState);
     const e = this.contentElement;
     if (e) {
       e.setAttribute('aria-expanded', openState);
