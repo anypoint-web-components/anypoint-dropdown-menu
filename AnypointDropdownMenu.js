@@ -4,7 +4,16 @@ import { ValidatableMixin } from '@anypoint-web-components/validatable-mixin/val
 import '@anypoint-web-components/anypoint-dropdown/anypoint-dropdown.js';
 import '@anypoint-web-components/anypoint-button/anypoint-icon-button.js';
 import './anypoint-dropdown-menu-icons.js';
-
+/**
+ * Accessible dropdown menu for Anypoint platform.
+ *
+ * The element works perfectly with `anypoint-listbox` which together creates an
+ * accessible list of options. The listbox can be replaced by any other element
+ * that support similar functionalit but make sure it has an appropiate aria
+ * support.
+ *
+ * See README.md file for detailed documentation.
+ */
 export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(LitElement)) {
   static get styles() {
     return css`
@@ -144,11 +153,17 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     }
     `;
   }
-
+  /**
+   * For form-associated custom elements. Marks this custom element
+   * as form enabled element.
+   */
   static get formAssociated() {
     return true;
   }
-
+  /**
+   * When form-associated custom elements are supported in the browser it
+   * returns `<form>` element associated with this constol.
+   */
   get form() {
     return this._internals && this._internals.form || null;
   }
@@ -184,17 +199,84 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
        * Prefer directly setting the `scrollAction` property.
        */
       allowOutsideScroll: { type: Boolean, reflect: true },
-
+      /**
+       * The orientation against which to align the element vertically
+       * relative to the `positionTarget`. Possible values are "top", "bottom",
+       * "middle", "auto".
+       */
       verticalAlign: { type: String },
+      /**
+       * The orientation against which to align the element horizontally
+       * relative to the `positionTarget`. Possible values are "left", "right",
+       * "center", "auto".
+       */
       horizontalAlign: { type: String },
+      /**
+       * A pixel value that will be added to the position calculated for the
+       * given `verticalAlign`, in the direction of alignment. You can think
+       * of it as increasing or decreasing the distance to the side of the
+       * screen given by `verticalAlign`.
+       *
+       * If `verticalAlign` is "top" or "middle", this offset will increase or
+       * decrease the distance to the top side of the screen: a negative offset
+       * will move the dropdown upwards; a positive one, downwards.
+       *
+       * Conversely if `verticalAlign` is "bottom", this offset will increase
+       * or decrease the distance to the bottom side of the screen: a negative
+       * offset will move the dropdown downwards; a positive one, upwards.
+       */
       verticalOffset: { type: Number },
+      /**
+       * A pixel value that will be added to the position calculated for the
+       * given `horizontalAlign`, in the direction of alignment. You can think
+       * of it as increasing or decreasing the distance to the side of the
+       * screen given by `horizontalAlign`.
+       *
+       * If `horizontalAlign` is "left" or "center", this offset will increase or
+       * decrease the distance to the left side of the screen: a negative offset
+       * will move the dropdown to the left; a positive one, to the right.
+       *
+       * Conversely if `horizontalAlign` is "right", this offset will increase
+       * or decrease the distance to the right side of the screen: a negative
+       * offset will move the dropdown to the right; a positive one, to the left.
+       */
       horizontalOffset: { type: Number },
+      /**
+       * If true, it will use `horizontalAlign` and `verticalAlign` values as
+       * preferred alignment and if there's not enough space, it will pick the
+       * values which minimize the cropping.
+       */
       dynamicAlign: { type: Boolean, reflect: true },
+      /**
+       * True if the list is currently displayed.
+       */
       opened: { type: Boolean, reflect: true },
+      /**
+       * Selected item value calculated as it's (in order) label property, label
+       * attribute, and `innerText` value.
+       */
       value: { type: String },
+      /**
+       * Name of the form control.
+       * Note, form-associated custom elements may not be supported as first
+       * implementation was released in Chrome M77 in July 2019. It may require
+       * using custom form element to gather form data.
+       */
       name: { type: String },
+      /**
+       * When set it marks the element as required. Calling the `validate`
+       * function will mark this control as invalid when no value is selected.
+       */
       required: { type: Boolean, reflect: true },
-      autoValidate: { type: Boolean, reflect: true }
+      /**
+       * Automatically calls `validate()` function when dropdown closes.
+       */
+      autoValidate: { type: Boolean, reflect: true },
+      /**
+       * Will position the list around the button without overlapping
+       * it.
+       */
+      noOverlap: { type: Boolean }
     };
   }
 
@@ -229,7 +311,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     this._openedChanged(value);
   }
   /**
-   * The content element that is contained by the dropdown menu, if any.
+   * @return {?Element} The content element that is contained by the dropdown menu, if any.
    */
   get contentElement() {
     const slot = this.shadowRoot.querySelector('slot[name="dropdown-content"]');
@@ -308,11 +390,18 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     this.removeEventListener('keydown', this._onKeydown);
     this.removeEventListener('focus', this._focusHandler);
   }
-
+  /**
+   * When form-associated custom elements are supported in the browser it
+   * is called when for disabled state changed.
+   * @param {Boolean} disabled Form disabled state
+   */
   formDisabledCallback(disabled) {
     this.disabled = disabled;
   }
-
+  /**
+   * When form-associated custom elements are supported in the browser it
+   * is called when the form has been reset
+   */
   formResetCallback() {
     this.value = '';
     const node = this.contentElement;
@@ -321,7 +410,12 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     }
     this._internals.setFormValue('');
   }
-
+  /**
+   * When form-associated custom elements are supported in the browser it
+   * is called when the form state has been restored
+   *
+   * @param {String} state Restored value
+   */
   formStateRestoreCallback(state) {
     this._internals.setFormValue(state);
   }
@@ -333,7 +427,11 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       this._selectedItem = item;
     }
   }
-
+  /**
+   * Handler for `click` event.
+   * Opens the list of the click originated from the shadow DOM.
+   * @param {MouseEvent} e
+   */
   _clickHandler(e) {
     const path = e.path || e.composedPath && e.composedPath();
     if (!path) {
@@ -345,14 +443,19 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       e.stopPropagation();
     }
   }
-
+  /**
+   * Focuses on the listbox, if available.
+   */
   _focusContent() {
     const node = this.contentElement;
     if (node) {
       node.focus();
     }
   }
-
+  /**
+   * Handler for the `focus` event.
+   * Focuses on the listbox when opened.
+   */
   _focusHandler() {
     if (this.opened) {
       this._focusContent();
@@ -371,7 +474,14 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       this._onEscKey(e);
     }
   }
-
+  /**
+   * Handler for ArrowDown button press.
+   * Opens the list if it's not open and focuses on the list otherwise.
+   *
+   * The event should be cancelled or it may cause unwanted behavior.
+   *
+   * @param {KeyboardEvent} e
+   */
   _onDownKey(e) {
     if (!this.opened) {
       this.opened = true;
@@ -381,7 +491,14 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     e.preventDefault();
     e.stopPropagation();
   }
-
+  /**
+   * Handler for ArrowUp button press.
+   * Opens the list if it's not open and focuses on the list otherwise.
+   *
+   * The event should be cancelled or it may cause unwanted behavior.
+   *
+   * @param {KeyboardEvent} e
+   */
   _onUpKey(e) {
     if (!this.opened) {
       this.opened = true;
@@ -391,7 +508,10 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     e.preventDefault();
     e.stopPropagation();
   }
-
+  /**
+   * Handler for Escape button press.
+   * Closes the list if it's open.
+   */
   _onEscKey() {
     if (this.opened) {
       this.opened = false;
