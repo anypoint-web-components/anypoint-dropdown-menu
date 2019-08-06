@@ -9,7 +9,7 @@ import './anypoint-dropdown-menu-icons.js';
  *
  * The element works perfectly with `anypoint-listbox` which together creates an
  * accessible list of options. The listbox can be replaced by any other element
- * that support similar functionalit but make sure it has an appropiate aria
+ * that support similar functionality but make sure it has an appropriate aria
  * support.
  *
  * See README.md file for detailed documentation.

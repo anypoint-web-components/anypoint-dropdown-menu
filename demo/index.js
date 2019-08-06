@@ -115,7 +115,6 @@ class ComponentDemo extends ArcDemoPage {
         </anypoint-dropdown-menu>
       </div>
 
-
       <div class="card">
         <h3>Empty form fields</h3>
         <anypoint-dropdown-menu>
