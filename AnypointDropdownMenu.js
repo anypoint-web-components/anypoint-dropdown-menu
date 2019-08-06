@@ -374,15 +374,14 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     if (!this.hasAttribute('aria-haspopup')) {
       this.setAttribute('aria-haspopup', 'listbox');
     }
-    if (!this.hasAttribute('aria-expanded')) {
-      this.setAttribute('aria-expanded', 'false');
-    }
+    // aria-expanded is set with `opened` flag which is initialzed in the cosntructor.
     this.addEventListener('click', this._clickHandler);
     this.addEventListener('keydown', this._onKeydown);
     this.addEventListener('focus', this._focusHandler);
   }
 
   disconnectedCallback() {
+    /* istanbul ignore else */
     if (super.disconnectedCallback) {
       super.disconnectedCallback();
     }
