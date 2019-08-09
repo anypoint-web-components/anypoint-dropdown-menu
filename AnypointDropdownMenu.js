@@ -23,55 +23,75 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       display: inline-block;
       position: relative;
       text-align: left;
-      cursor: default;
-      border: 1px var(--anypoint-dropdown-menu-border-color, #E0E0E0) solid;
-      -webkit-tap-highlight-color: rgba(0,0,0,0);
-      -webkit-tap-highlight-color: transparent;
-      background-color: var(--anypoint-dropdown-menu-background-color, #F5F5F5);
-      border-radius: 3px;
-      box-sizing: border-box;
-      margin: 12px 8px;
       outline: none;
+      height: 56px;
+      box-sizing: border-box;
+      font-size: 1rem;
+      /* Anypoint UI controls margin in forms */
+      margin: 12px 8px;
     }
 
-    :host([disabled]) anypoint-icon-button {
+    :host([disabled]) .trigger-icon {
       pointer-events: none;
-      opacity: var(--anypoint-dropdown-menu-disabled-opacity, 0.33);
+      opacity: var(--anypoint-dropdown-menu-disabled-opacity, 0.43);
     }
 
-    :host([disabled]) .input {
-      opacity: var(--anypoint-dropdown-menu-disabled-opacity, 0.33);
+    :host([disabled]) .label.resting {
+      opacity: var(--anypoint-dropdown-menu-disabled-opacity, 0.43);
+    }
+
+    :host([nolabelfloat]) {
+      height: 40px;
+    }
+
+    .input-container {
+      position: relative;
+      height: 100%;
+      width: inherit;
+      background-color: var(--anypoint-dropdown-menu-background-color, #F5F5F5);
+
+      border: 1px var(--anypoint-dropdown-menu-border-color, transparent) solid;
+      border-radius: 4px 4px 0 0;
+      border-bottom-width: 1px;
+      border-bottom-style: solid;
+      border-bottom-color: var(--anypoint-dropdown-menu-border-bottom-color, #8e8e8e);
+      transition: border-bottom-color 0.22s linear;
+      transform-origin: center center;
+
+      cursor: default;
+    }
+
+    :host([invalid]) .input-container,
+    :host(:invalid) .input-container {
+      border-bottom: 1px solid var(--anypoint-dropdown-error-color, var(--error-color)) !important;
+    }
+
+    :host([disabled]) .input-container {
+      opacity: var(--anypoint-dropdown-menu-disabled-opacity, 0.43);
       border-bottom: 1px dashed var(--paper-dropdown-menu-color, var(--secondary-text-color));
     }
 
-    :host([disabled]) .label.without-value {
-      opacity: var(--anypoint-dropdown-menu-disabled-opacity, 0.33);
-    }
-    :host([invalid]) .input,
-    :host(:invalid) .input {
-      border-bottom: 2px solid var(--anypoint-dropdown-error-color, var(--error-color));
-    }
-
-    :host([opened]),
-    :host([focused]),
-    :host(:focus) {
-      background-color: var(--anypoint-dropdown-menu-focus-background-color, #fff);
-      border-color: var(--anypoint-dropdown-menu-hover-border-color, var(--anypoint-color-coreBlue3));
+    :host([opened]) .input-container,
+    :host([focused]) .input-container,
+    :host(:focus) .input-container {
+      border-bottom-color: var(--anypoint-dropdown-menu-hover-border-color, var(--anypoint-color-coreBlue3));
     }
 
     .input-wrapper {
       display: flex;
       flex-direction: row;
       align-items: center;
+      height: 100%;
+      position: relative;
     }
 
     .input {
       flex: 1;
-      margin: 0px 0px 0px 8px;
+      margin: 12px 0px 0px 8px;
       white-space: nowrap;
       text-overflow: ellipsis;
+      overflow: hidden;
       max-width: calc(100% - 40px);
-      overflow: auto;
     }
 
     :host(:dir(rtl)) .input {
@@ -81,7 +101,11 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
 
     :host([dir="rtl"]) .input {
       text-align: right;
-      margin: 0px 8px 0px 0px;
+      margin: 12px 8px 0px 0px;
+    }
+
+    :host([nolabelfloat]) .input {
+      margin-top: 0 !important;
     }
 
     .input-spacer {
@@ -89,23 +113,23 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       margin-left: -12px;
     }
 
-    anypoint-dropdown {
-      width: inherit;
-    }
-
     .label {
       position: absolute;
-      font-size: 13px;
-      transition: top 0.12s ease-in-out;
-      will-change: top;
+      transition: transform 0.12s ease-in-out, max-width 0.12s ease-in-out;
+      will-change: transform;
       border-radius: 3px;
       margin: 0;
       padding: 0;
-      left: 8px;
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
-      max-width: calc(100% - 40px);
+      z-index: 1;
+      max-width: calc(100% - 16px);
+      text-overflow: clip;
+      color: var(--anypoint-dropdown-menu-label-color, #616161);
+      transform-origin: left top;
+      left: 8px;
+      top: calc(100% / 2 - 8px);
     }
 
     :host(:dir(rtl)) .label {
@@ -119,38 +143,236 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       text-align: right;
       right: 8px;
       left: auto;
+      transform-origin: right top;
     }
 
-    .label.without-value {
-      top: calc(100% / 2 - 8px);
-      font-size: 14px;
+    .label.resting {
+      transform: translateY(0) scale(1);
     }
 
-    .label.with-value {
-      background-color: var(--anypoint-dropdown-menu-label-background-color, white);
-      top: -8px;
+    .label.floating {
+      transform: translateY(-80%) scale(0.75);
+      max-width: calc(100% + 20%);
+    }
+
+    :host([nolabelfloat]:not([legacy])) .label.floating {
+      display: none !important;
+    }
+
+    :host([invalid]) .label,
+    :host(:invalid) .label {
+      color: var(--anypoint-dropdown-error-color, var(--error-color)) !important;
     }
 
     .trigger-icon {
       transform: rotate(0);
       transition: transform 0.12s ease-in-out;
       will-change: transform;
+      color: var(--anypoint-dropdown-menu-label-color, #616161);
     }
 
     .trigger-icon.opened {
       transform: rotate(-180deg);
     }
 
+    :host([opened]) .trigger-icon,
+    :host([focused]) .trigger-icon,
+    :host(:focus) .trigger-icon {
+      color: var(--anypoint-dropdown-menu-trigger-icon-active-color, var(--primary-color));
+    }
+
     anypoint-dropdown {
       border-bottom: 2px var(--anypoint-dropdown-menu-border-color, #E0E0E0) solid;
       border-top: 2px var(--anypoint-dropdown-menu-border-color, #E0E0E0) solid;
-      margin-top: 41px;
+      margin-top: 58px;
+      width: inherit;
     }
 
     :host([verticalalign="bottom"]) anypoint-dropdown {
-      margin-bottom: 41px;
+      margin-bottom: 58px;
       margin-top: auto;
     }
+
+    :host([nolabelfloat]) anypoint-dropdown {
+      margin-top: 40px;
+    }
+
+    .assistive-info {
+      overflow: hidden;
+    }
+
+    .invalid,
+    .info {
+      padding: 0;
+      margin: 0 0 0 8px;
+      font-size: .875rem;
+      transition: transform 0.12s ease-in-out;
+    }
+
+    .info {
+      color: var(--anypoint-dropdown-menu-info-message-color, #616161);
+    }
+
+    .info.hidden {
+      transform: translateY(-200%);
+    }
+
+    .invalid {
+      color: var(--anypoint-dropdown-menu-error-color, var(--error-color));
+    }
+
+    .invalid.hidden,
+    .invalid.info-offset.hidden {
+      transform: translateY(-200%);
+    }
+
+    .invalid.info-offset {
+      transform: translateY(-12px);
+    }
+
+    /* Outlined theme */
+    :host([outlined]) .input-container {
+      border: 1px var(--anypoint-dropdown-menu-border-color, #8e8e8e) solid;
+      background-color: var(--anypoint-dropdown-menu-background-color, #fff);
+      border-radius: 4px;
+      transition: border-bottom-color 0.22s linear;
+    }
+
+    :host([outlined]) .input {
+      margin-top: 0;
+    }
+
+    :host([outlined]) .label.resting {
+      margin-top: 0;
+      top: calc(100% / 2 - 8px);
+    }
+
+    :host([outlined]) .label.floating {
+      background-color: var(--anypoint-dropdown-menu-label-background-color, white);
+      transform: translateY(-130%) scale(0.75);
+      max-width: 120%;
+      padding: 0 2px;
+    }
+
+    /* Anypoint legacy theme */
+
+    :host([legacy]) {
+      height: 40px;
+      margin-top: 20px;
+    }
+
+    :host([legacy]) .input-container {
+      border: none;
+      border-left: 2px var(--anypoint-dropdown-menu-border-color, #8e8e8e) solid;
+      border-right: 2px var(--anypoint-dropdown-menu-border-color, #8e8e8e) solid;
+      border-radius: 0;
+      box-sizing: border-box;
+    }
+
+    :host([legacy][focused]) .input-container,
+    :host([legacy]:hover) .input-container {
+      border-left-color: var(--anypoint-dropdown-menu-legacy-focus-border-color, #58595a);
+      border-right-color: var(--anypoint-dropdown-menu-legacy-focus-border-color, #58595a);
+      background-color: var(--anypoint-dropdown-menu-legacy-focus-background-color, #f9fafb);
+    }
+
+    :host([legacy][invalid]) .input-container {
+      border-left-color: var(--anypoint-dropdown-menu-error-color, var(--error-color));
+      border-right-color: var(--anypoint-dropdown-menu-error-color, var(--error-color));
+    }
+
+    :host([legacy]) .label {
+      font-size: .875rem;
+      left: 0;
+      top: -18px;
+      transform: none;
+      font-weight: 500;
+      color: var(--anypoint-dropdown-menu-legacy-label-color, #616161);
+    }
+
+    :host([legacy]) anypoint-dropdown {
+      margin-top: 40px;
+    }
+
+    :host([legacy]) .input {
+      margin-top: 0;
+    }
+    `;
+  }
+
+  render() {
+    const {
+      opened,
+      horizontalAlign,
+      verticalAlign,
+      dynamicAlign,
+      horizontalOffset,
+      verticalOffset,
+      noOverlap,
+      openAnimationConfig,
+      closeAnimationConfig,
+      noAnimations,
+      allowOutsideScroll,
+      restoreFocusOnClose,
+      value,
+      invalidMessage,
+      infoMessage,
+      legacy,
+      _labelClass,
+      _errorAddonClass,
+      _infoAddonClass
+    } = this;
+
+    const renderValue = value || '';
+    return html`
+    <div class="input-container">
+      <div class="${_labelClass}">
+        <slot name="label"></slot>
+      </div>
+
+      <div class="input-wrapper">
+        <div class="input">
+          ${renderValue}
+          <span class="input-spacer">&nbsp;</span>
+        </div>
+        <anypoint-icon-button @click="${this.toggle}" aria-label="Toggles dropdown menu">
+          <button tabindex="-1" aria-label="Toggles dropdown menu">
+            <iron-icon
+              class="trigger-icon ${opened ? 'opened' : ''}"
+              icon="paper-dropdown-menu:arrow-drop-down"></iron-icon>
+          </button>
+        </anypoint-icon-button>
+      </div>
+
+      <anypoint-dropdown
+        .opened="${opened}"
+        .horizontalAlign="${horizontalAlign}"
+        .verticalAlign="${verticalAlign}"
+        .dynamicAlign="${dynamicAlign}"
+        .horizontalOffset="${horizontalOffset}"
+        .verticalOffset="${verticalOffset}"
+        .noOverlap="${noOverlap}"
+        .openAnimationConfig="${openAnimationConfig}"
+        .closeAnimationConfig="${closeAnimationConfig}"
+        .noAnimations="${noAnimations}"
+        .allowOutsideScroll="${allowOutsideScroll}"
+        .restoreFocusOnClose="${restoreFocusOnClose}"
+        ?legacy="${legacy}"
+        @overlay-closed="${this._dropdownClosed}"
+        @overlay-opened="${this._dropdownOpened}"
+        @select="${this._selectHandler}"
+        @deselect="${this._deselectHandler}">
+        <div slot="dropdown-content" class="dropdown-content">
+          <slot id="content" name="dropdown-content"></slot>
+        </div>
+      </anypoint-dropdown>
+    </div>
+    <div class="assistive-info">
+    ${infoMessage ? html`<p class="${_infoAddonClass}">${infoMessage}</p>` : undefined}
+    ${invalidMessage ?
+      html`<p class="${_errorAddonClass}">${invalidMessage}</p>` :
+      undefined}
+    </div>
     `;
   }
   /**
@@ -166,6 +388,116 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
    */
   get form() {
     return this._internals && this._internals.form || null;
+  }
+
+  get validationStates() {
+    return this._validationStates;
+  }
+
+  set validationStates(value) {
+    const old = this._validationStates;
+    /* istanbul ignore if */
+    if (old === value) {
+      return;
+    }
+    this._validationStates = value;
+    /* istanbul ignore else */
+    if (this.requestUpdate) {
+      this.requestUpdate('validationStates', old);
+    }
+    this._hasValidationMessage = !!(value && value.length);
+    this._validationStatesChanged(value);
+    this.dispatchEvent(new CustomEvent('validationstates-changed', {
+      detail: {
+        value
+      }
+    }));
+  }
+
+  get hasValidationMessage() {
+    return this._hasValidationMessage;
+  }
+
+  get _hasValidationMessage() {
+    return this.__hasValidationMessage;
+  }
+
+  set _hasValidationMessage(value) {
+    const old = this.__hasValidationMessage;
+    /* istanbul ignore if */
+    if (old === value) {
+      return;
+    }
+    this.__hasValidationMessage = value;
+    /* istanbul ignore else */
+    if (this.requestUpdate) {
+      this.requestUpdate('hasValidationMessage', old);
+    }
+    this.__hasValidationMessage = value;
+    this.dispatchEvent(new CustomEvent('hasvalidationmessage-changed', {
+      detail: {
+        value
+      }
+    }));
+  }
+
+  get autoValidate() {
+    return this._autoValidate;
+  }
+
+  set autoValidate(value) {
+    const old = this._autoValidate;
+    /* istanbul ignore if */
+    if (old === value) {
+      return;
+    }
+    this._autoValidate = value;
+    this._autoValidateChanged(value);
+  }
+
+  get invalidMessage() {
+    return this._invalidMessage;
+  }
+
+  set invalidMessage(value) {
+    const old = this._invalidMessage;
+    /* istanbul ignore if */
+    if (old === value) {
+      return;
+    }
+    this._invalidMessage = value;
+    /* istanbul ignore else */
+    if (this.requestUpdate) {
+      this.requestUpdate('invalidMessage', old);
+    }
+    this._hasValidationMessage = this.invalid && !!value;
+  }
+
+  get _labelClass() {
+    const labelFloating = !!this.value;
+    let klas = 'label';
+    klas += labelFloating ? ' floating' : ' resting';
+    return klas;
+  }
+
+  get _infoAddonClass() {
+    let klas = 'info';
+    const isInavlidWithMessage = !!this.invalidMessage && this.invalid;
+    if (isInavlidWithMessage) {
+      klas += ' hidden';
+    }
+    return klas;
+  }
+
+  get _errorAddonClass() {
+    let klas = 'invalid';
+    if (!this.invalid) {
+      klas += ' hidden';
+    }
+    if (this.infoMessage) {
+      klas += ' info-offset';
+    }
+    return klas;
   }
 
   static get properties() {
@@ -273,10 +605,48 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
        */
       autoValidate: { type: Boolean, reflect: true },
       /**
+       * The error message to display when the input is invalid.
+       */
+      invalidMessage: { type: String },
+      /**
+       * Assistive text value.
+       * Rendered beflow the input.
+       */
+      infoMessage: { type: String },
+      /**
+       * After calling `validate()` this will be populated by latest result of the test for each
+       * validator. Result item will contain following properties:
+       *
+       * - validator {String} Name of the validator
+       * - valid {Boolean} Result of the test
+       * - message {String} Error message, populated only if `valid` equal `false`
+       *
+       * This property is `undefined` if `validator` is not set.
+       */
+      validationStates: { type: Array },
+      /**
+       * Value computed from `invalidMessage`, `invalid` and `validationStates`.
+       * True if the validation message should be displayed.
+       */
+      _hasValidationMessage: { type: Boolean },
+      /**
        * Will position the list around the button without overlapping
        * it.
        */
-      noOverlap: { type: Boolean }
+      noOverlap: { type: Boolean },
+      /**
+       * Enables outlined theme.
+       */
+      outlined: { type: Boolean, reflect: true },
+      /**
+       * Enables Anypoint legacy theme.
+       */
+      legacy: { type: Boolean, reflect: true },
+      /**
+       * When set the label is rendered only when not selected state.
+       * It is useful when using the dropdown in an application menu bar.
+       */
+      noLabelFloat: { type: Boolean, reflect: true }
     };
   }
 
@@ -357,6 +727,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     this.horizontalOffset = 0;
     this.verticalOffset = 0;
     this.restoreFocusOnClose = false;
+    this.value = '';
 
     this._clickHandler = this._clickHandler.bind(this);
     this._onKeydown = this._onKeydown.bind(this);
@@ -620,65 +991,62 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
   checkValidity() {
     return this._getValidity() && ((this._internals && this._internals.checkValidity()) || true);
   }
+  /**
+   * Called when validation states changed.
+   * Validation states are set by validatable mixin and is a result of calling
+   * a custom validator. Each validator returns an object with `valid` and `message`
+   * properties.
+   *
+   * See `ValidatableMixin` for more information.
+   *
+   * @param {?Array<Object>} states
+   */
+  _validationStatesChanged(states) {
+    if (!states || !states.length) {
+      return;
+    }
+    const parts = [];
+    for (let i = 0, len = states.length; i < len; i++) {
+      if (!states[i].valid) {
+        parts[parts.length] = states[i].message;
+      }
+    }
+    this.invalidMessage = parts.join('. ');
+  }
+  /**
+   * Calles when `autoValidate` changed
+   * @param {Boolean} value
+   */
+  _autoValidateChanged(value) {
+    if (value) {
+      this.validate();
+    }
+  }
+  /**
+   * From `ValidatableMixin`
+   * @param {Boolean} value Current invalid sate
+   */
+  _invalidChanged(value) {
+    super._invalidChanged(value);
+    this._hasValidationMessage = value && !!this.invalidMessage;
+    this._ensureInvalidAlertSate(value);
+  }
 
-  render() {
-    const {
-      opened,
-      horizontalAlign,
-      verticalAlign,
-      dynamicAlign,
-      horizontalOffset,
-      verticalOffset,
-      noOverlap,
-      openAnimationConfig,
-      closeAnimationConfig,
-      noAnimations,
-      allowOutsideScroll,
-      restoreFocusOnClose,
-      value
-    } = this;
-
-    const renderValue = opened ? '' : value || '';
-    return html`
-    <div class="label ${value && !opened ? 'with-value' : 'without-value'}">
-      <slot name="label"></slot>
-    </div>
-
-    <div class="input-wrapper">
-      <div class="input">
-        ${renderValue}
-        <span class="input-spacer">&nbsp;</span>
-      </div>
-      <anypoint-icon-button @click="${this.toggle}" aria-label="Toggles dropdown menu">
-        <button tabindex="-1" aria-label="Toggles dropdown menu">
-          <iron-icon
-            class="trigger-icon ${opened ? 'opened' : ''}"
-            icon="paper-dropdown-menu:arrow-drop-down"></iron-icon>
-        </button>
-      </anypoint-icon-button>
-    </div>
-
-    <anypoint-dropdown
-      .opened="${opened}"
-      .horizontalAlign="${horizontalAlign}"
-      .verticalAlign="${verticalAlign}"
-      .dynamicAlign="${dynamicAlign}"
-      .horizontalOffset="${horizontalOffset}"
-      .verticalOffset="${verticalOffset}"
-      .noOverlap="${noOverlap}"
-      .openAnimationConfig="${openAnimationConfig}"
-      .closeAnimationConfig="${closeAnimationConfig}"
-      .noAnimations="${noAnimations}"
-      .allowOutsideScroll="${allowOutsideScroll}"
-      .restoreFocusOnClose="${restoreFocusOnClose}"
-      @overlay-closed="${this._dropdownClosed}"
-      @overlay-opened="${this._dropdownOpened}"
-      @select="${this._selectHandler}"
-      @deselect="${this._deselectHandler}">
-      <div slot="dropdown-content" class="dropdown-content">
-        <slot id="content" name="dropdown-content"></slot>
-      </div>
-    </anypoint-dropdown>
-    `;
+  _ensureInvalidAlertSate(invalid) {
+    if (!this.invalidMessage) {
+      return;
+    }
+    const node = this.shadowRoot.querySelector('p.invalid');
+    if (!node) {
+      return;
+    }
+    if (invalid) {
+      node.setAttribute('role', 'alert');
+    } else {
+      node.removeAttribute('role');
+    }
+    setTimeout(() => {
+      node.removeAttribute('role');
+    }, 1000);
   }
 }

@@ -67,6 +67,10 @@ describe('<anypoint-dropdown-menu>', () => {
     `);
   }
 
+  async function invalidMessageFixture() {
+    return await fixture(`<anypoint-dropdown-menu invalidmessage="test"></anypoint-dropdown-menu>`);
+  }
+
   function elementIsVisible(element) {
     const contentRect = element.getBoundingClientRect();
     const computedStyle = window.getComputedStyle(element);
@@ -227,6 +231,125 @@ describe('<anypoint-dropdown-menu>', () => {
       const element = await selectedFixture();
       element.contentElement.selected = -1;
       assert.equal(element.selectedItem, null);
+    });
+  });
+
+  describe('validationStates', () => {
+    const states = [{
+      valid: false,
+      message: 'test'
+    }];
+
+    let element;
+    beforeEach(async () => {
+      element = await basicFixture();
+    });
+
+    it('sets validationStates on element', function() {
+      element.validationStates = states;
+      assert.deepEqual(element.validationStates, states);
+    });
+
+    it('value change dispatches value-change event', async () => {
+      const spy = sinon.spy();
+      element.addEventListener('validationstates-changed', spy);
+      element.validationStates = states;
+      assert.deepEqual(spy.args[0][0].detail.value, states);
+    });
+
+    it('setting the same value ignores setter', async () => {
+      element.validationStates = states;
+      const spy = sinon.spy();
+      element.addEventListener('validationstates-changed', spy);
+      element.validationStates = states;
+      assert.isFalse(spy.called);
+    });
+
+    it('calls _validationStatesChanged()', async () => {
+      const spy = sinon.spy(element, '_validationStatesChanged');
+      element.validationStates = states;
+      assert.deepEqual(spy.args[0][0], states);
+    });
+
+    it('sets hasValidationMessage when validationStates changes', function() {
+      element.invalid = true;
+      element.validationStates = states;
+      assert.isTrue(element.hasValidationMessage);
+    });
+  });
+
+  describe('autoValidate', () => {
+    let element;
+    beforeEach(async () => {
+      element = await basicFixture();
+    });
+
+    it('calls validate() when autovalidate is on', async () => {
+      const spy = sinon.spy(element, 'validate');
+      element.autoValidate = true;
+      assert.isTrue(spy.called);
+    });
+  });
+
+  describe('_infoAddonClass getter', function() {
+    let element;
+    beforeEach(async () => {
+      element = await basicFixture();
+    });
+
+    it('returns default class', () => {
+      assert.equal(
+        element._infoAddonClass,
+        'info'
+      );
+    });
+
+    it('returns default class when not invalid', () => {
+      element.invalidMessage = 'test';
+      assert.equal(
+        element._infoAddonClass,
+        'info'
+      );
+    });
+
+    it('returns hidden class when invalid', () => {
+      element.invalidMessage = 'test';
+      element.invalid = true;
+      assert.equal(
+        element._infoAddonClass,
+        'info hidden'
+      );
+    });
+  });
+
+  describe('_errorAddonClass getter', function() {
+    let element;
+    beforeEach(async () => {
+      element = await basicFixture();
+    });
+
+    it('returns default class', () => {
+      assert.equal(
+        element._errorAddonClass,
+        'invalid hidden'
+      );
+    });
+
+    it('returns info-offset class when with info message', () => {
+      element.infoMessage = 'test';
+      assert.equal(
+        element._errorAddonClass,
+        'invalid hidden info-offset'
+      );
+    });
+
+    it('returns visible class when invalid', () => {
+      element.infoMessage = 'test';
+      element.invalid = true;
+      assert.equal(
+        element._errorAddonClass,
+        'invalid info-offset'
+      );
     });
   });
 
@@ -426,6 +549,63 @@ describe('<anypoint-dropdown-menu>', () => {
     });
   });
 
+  describe('_invalidChanged()', () => {
+    let element;
+    beforeEach(async () => {
+      element = await basicFixture();
+    });
+
+    it('sets invalid state', () => {
+      element._invalidChanged(true);
+      // This is done in parent class.
+      assert.equal(element.getAttribute('aria-invalid'), 'true');
+    });
+
+    it('sets _hasValidationMessage when invalidMessage', () => {
+      element.invalidMessage = 'test';
+      element._invalidChanged(true);
+      assert.isTrue(element.hasValidationMessage);
+    });
+
+    it('sets _hasValidationMessage when no invalidMessage', () => {
+      element._invalidChanged(true);
+      assert.isFalse(element.hasValidationMessage);
+    });
+
+    it('calls _ensureInvalidAlertSate()', () => {
+      const spy = sinon.spy(element, '_ensureInvalidAlertSate');
+      element._invalidChanged(true);
+      assert.isTrue(spy.args[0][0]);
+    });
+  });
+
+  describe('_ensureInvalidAlertSate()', () => {
+    let element;
+    beforeEach(async () => {
+      element = await invalidMessageFixture();
+    });
+
+    it('sets role attribute on invalid label', () => {
+      element._ensureInvalidAlertSate(true);
+      const node = element.shadowRoot.querySelector('p.invalid');
+      assert.equal(node.getAttribute('role'), 'alert');
+    });
+
+    it('removes role attribute from invalid label', () => {
+      const node = element.shadowRoot.querySelector('p.invalid');
+      node.setAttribute('role', 'alert');
+      element._ensureInvalidAlertSate(false);
+      assert.isFalse(node.hasAttribute('role'));
+    });
+
+    it('removes role attribute from invalid label after timeout', async () => {
+      element._ensureInvalidAlertSate(true);
+      await aTimeout(1001);
+      const node = element.shadowRoot.querySelector('p.invalid');
+      assert.isFalse(node.hasAttribute('role'));
+    });
+  });
+
   describe('a11y', () => {
     it('sets aria-expanded when opened', async () => {
       const element = await basicFixture();
@@ -487,6 +667,18 @@ describe('<anypoint-dropdown-menu>', () => {
       const element = await basicFixture();
       element.opened = true;
       // await untilOpened(element);
+      await assert.isAccessible(element);
+    });
+
+    it('is accessible for outlined style', async () => {
+      const element = await basicFixture();
+      element.outlined = true;
+      await assert.isAccessible(element);
+    });
+
+    it('is accessible for legacy style', async () => {
+      const element = await basicFixture();
+      element.legacy = true;
       await assert.isAccessible(element);
     });
   });

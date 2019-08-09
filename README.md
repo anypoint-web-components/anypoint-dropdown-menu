@@ -4,11 +4,33 @@
 
 # anypoint-dropdown-menu
 
-A form element to select value from the list of options, styled for Anypoint platform.
+This component is based on Material Design menu and adjusted for Anypoint platform components.
 
-## Accessibility
+Anypoint web components are set of components that allows to build Anypoint enabled UI in open source projects.
 
-The element works perfectly with `anypoint-listbox` which together creates an accessible list of options. The listbox can be replaced by any other element  that support similar functionality but make sure it has an appropriate aria support.
+Exposed dropdown menus display the currently selected menu item above the menu.
+They can be used only when a single menu item can be chosen at a time.
+
+## Styling options
+
+The element has three built-in themes:
+-   Material Design - Filled
+-   Material Design - Outlined
+-   Anypoint Design - Legacy
+
+By default the input renders `filled` dropdown list.
+
+![Filled menu](demo/filled.png)
+
+Outlined style is rendered when `outlined` property is set.
+
+![Outlined menu](demo/outlined.png)
+
+Anypoint ready styles are rendered when `legacy` property is set.
+
+![Legacy menu](demo/legacy.png)
+
+OSS application should not use Anypoint based styling as it's protected by MuleSoft copyrights. This property is reserved for OSS applications embedded in the Anypoint platform.
 
 ## Usage
 
@@ -71,6 +93,47 @@ The selection can be controlled by setting `selected` attribute/property on the 
 
 By default the selected value is set to `My item 1`. When selecting option 3 then the label value becomes `item 3`.
 
+### Assistive text
+
+Assistive text allows the user to better understand what kind of input is required. It can be an info message or invalid message when invalid
+input has been detected.
+
+#### Info message
+
+Info message provides the user with additional description for the field. It should be used when the label can be confusing or to ensure the user about the reason of collecting the input.
+
+```html
+<anypoint-dropdown-menu infomessage="Will be added to your order.">
+  <label slot="label">Select a dinosaur</label>
+  <anypoint-listbox slot="dropdown-content" tabindex="-1">
+    <anypoint-item>item 1</anypoint-item>
+    <anypoint-item>item 2</anypoint-item>
+    <anypoint-item>item 3</anypoint-item>
+  </anypoint-listbox>
+</anypoint-dropdown-menu>
+```
+
+![Info message](demo/info-message.png)
+
+Do not try to put too detailed information. The user should be able to scan the message in a fraction of a second. Treat it as an additional text for the label.
+
+#### Invalid message
+
+Error message should help the user recover from the error state. Use clear message with simple instructions of how to fix the problem, for example `Only letters are allowed`.
+
+```html
+<anypoint-dropdown-menu invalidmessage="This value is required" invalid required>
+  <label slot="label">Select a dinosaur</label>
+  <anypoint-listbox slot="dropdown-content" tabindex="-1">
+    <anypoint-item>item 1</anypoint-item>
+    <anypoint-item>item 2</anypoint-item>
+    <anypoint-item>item 3</anypoint-item>
+  </anypoint-listbox>
+</anypoint-dropdown-menu>
+```
+
+![Invalid message](demo/invalid-message.png)
+
 ### Form-associated custom elements
 
 The [form-associated custom elements](https://docs.google.com/document/d/1JO8puctCSpW-ZYGU8lF-h4FWRIDQNDVexzHoOQ2iQmY/edit?pli=1#) allows to associate a custom element with a `<form>` element. Original custom elements spec does not allow this.
@@ -95,6 +158,10 @@ The `autoValidate` option allows to automatically call validate function when va
   </anypoint-listbox>
 </anypoint-dropdown-menu>
 ```
+
+## Accessibility
+
+The element works perfectly with `anypoint-listbox` which together creates an accessible list of options. The listbox can be replaced by any other element  that support similar functionality but make sure it has an appropriate aria support.
 
 ## Development
 
