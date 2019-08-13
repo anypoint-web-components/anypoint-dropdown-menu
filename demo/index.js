@@ -604,6 +604,21 @@ class ComponentDemo extends ArcDemoPage {
         ${this.items.map((item) => html`<anypoint-item>${item}</anypoint-item>`)}
         </anypoint-listbox>
       </anypoint-dropdown-menu>
+
+      <h3>Invalid and info message</h3>
+      <p>
+        Error message has higher priority and info message is hidden when error is rendered.
+      </p>
+
+      <anypoint-dropdown-menu
+        invalidmessage="Dino is required with the order"
+        infomessage="Will be added to your order."
+        invalid required>
+        <label slot="label">Select a dinosaur</label>
+        <anypoint-listbox slot="dropdown-content" tabindex="-1">
+        ${this.items.map((item) => html`<anypoint-item>${item}</anypoint-item>`)}
+        </anypoint-listbox>
+      </anypoint-dropdown-menu>
     </section>`;
   }
 

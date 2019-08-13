@@ -227,7 +227,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     }
 
     .invalid.info-offset {
-      transform: translateY(-12px);
+      transform: translateY(-100%);
     }
 
     /* Outlined theme */
