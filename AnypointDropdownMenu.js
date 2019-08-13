@@ -335,12 +335,15 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
           ${renderValue}
           <span class="input-spacer">&nbsp;</span>
         </div>
-        <anypoint-icon-button @click="${this.toggle}" aria-label="Toggles dropdown menu">
-          <button tabindex="-1" aria-label="Toggles dropdown menu">
-            <iron-icon
-              class="trigger-icon ${opened ? 'opened' : ''}"
-              icon="paper-dropdown-menu:arrow-drop-down"></iron-icon>
-          </button>
+        <anypoint-icon-button
+          @click="${this.toggle}"
+          aria-label="Toggles dropdown menu"
+          tabindex="-1"
+          aria-label="Toggles dropdown menu"
+          ?legacy="${legacy}">
+          <iron-icon
+            class="trigger-icon ${opened ? 'opened' : ''}"
+            icon="paper-dropdown-menu:arrow-drop-down"></iron-icon>
         </anypoint-icon-button>
       </div>
 
