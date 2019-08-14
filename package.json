@@ -45,7 +45,7 @@
     "@anypoint-web-components/anypoint-checkbox": "^1.0.0",
     "@anypoint-web-components/anypoint-item": "^1.0.2",
     "@anypoint-web-components/anypoint-listbox": "^1.0.2",
-    "@anypoint-web-components/anypoint-radio-button": "^0.1.1",
+    "@anypoint-web-components/anypoint-radio-button": "^0.1.2",
     "@anypoint-web-components/anypoint-styles": "^1.0.0-preview.1",
     "@commitlint/cli": "^8.1.0",
     "@commitlint/config-conventional": "^7.0.0",
