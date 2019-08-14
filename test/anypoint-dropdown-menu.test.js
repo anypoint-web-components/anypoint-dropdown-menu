@@ -312,12 +312,12 @@ describe('<anypoint-dropdown-menu>', () => {
       );
     });
 
-    it('returns hidden class when invalid', () => {
+    it('returns label-hidden class when invalid', () => {
       element.invalidMessage = 'test';
       element.invalid = true;
       assert.equal(
         element._infoAddonClass,
-        'info hidden'
+        'info label-hidden'
       );
     });
   });
@@ -331,7 +331,7 @@ describe('<anypoint-dropdown-menu>', () => {
     it('returns default class', () => {
       assert.equal(
         element._errorAddonClass,
-        'invalid hidden'
+        'invalid label-hidden'
       );
     });
 
@@ -339,7 +339,7 @@ describe('<anypoint-dropdown-menu>', () => {
       element.infoMessage = 'test';
       assert.equal(
         element._errorAddonClass,
-        'invalid hidden info-offset'
+        'invalid label-hidden info-offset'
       );
     });
 

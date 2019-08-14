@@ -31,6 +31,10 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       margin: 12px 8px;
     }
 
+    .hidden {
+      display: none !important;
+    }
+
     :host([disabled]) .trigger-icon {
       pointer-events: none;
       opacity: var(--anypoint-dropdown-menu-disabled-opacity, 0.43);
@@ -130,6 +134,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       transform-origin: left top;
       left: 8px;
       top: calc(100% / 2 - 8px);
+      font-size: 1rem;
     }
 
     :host(:dir(rtl)) .label {
@@ -189,7 +194,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     }
 
     :host([verticalalign="bottom"]) anypoint-dropdown {
-      margin-bottom: 58px;
+      margin-bottom: 56px;
       margin-top: auto;
     }
 
@@ -199,6 +204,8 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
 
     .assistive-info {
       overflow: hidden;
+      margin-top: -2px;
+      height: 20px;
     }
 
     .invalid,
@@ -213,7 +220,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       color: var(--anypoint-dropdown-menu-info-message-color, #616161);
     }
 
-    .info.hidden {
+    .info.label-hidden {
       transform: translateY(-200%);
     }
 
@@ -221,8 +228,8 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       color: var(--anypoint-dropdown-menu-error-color, var(--error-color));
     }
 
-    .invalid.hidden,
-    .invalid.info-offset.hidden {
+    .invalid.label-hidden,
+    .invalid.info-offset.label-hidden {
       transform: translateY(-200%);
     }
 
@@ -252,6 +259,12 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       transform: translateY(-130%) scale(0.75);
       max-width: 120%;
       padding: 0 2px;
+      left: 6px;
+    }
+
+    :host([outlined][invalid]) .input-container,
+    :host([outlined]:invalid) .input-container {
+      border: 1px solid var(--anypoint-dropdown-error-color, var(--error-color)) !important;
     }
 
     /* Anypoint legacy theme */
@@ -279,11 +292,12 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     :host([legacy][invalid]) .input-container {
       border-left-color: var(--anypoint-dropdown-menu-error-color, var(--error-color));
       border-right-color: var(--anypoint-dropdown-menu-error-color, var(--error-color));
+      border-bottom: none !important;
     }
 
     :host([legacy]) .label {
       font-size: .875rem;
-      left: 0;
+      left: -2px;
       top: -18px;
       transform: none;
       font-weight: 500;
@@ -296,6 +310,21 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
 
     :host([legacy]) .input {
       margin-top: 0;
+    }
+
+    :host([legacy]) .invalid,
+    :host([legacy]) .info {
+      margin-left: 0px;
+    }
+
+    :host([nolabelfloat][legacy]) {
+      margin-top: 0px;
+    }
+
+    :host([nolabelfloat][legacy]) .label.resting {
+      top: calc(100% / 2 - 8px);
+      left: 10px;
+      font-size: 1rem;
     }
     `;
   }
@@ -479,7 +508,11 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
   get _labelClass() {
     const labelFloating = !!this.value;
     let klas = 'label';
-    klas += labelFloating ? ' floating' : ' resting';
+    if (labelFloating && this.noLabelFloat) {
+      klas += ' hidden';
+    } else {
+      klas += labelFloating ? ' floating' : ' resting';
+    }
     return klas;
   }
 
@@ -487,7 +520,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     let klas = 'info';
     const isInavlidWithMessage = !!this.invalidMessage && this.invalid;
     if (isInavlidWithMessage) {
-      klas += ' hidden';
+      klas += ' label-hidden';
     }
     return klas;
   }
@@ -495,7 +528,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
   get _errorAddonClass() {
     let klas = 'invalid';
     if (!this.invalid) {
-      klas += ' hidden';
+      klas += ' label-hidden';
     }
     if (this.infoMessage) {
       klas += ' info-offset';
