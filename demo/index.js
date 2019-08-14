@@ -174,7 +174,7 @@ class ComponentDemo extends ArcDemoPage {
         ?noLabelFloat="${demoNoLabelFloat}"
         >
         <label slot="label">Select a dinosaur</label>
-        <anypoint-listbox slot="dropdown-content" tabindex="-1">
+        <anypoint-listbox slot="dropdown-content" tabindex="-1" ?legacy="${demoLegacy}">
         ${this.items.map((item) => html`<anypoint-item>${item}</anypoint-item>`)}
         </anypoint-listbox>
       </anypoint-dropdown-menu>
