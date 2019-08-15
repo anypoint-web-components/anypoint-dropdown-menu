@@ -72,7 +72,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
 
     :host([disabled]) .input-container {
       opacity: var(--anypoint-dropdown-menu-disabled-opacity, 0.43);
-      border-bottom: 1px dashed var(--paper-dropdown-menu-color, var(--secondary-text-color));
+      border-bottom: 1px dashed var(--anypoint-dropdown-menu-color, var(--secondary-text-color));
     }
 
     :host([opened]) .input-container,
