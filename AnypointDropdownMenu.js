@@ -372,7 +372,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
           ?legacy="${legacy}">
           <iron-icon
             class="trigger-icon ${opened ? 'opened' : ''}"
-            icon="paper-dropdown-menu:arrow-drop-down"></iron-icon>
+            icon="anypoint-dropdown-menu:adm-arrow-down"></iron-icon>
         </anypoint-icon-button>
       </div>
 
