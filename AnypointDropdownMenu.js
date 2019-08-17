@@ -768,7 +768,6 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     this.verticalAlign = 'top';
     this.noAnimations = false;
     this.allowOutsideScroll = false;
-    this.opened = false;
     this.dynamicAlign = false;
     this.noOverlap = false;
     this.horizontalOffset = 0;
@@ -843,6 +842,9 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
   }
 
   firstUpdated() {
+    if (this.opened === undefined) {
+      this.opened = false;
+    }
     const contentElement = this.contentElement;
     const item = contentElement && contentElement.selectedItem;
     if (item) {

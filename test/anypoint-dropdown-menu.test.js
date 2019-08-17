@@ -98,6 +98,18 @@ describe('<anypoint-dropdown-menu>', () => {
     });
   }
 
+  describe('Initialization', () => {
+    it('can be initialized with createElement', () => {
+      const element = document.createElement('anypoint-dropdown-menu');
+      assert.ok(element);
+    });
+
+    it('has opened state set', async () => {
+      const element = await basicFixture();
+      assert.isFalse(element.opened);
+    });
+  });
+
   describe('Menu rendering', () => {
     it('initially hides the content', async () => {
       const element = await basicFixture();
