@@ -54,6 +54,11 @@ class ComponentDemo extends ArcDemoPage {
       'yandusaurus',
       'zephyrosaurus'
     ];
+    this.minItems = [
+      'Allosaurus',
+      'Brontosaurus',
+      'Carcharodontosaurus'
+    ];
 
     this._formSubmit = this._formSubmit.bind(this);
     this._mainDemoStateHandler = this._mainDemoStateHandler.bind(this);
@@ -274,7 +279,7 @@ class ComponentDemo extends ArcDemoPage {
         <anypoint-dropdown-menu aria-owns="preSelectedList">
           <label slot="label" id="preSelectedLabel">Pre-selected dinosaur</label>
           <anypoint-listbox slot="dropdown-content" tabindex="-1" selected="1" id="preSelectedList">
-          ${this.items.map((item) => html`<anypoint-item>${item}</anypoint-item>`)}
+          ${this.minItems.map((item) => html`<anypoint-item>${item}</anypoint-item>`)}
           </anypoint-listbox>
         </anypoint-dropdown-menu>
 
@@ -301,7 +306,7 @@ class ComponentDemo extends ArcDemoPage {
         <anypoint-dropdown-menu>
           <label slot="label">Attribute as selection value</label>
           <anypoint-listbox slot="dropdown-content" tabindex="-1" attrforselected="label" selected="Brontosaurus">
-          ${this.items.map((item) => html`<anypoint-item label="${item}">${item}</anypoint-item>`)}
+          ${this.minItems.map((item) => html`<anypoint-item label="${item}">${item}</anypoint-item>`)}
           </anypoint-listbox>
         </anypoint-dropdown-menu>
 
@@ -328,7 +333,7 @@ class ComponentDemo extends ArcDemoPage {
         <anypoint-dropdown-menu dir="rtl">
           <label slot="label">Select a dinosaur</label>
           <anypoint-listbox slot="dropdown-content" tabindex="-1">
-          ${this.items.map((item) => html`<anypoint-item>${item}</anypoint-item>`)}
+          ${this.minItems.map((item) => html`<anypoint-item>${item}</anypoint-item>`)}
           </anypoint-listbox>
         </anypoint-dropdown-menu>
 
@@ -361,7 +366,7 @@ class ComponentDemo extends ArcDemoPage {
         <anypoint-dropdown-menu verticalalign="bottom">
           <label slot="label">Select a dinosaur</label>
           <anypoint-listbox slot="dropdown-content" tabindex="-1">
-          ${this.items.map((item) => html`<anypoint-item>${item}</anypoint-item>`)}
+          ${this.minItems.map((item) => html`<anypoint-item>${item}</anypoint-item>`)}
           </anypoint-listbox>
         </anypoint-dropdown-menu>
 
@@ -385,7 +390,7 @@ class ComponentDemo extends ArcDemoPage {
         <anypoint-dropdown-menu dynamicalign>
           <label slot="label">Select a dinosaur</label>
           <anypoint-listbox slot="dropdown-content" tabindex="-1">
-          ${this.items.map((item) => html`<anypoint-item>${item}</anypoint-item>`)}
+          ${this.minItems.map((item) => html`<anypoint-item>${item}</anypoint-item>`)}
           </anypoint-listbox>
         </anypoint-dropdown-menu>
 

@@ -187,10 +187,12 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     }
 
     anypoint-dropdown {
-      border-bottom: 2px var(--anypoint-dropdown-menu-border-color, #E0E0E0) solid;
-      border-top: 2px var(--anypoint-dropdown-menu-border-color, #E0E0E0) solid;
       margin-top: 58px;
       width: inherit;
+    }
+
+    .dropdown-content {
+      box-shadow: var(--anypoiont-dropdown-shaddow);
     }
 
     :host([verticalalign="bottom"]) anypoint-dropdown {
@@ -319,6 +321,15 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
 
     :host([nolabelfloat][legacy]) {
       margin-top: 0px;
+    }
+
+    :host([legacy]) anypoint-dropdown {
+      border-bottom: 2px var(--anypoint-dropdown-menu-border-color, #E0E0E0) solid;
+      border-top: 2px var(--anypoint-dropdown-menu-border-color, #E0E0E0) solid;
+    }
+
+    :host([legacy]) .dropdown-content {
+      box-shadow: none;
     }
 
     :host([nolabelfloat][legacy]) .label.resting {
