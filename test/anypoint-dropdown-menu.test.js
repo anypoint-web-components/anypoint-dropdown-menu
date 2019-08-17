@@ -98,7 +98,7 @@ describe('<anypoint-dropdown-menu>', () => {
     });
   }
 
-  describe('Initialization', () => {
+  describe('Basics', () => {
     it('can be initialized with createElement', () => {
       const element = document.createElement('anypoint-dropdown-menu');
       assert.ok(element);
@@ -107,6 +107,14 @@ describe('<anypoint-dropdown-menu>', () => {
     it('has opened state set', async () => {
       const element = await basicFixture();
       assert.isFalse(element.opened);
+    });
+
+    it('dispatches opened-changed event', async () => {
+      const element = await basicFixture();
+      const spy = sinon.spy();
+      element.addEventListener('opened-changed', spy);
+      element.opened = true;
+      assert.isTrue(spy.called);
     });
   });
 

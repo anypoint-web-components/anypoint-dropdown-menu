@@ -727,6 +727,11 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     this._opened = value;
     this.requestUpdate('opened', old);
     this._openedChanged(value);
+    this.dispatchEvent(new CustomEvent('opened-changed', {
+      detail: {
+        value
+      }
+    }));
   }
   /**
    * @return {?Element} The content element that is contained by the dropdown menu, if any.
