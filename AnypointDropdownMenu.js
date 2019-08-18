@@ -35,12 +35,12 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       display: none !important;
     }
 
-    :host([disabled]) .trigger-icon {
+    .trigger-button.form-disabled {
       pointer-events: none;
       opacity: var(--anypoint-dropdown-menu-disabled-opacity, 0.43);
     }
 
-    :host([disabled]) .label.resting {
+    .label.resting.form-disabled, {
       opacity: var(--anypoint-dropdown-menu-disabled-opacity, 0.43);
     }
 
@@ -70,7 +70,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       border-bottom: 1px solid var(--anypoint-dropdown-error-color, var(--error-color)) !important;
     }
 
-    :host([disabled]) .input-container {
+    .input-container.form-disabled {
       opacity: var(--anypoint-dropdown-menu-disabled-opacity, 0.43);
       border-bottom: 1px dashed var(--anypoint-dropdown-menu-color, var(--secondary-text-color));
     }
@@ -360,12 +360,14 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       legacy,
       _labelClass,
       _errorAddonClass,
-      _infoAddonClass
+      _infoAddonClass,
+      _triggerClass,
+      _inputContainerClass
     } = this;
 
     const renderValue = value || '';
     return html`
-    <div class="input-container">
+    <div class="${_inputContainerClass}">
       <div class="${_labelClass}">
         <slot name="label"></slot>
       </div>
@@ -380,6 +382,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
           aria-label="Toggles dropdown menu"
           tabindex="-1"
           aria-label="Toggles dropdown menu"
+          class="${_triggerClass}"
           ?legacy="${legacy}">
           <iron-icon
             class="trigger-icon ${opened ? 'opened' : ''}"
@@ -524,6 +527,9 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     } else {
       klas += labelFloating ? ' floating' : ' resting';
     }
+    if (this._formDisabled || this.disabled) {
+      klas += ' form-disabled';
+    }
     return klas;
   }
 
@@ -545,6 +551,111 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       klas += ' info-offset';
     }
     return klas;
+  }
+
+  get _triggerClass() {
+    let klas = 'trigger-button';
+    if (this._formDisabled || this.disabled) {
+      klas += ' form-disabled';
+    }
+    return klas;
+  }
+
+  get _inputContainerClass() {
+    let klas = 'input-container';
+    if (this._formDisabled || this.disabled) {
+      klas += ' form-disabled';
+    }
+    return klas;
+  }
+
+  get selectedItem() {
+    return this._selectedItem;
+  }
+
+  get _selectedItem() {
+    return this.__selectedItem;
+  }
+
+  set _selectedItem(value) {
+    const old = this.__selectedItem;
+    /* istanbul ignore if */
+    if (old === value) {
+      return;
+    }
+    this.__selectedItem = value;
+    this._selectedItemChanged(value);
+  }
+
+  get opened() {
+    return this._opened || false;
+  }
+
+  set opened(value) {
+    const old = this._opened;
+    if (old === value) {
+      return;
+    }
+    if (value && (this._disabled || this._formDisabled)) {
+      return;
+    }
+    this._opened = value;
+    this.requestUpdate('opened', old);
+    this._openedChanged(value);
+    this.dispatchEvent(new CustomEvent('opened-changed', {
+      detail: {
+        value
+      }
+    }));
+  }
+  /**
+   * @return {?Element} The content element that is contained by the dropdown menu, if any.
+   */
+  get contentElement() {
+    const slot = this.shadowRoot.querySelector('slot[name="dropdown-content"]');
+    if (!slot) {
+      return null;
+    }
+    const nodes = slot.assignedNodes();
+    for (let i = 0, l = nodes.length; i < l; i++) {
+      if (nodes[i].nodeType === Node.ELEMENT_NODE) {
+        return nodes[i];
+      }
+    }
+    return null;
+  }
+
+  get value() {
+    return this._value;
+  }
+
+  set value(value) {
+    const old = this._value;
+    if (old === value) {
+      return;
+    }
+    this._value = value;
+    this.requestUpdate('value', old);
+    /* istanbul ignore else */
+    if (this._internals) {
+      this._internals.setFormValue(value);
+    }
+  }
+
+  get disabled() {
+    return this._disabled || false;
+  }
+
+  set disabled(value) {
+    const old = this._disabled;
+    if (old === value) {
+      return;
+    }
+    this._disabled = value;
+    this.requestUpdate('disabled', old);
+    if (this.opened) {
+      this.opened = false;
+    }
   }
 
   static get properties() {
@@ -693,78 +804,12 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
        * When set the label is rendered only when not selected state.
        * It is useful when using the dropdown in an application menu bar.
        */
-      noLabelFloat: { type: Boolean, reflect: true }
+      noLabelFloat: { type: Boolean, reflect: true },
+      /**
+       * When set the control is rendered as disabled form control.
+       */
+      disabled: { type: Boolean, reflect: true }
     };
-  }
-
-  get selectedItem() {
-    return this._selectedItem;
-  }
-
-  get _selectedItem() {
-    return this.__selectedItem;
-  }
-
-  set _selectedItem(value) {
-    const old = this.__selectedItem;
-    /* istanbul ignore if */
-    if (old === value) {
-      return;
-    }
-    this.__selectedItem = value;
-    this._selectedItemChanged(value);
-  }
-
-  get opened() {
-    return this._opened;
-  }
-
-  set opened(value) {
-    const old = this._opened;
-    if (old === value) {
-      return;
-    }
-    this._opened = value;
-    this.requestUpdate('opened', old);
-    this._openedChanged(value);
-    this.dispatchEvent(new CustomEvent('opened-changed', {
-      detail: {
-        value
-      }
-    }));
-  }
-  /**
-   * @return {?Element} The content element that is contained by the dropdown menu, if any.
-   */
-  get contentElement() {
-    const slot = this.shadowRoot.querySelector('slot[name="dropdown-content"]');
-    if (!slot) {
-      return null;
-    }
-    const nodes = slot.assignedNodes();
-    for (let i = 0, l = nodes.length; i < l; i++) {
-      if (nodes[i].nodeType === Node.ELEMENT_NODE) {
-        return nodes[i];
-      }
-    }
-    return null;
-  }
-
-  get value() {
-    return this._value;
-  }
-
-  set value(value) {
-    const old = this._value;
-    if (old === value) {
-      return;
-    }
-    this._value = value;
-    this.requestUpdate('value', old);
-    /* istanbul ignore else */
-    if (this._internals) {
-      this._internals.setFormValue(value);
-    }
   }
 
   constructor() {
@@ -821,7 +866,12 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
    * @param {Boolean} disabled Form disabled state
    */
   formDisabledCallback(disabled) {
-    this.disabled = disabled;
+    const old = this._formDisabled;
+    this._formDisabled = disabled;
+    if (disabled && this.opened) {
+      this.opened = false;
+    }
+    this.requestUpdate('_formDisabled', old);
   }
   /**
    * When form-associated custom elements are supported in the browser it
@@ -847,9 +897,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
   }
 
   firstUpdated() {
-    if (this.opened === undefined) {
-      this.opened = false;
-    }
+    this._openedChanged(this.opened);
     const contentElement = this.contentElement;
     const item = contentElement && contentElement.selectedItem;
     if (item) {
@@ -968,6 +1016,9 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
    * @param {?MouseEvent} e When set it cancels the event
    */
   toggle(e) {
+    if (this.disabled || this._formDisabled) {
+      return;
+    }
     this.opened = !this.opened;
     if (e && e.preventDefault) {
       e.preventDefault();
@@ -979,12 +1030,18 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
    * Show the dropdown content.
    */
   open() {
+    if (this.disabled || this._formDisabled) {
+      return;
+    }
     this.opened = true;
   }
   /**
    * Hide the dropdown content.
    */
   close() {
+    if (this.disabled || this._formDisabled) {
+      return;
+    }
     this.opened = false;
   }
 
@@ -1030,7 +1087,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
    * and the element has a valid selection.
    */
   _getValidity() {
-    return this.disabled || !this.required || (this.required && !!this.value);
+    return (this.disabled || this._formDisabled) || !this.required || (this.required && !!this.value);
   }
 
   _openedChanged(opened) {

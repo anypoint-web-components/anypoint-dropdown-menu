@@ -22,7 +22,8 @@ class ComponentDemo extends ArcDemoPage {
       'demoError',
       'demoNoLabelFloat',
       'demoRtl',
-      'formFieldsDisabled'
+      'formFieldsDisabled',
+      'formMenuDisabled'
     ]);
     this._componentName = 'anypoint-dropdown-menu';
     this.demoStates = ['Normal', 'Outlined', 'Legacy'];
@@ -85,9 +86,14 @@ class ComponentDemo extends ArcDemoPage {
   _formSubmit(e) {
     e.preventDefault();
     const result = {};
-    for (let i = 0; i < e.target.elements.length; i++) {
-      const node = e.target.elements[i];
-      if (!node.name) {
+    const elements = e.target.elements;
+    let ignore = [];
+    for (let i = 0; i < elements.length; i++) {
+      const node = elements[i];
+      if (node.localName === 'fieldset' && node.disabled) {
+        ignore = [...ignore, ...elements[0].elements];
+      }
+      if (!node.name || node.disabled || ignore.indexOf(node) !== -1) {
         continue;
       }
       result[node.name] = node.value;
@@ -415,7 +421,8 @@ class ComponentDemo extends ArcDemoPage {
   _formsTemplate() {
     const {
       darkThemeActive,
-      formFieldsDisabled
+      formFieldsDisabled,
+      formMenuDisabled
     } = this;
     return html`
       <section class="documentation-section">
@@ -534,15 +541,18 @@ class ComponentDemo extends ArcDemoPage {
           <form enctype="application/json" @submit="${this._formSubmit}" slot="content">
             <fieldset ?disabled="${formFieldsDisabled}">
               <legend>Form fields group</legend>
-              <anypoint-dropdown-menu required name="dino">
+              <anypoint-dropdown-menu required name="dino" ?disabled="${formMenuDisabled}">
                 <label slot="label">Select a dinosaur</label>
                 <anypoint-listbox slot="dropdown-content" tabindex="-1">
                 ${this.items.map((item) => html`<anypoint-item>${item}</anypoint-item>`)}
                 </anypoint-listbox>
               </anypoint-dropdown-menu>
               <br/>
-              <input type="text" name="textInput" aria-label="Input text" />
+              <label for="fieldsetInput">Input inside fieldset</label><br/>
+              <input type="text" name="textInput" id="fieldsetInput" />
             </fieldset>
+            <label for="outsideInput">Input outside fieldset</label><br/>
+            <input type="text" name="textInput2" id="outsideInput" /><br/>
             <input type="reset" value="Reset">
             <input type="submit" value="Submit">
           </form>
@@ -555,14 +565,18 @@ class ComponentDemo extends ArcDemoPage {
             @change="${this._toggleMainOption}"
             >Disable fieldset</anypoint-checkbox
           >
+          <anypoint-checkbox
+            aria-describedby="formOptionsLabel"
+            slot="options"
+            name="formMenuDisabled"
+            @change="${this._toggleMainOption}"
+            >Disable dropdown</anypoint-checkbox
+          >
+
         </arc-interactive-demo>
 
         ${this.formData ? html`<b>Form values</b><output>${this.formData}</output>`:undefined}
 
-        <p>
-          Note <a href="https://bugs.chromium.org/p/chromium/issues/detail?id=992504">this bug</a>
-          when toggling disabled state.
-        </p>
       </section>
     `;
   }

@@ -71,6 +71,36 @@ describe('<anypoint-dropdown-menu>', () => {
     return await fixture(`<anypoint-dropdown-menu invalidmessage="test"></anypoint-dropdown-menu>`);
   }
 
+  async function disabledFixture() {
+    return await fixture(`<anypoint-dropdown-menu disabled>
+      <label slot="label">Selected dinosaur</label>
+      <anypoint-listbox slot="dropdown-content" tabindex="-1">
+        <div label="item1-label">item 1</div>
+        <div label="item2-label">item 2</div>
+        <div label="item3-label">item 3</div>
+      </div>
+    </anypoint-listbox>
+    `);
+  }
+
+  async function formFixtrue() {
+    return await fixture(`
+    <form>
+      <fieldset name="form-fiels">
+        <anypoint-dropdown-menu name="formItem">
+          <label slot="label">Selected dinosaur</label>
+          <anypoint-listbox slot="dropdown-content" tabindex="-1" selected="1">
+            <div>item 1</div>
+            <div>item 2</div>
+            <div>item 3</div>
+          </div>
+        </anypoint-listbox>
+      </fieldset>
+      <input type="reset" value="Reset">
+      <input type="submit" value="Submit">
+    </form>`);
+  }
+
   function elementIsVisible(element) {
     const contentRect = element.getBoundingClientRect();
     const computedStyle = window.getComputedStyle(element);
@@ -468,24 +498,6 @@ describe('<anypoint-dropdown-menu>', () => {
   });
 
   (hasFormAssociatedElements ? describe : describe.skip)('form-associated custom elements', () => {
-    async function formFixtrue() {
-      return await fixture(`
-      <form>
-        <fieldset name="form-fiels">
-          <anypoint-dropdown-menu name="formItem">
-            <label slot="label">Selected dinosaur</label>
-            <anypoint-listbox slot="dropdown-content" tabindex="-1" selected="1">
-              <div>item 1</div>
-              <div>item 2</div>
-              <div>item 3</div>
-            </div>
-          </anypoint-listbox>
-        </fieldset>
-        <input type="reset" value="Reset">
-        <input type="submit" value="Submit">
-      </form>`);
-    }
-
     describe('Internal basics', () => {
       let element;
       let form;
@@ -534,22 +546,6 @@ describe('<anypoint-dropdown-menu>', () => {
       it('resets input value', () => {
         form.reset();
         assert.equal(element.value, '');
-      });
-    });
-
-    describe('Disables the input when fieldset is disabled', () => {
-      let element;
-      let form;
-      let fieldset;
-      beforeEach(async () => {
-        form = await formFixtrue();
-        element = form.querySelector('anypoint-dropdown-menu');
-        fieldset = form.querySelector('fieldset');
-      });
-
-      it('resets input value', () => {
-        fieldset.disabled = true;
-        assert.isTrue(element.disabled);
       });
     });
 
@@ -623,6 +619,108 @@ describe('<anypoint-dropdown-menu>', () => {
       await aTimeout(1001);
       const node = element.shadowRoot.querySelector('p.invalid');
       assert.isFalse(node.hasAttribute('role'));
+    });
+  });
+
+  describe('disabled state', () => {
+    describe('disabled attribute', () => {
+      it('disabled cannot be opened via open()', async () => {
+        const element = await disabledFixture();
+        element.open();
+        assert.isFalse(element.opened);
+      });
+
+      it('disabled cannot be opened via opened property', async () => {
+        const element = await disabledFixture();
+        element.opened = true;
+        assert.isFalse(element.opened);
+      });
+
+      it('disabled cannot be opened via click', async () => {
+        const element = await disabledFixture();
+        MockInteractions.tap(element);
+        assert.isFalse(element.opened);
+      });
+
+      it('restores state when disabled set to false', async () => {
+        const element = await disabledFixture();
+        element.disabled = false;
+        await nextFrame();
+        element.open();
+        assert.isTrue(element.opened);
+      });
+
+      it('closes overlay when disabling', async () => {
+        const element = await basicFixture();
+        await untilOpened(element);
+        element.disabled = true;
+        assert.isFalse(element.opened);
+      });
+    });
+
+    (hasFormAssociatedElements ? describe : describe.skip)('disabled via fieldset', () => {
+      let element;
+      let form;
+      let fieldset;
+      beforeEach(async () => {
+        form = await formFixtrue();
+        element = form.querySelector('anypoint-dropdown-menu');
+        fieldset = form.querySelector('fieldset');
+      });
+
+      it('renders control disabled when fieldset is disabled', async () => {
+        fieldset.disabled = true;
+        await nextFrame();
+        const container = element.shadowRoot.querySelector('.input-container');
+        assert.isTrue(container.classList.contains('form-disabled'), 'container has disabled class');
+        const label = element.shadowRoot.querySelector('.label');
+        assert.isTrue(label.classList.contains('form-disabled'), 'label has disabled class');
+        const button = element.shadowRoot.querySelector('.trigger-button');
+        assert.isTrue(button.classList.contains('form-disabled'), 'button has disabled class');
+      });
+
+      it('dropdown has no disabled property set', async () => {
+        fieldset.disabled = true;
+        await nextFrame();
+        assert.isFalse(element.disabled);
+      });
+
+      it('disabled cannot be opened via open()', async () => {
+        fieldset.disabled = true;
+        await nextFrame();
+        element.open();
+        assert.isFalse(element.opened);
+      });
+
+      it('disabled cannot be opened via opened property', async () => {
+        fieldset.disabled = true;
+        await nextFrame();
+        element.opened = true;
+        assert.isFalse(element.opened);
+      });
+
+      it('disabled cannot be opened via click', async () => {
+        fieldset.disabled = true;
+        await nextFrame();
+        MockInteractions.tap(element);
+        assert.isFalse(element.opened);
+      });
+
+      it('restores state when disabled set to false', async () => {
+        fieldset.disabled = true;
+        await nextFrame();
+        fieldset.disabled = false;
+        await nextFrame();
+        element.open();
+        assert.isTrue(element.opened);
+      });
+
+      it('closes overlay when disabling', async () => {
+        await untilOpened(element);
+        fieldset.disabled = true;
+        await nextFrame();
+        assert.isFalse(element.opened);
+      });
     });
   });
 
