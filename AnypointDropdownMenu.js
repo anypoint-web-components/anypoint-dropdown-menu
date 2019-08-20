@@ -51,7 +51,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     .input-container {
       position: relative;
       height: 100%;
-      width: inherit;
+      /* width: inherit; */
       background-color: var(--anypoint-dropdown-menu-background-color, #F5F5F5);
 
       border: 1px var(--anypoint-dropdown-menu-border-color, transparent) solid;
@@ -188,7 +188,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
 
     anypoint-dropdown {
       margin-top: 58px;
-      width: inherit;
+      width: auto;
     }
 
     .dropdown-content {
