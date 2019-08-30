@@ -28,7 +28,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       box-sizing: border-box;
       font-size: 1rem;
       /* Anypoint UI controls margin in forms */
-      margin: 12px 8px;
+      margin: 16px 8px;
     }
 
     .hidden {
