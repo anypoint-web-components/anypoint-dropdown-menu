@@ -1,1 +1,1 @@
-export { AnypointDropdown } from './AnypointDropdown.js';
+export { AnypointDropdownMenu } from './AnypointDropdownMenu.js';
