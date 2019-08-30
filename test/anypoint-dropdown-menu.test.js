@@ -1,7 +1,7 @@
 import { fixture, assert, nextFrame, aTimeout } from '@open-wc/testing';
 import * as MockInteractions from '@polymer/iron-test-helpers/mock-interactions.js';
 import '@anypoint-web-components/anypoint-listbox/anypoint-listbox.js';
-import sinon from 'sinon/pkg/sinon-esm.js';
+import * as sinon from 'sinon/pkg/sinon-esm.js';
 import '../anypoint-dropdown-menu.js';
 
 const hasFormAssociatedElements = 'attachInternals' in document.createElement('span');
@@ -794,10 +794,25 @@ describe('<anypoint-dropdown-menu>', () => {
       await assert.isAccessible(element);
     });
 
-    it('is accessible for legacy style', async () => {
+    it('is accessible for compatibility style', async () => {
+      const element = await basicFixture();
+      element.compatibility = true;
+      await assert.isAccessible(element);
+    });
+  });
+
+  describe('compatibility mode', () => {
+    it('sets compatibility on item when setting legacy', async () => {
       const element = await basicFixture();
       element.legacy = true;
-      await assert.isAccessible(element);
+      assert.isTrue(element.legacy, 'legacy is set');
+      assert.isTrue(element.compatibility, 'compatibility is set');
+    });
+
+    it('returns compatibility value from item when getting legacy', async () => {
+      const element = await basicFixture();
+      element.compatibility = true;
+      assert.isTrue(element.legacy, 'legacy is set');
     });
   });
 });

@@ -17,7 +17,7 @@ class ComponentDemo extends ArcDemoPage {
     super();
     this.initObservableProperties([
       'demoOutlined',
-      'demoLegacy',
+      'demoCompatibility',
       'demoInfo',
       'demoError',
       'demoNoLabelFloat',
@@ -26,7 +26,7 @@ class ComponentDemo extends ArcDemoPage {
       'formMenuDisabled'
     ]);
     this._componentName = 'anypoint-dropdown-menu';
-    this.demoStates = ['Normal', 'Outlined', 'Legacy'];
+    this.demoStates = ['Filled', 'Outlined', 'Anypoint'];
     this.items = [
       'Allosaurus',
       'Brontosaurus',
@@ -114,15 +114,15 @@ class ComponentDemo extends ArcDemoPage {
     switch (state) {
       case 0:
         this.demoOutlined = false;
-        this.demoLegacy = false;
+        this.demoCompatibility = false;
         break;
       case 1:
         this.demoOutlined = true;
-        this.demoLegacy = false;
+        this.demoCompatibility = false;
         break;
       case 2:
         this.demoOutlined = false;
-        this.demoLegacy = true;
+        this.demoCompatibility = true;
         break;
     }
   }
@@ -154,7 +154,7 @@ class ComponentDemo extends ArcDemoPage {
       demoStates,
       darkThemeActive,
       demoOutlined,
-      demoLegacy,
+      demoCompatibility,
       demoInfo,
       demoError,
       demoRtl,
@@ -177,7 +177,7 @@ class ComponentDemo extends ArcDemoPage {
         name="mainDemo"
         title="Dropdown menu"
         ?outlined="${demoOutlined}"
-        ?legacy="${demoLegacy}"
+        ?compatibility="${demoCompatibility}"
         .infoMessage="${infoMessage}"
         invalidmessage="This value is invalid"
         ?invalid="${demoError}"
@@ -185,7 +185,7 @@ class ComponentDemo extends ArcDemoPage {
         ?noLabelFloat="${demoNoLabelFloat}"
         >
         <label slot="label">Select a dinosaur</label>
-        <anypoint-listbox slot="dropdown-content" tabindex="-1" ?legacy="${demoLegacy}">
+        <anypoint-listbox slot="dropdown-content" tabindex="-1" ?compatibility="${demoCompatibility}">
         ${this.items.map((item) => html`<anypoint-item>${item}</anypoint-item>`)}
         </anypoint-listbox>
       </anypoint-dropdown-menu>
@@ -262,7 +262,7 @@ class ComponentDemo extends ArcDemoPage {
           <li><b>Filled</b> (normal) - For low emphasis inputs</li>
           <li><b>Outlined</b> - For high emphasis inputs</li>
           <li>
-            <b>Legacy</b> - To provide compatibility with legacy Anypoint design
+            <b>Compatibility</b> - To provide compatibility with Anypoint design
           </li>
         </ul>
 

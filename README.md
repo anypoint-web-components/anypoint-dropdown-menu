@@ -16,7 +16,7 @@ They can be used only when a single menu item can be chosen at a time.
 The element has three built-in themes:
 -   Material Design - Filled
 -   Material Design - Outlined
--   Anypoint Design - Legacy
+-   Anypoint Design - Compatibility
 
 By default the input renders `filled` dropdown list.
 
@@ -26,9 +26,9 @@ Outlined style is rendered when `outlined` property is set.
 
 ![Outlined menu](demo/outlined.png)
 
-Anypoint ready styles are rendered when `legacy` property is set.
+Anypoint ready styles are rendered when `compatibility` property is set.
 
-![Legacy menu](demo/legacy.png)
+![Compatibility menu](demo/compatibility.png)
 
 OSS application should not use Anypoint based styling as it's protected by MuleSoft copyrights. This property is reserved for OSS applications embedded in the Anypoint platform.
 

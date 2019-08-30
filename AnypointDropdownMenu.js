@@ -160,7 +160,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       max-width: calc(100% + 20%);
     }
 
-    :host([nolabelfloat]:not([legacy])) .label.floating {
+    :host([nolabelfloat]:not([compatibility])) .label.floating {
       display: none !important;
     }
 
@@ -269,14 +269,14 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       border: 1px solid var(--anypoint-dropdown-error-color, var(--error-color)) !important;
     }
 
-    /* Anypoint legacy theme */
+    /* Anypoint compatibility theme */
 
-    :host([legacy]) {
+    :host([compatibility]) {
       height: 40px;
       margin-top: 20px;
     }
 
-    :host([legacy]) .input-container {
+    :host([compatibility]) .input-container {
       border: none;
       border-left: 2px var(--anypoint-dropdown-menu-border-color, #8e8e8e) solid;
       border-right: 2px var(--anypoint-dropdown-menu-border-color, #8e8e8e) solid;
@@ -284,55 +284,55 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       box-sizing: border-box;
     }
 
-    :host([legacy][focused]) .input-container,
-    :host([legacy]:hover) .input-container {
-      border-left-color: var(--anypoint-dropdown-menu-legacy-focus-border-color, #58595a);
-      border-right-color: var(--anypoint-dropdown-menu-legacy-focus-border-color, #58595a);
-      background-color: var(--anypoint-dropdown-menu-legacy-focus-background-color, #f9fafb);
+    :host([compatibility][focused]) .input-container,
+    :host([compatibility]:hover) .input-container {
+      border-left-color: var(--anypoint-dropdown-menu-compatibility-focus-border-color, #58595a);
+      border-right-color: var(--anypoint-dropdown-menu-compatibility-focus-border-color, #58595a);
+      background-color: var(--anypoint-dropdown-menu-compatibility-focus-background-color, #f9fafb);
     }
 
-    :host([legacy][invalid]) .input-container {
+    :host([compatibility][invalid]) .input-container {
       border-left-color: var(--anypoint-dropdown-menu-error-color, var(--error-color));
       border-right-color: var(--anypoint-dropdown-menu-error-color, var(--error-color));
       border-bottom: none !important;
     }
 
-    :host([legacy]) .label {
+    :host([compatibility]) .label {
       font-size: .875rem;
       left: -2px;
       top: -18px;
       transform: none;
       font-weight: 500;
-      color: var(--anypoint-dropdown-menu-legacy-label-color, #616161);
+      color: var(--anypoint-dropdown-menu-compatibility-label-color, #616161);
     }
 
-    :host([legacy]) anypoint-dropdown {
+    :host([compatibility]) anypoint-dropdown {
       margin-top: 40px;
     }
 
-    :host([legacy]) .input {
+    :host([compatibility]) .input {
       margin-top: 0;
     }
 
-    :host([legacy]) .invalid,
-    :host([legacy]) .info {
+    :host([compatibility]) .invalid,
+    :host([compatibility]) .info {
       margin-left: 0px;
     }
 
-    :host([nolabelfloat][legacy]) {
+    :host([nolabelfloat][compatibility]) {
       margin-top: 0px;
     }
 
-    :host([legacy]) anypoint-dropdown {
+    :host([compatibility]) anypoint-dropdown {
       border-bottom: 2px var(--anypoint-dropdown-menu-border-color, #E0E0E0) solid;
       border-top: 2px var(--anypoint-dropdown-menu-border-color, #E0E0E0) solid;
     }
 
-    :host([legacy]) .dropdown-content {
+    :host([compatibility]) .dropdown-content {
       box-shadow: none;
     }
 
-    :host([nolabelfloat][legacy]) .label.resting {
+    :host([nolabelfloat][compatibility]) .label.resting {
       top: calc(100% / 2 - 8px);
       left: 10px;
       font-size: 1rem;
@@ -357,7 +357,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       value,
       invalidMessage,
       infoMessage,
-      legacy,
+      compatibility,
       _labelClass,
       _errorAddonClass,
       _infoAddonClass,
@@ -383,7 +383,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
           tabindex="-1"
           aria-label="Toggles dropdown menu"
           class="${_triggerClass}"
-          ?legacy="${legacy}">
+          ?compatibility="${compatibility}">
           <iron-icon
             class="trigger-icon ${opened ? 'opened' : ''}"
             icon="anypoint-dropdown-menu:adm-arrow-down"></iron-icon>
@@ -403,7 +403,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
         .noAnimations="${noAnimations}"
         .allowOutsideScroll="${allowOutsideScroll}"
         .restoreFocusOnClose="${restoreFocusOnClose}"
-        ?legacy="${legacy}"
+        ?compatibility="${compatibility}"
         @overlay-closed="${this._dropdownClosed}"
         @overlay-opened="${this._dropdownOpened}"
         @select="${this._selectHandler}"
@@ -658,6 +658,14 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     }
   }
 
+  get legacy() {
+    return this.compatibility;
+  }
+
+  set legacy(value) {
+    this.compatibility = value;
+  }
+
   static get properties() {
     return {
       /**
@@ -797,9 +805,13 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
        */
       outlined: { type: Boolean, reflect: true },
       /**
-       * Enables Anypoint legacy theme.
+       * Enables compatibility with Anypoint components.
        */
-      legacy: { type: Boolean, reflect: true },
+      compatibility: { type: Boolean, reflect: true },
+      /**
+       * @deprecated Use `compatibility` instead
+       */
+      legacy: { type: Boolean },
       /**
        * When set the label is rendered only when not selected state.
        * It is useful when using the dropdown in an application menu bar.
