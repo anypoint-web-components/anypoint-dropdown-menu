@@ -208,6 +208,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       overflow: hidden;
       margin-top: -2px;
       height: 20px;
+      position: absolute;
     }
 
     .invalid,
