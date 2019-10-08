@@ -3,7 +3,7 @@ import { ControlStateMixin } from '@anypoint-web-components/anypoint-control-mix
 import { ValidatableMixin } from '@anypoint-web-components/validatable-mixin/validatable-mixin.js';
 import '@anypoint-web-components/anypoint-dropdown/anypoint-dropdown.js';
 import '@anypoint-web-components/anypoint-button/anypoint-icon-button.js';
-import './anypoint-dropdown-menu-icons.js';
+import { arrowDown } from './icons.js';
 /**
  * Accessible dropdown menu for Anypoint platform.
  *
@@ -174,6 +174,10 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       transition: transform 0.12s ease-in-out;
       will-change: transform;
       color: var(--anypoint-dropdown-menu-label-color, #616161);
+      fill: currentColor;
+      display: inline-block;
+      width: 24px;
+      height: 24px;
     }
 
     .trigger-icon.opened {
@@ -384,10 +388,9 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
           tabindex="-1"
           aria-label="Toggles dropdown menu"
           class="${_triggerClass}"
-          ?compatibility="${compatibility}">
-          <iron-icon
-            class="trigger-icon ${opened ? 'opened' : ''}"
-            icon="anypoint-dropdown-menu:adm-arrow-down"></iron-icon>
+          ?compatibility="${compatibility}"
+        >
+          <span class="trigger-icon ${opened ? 'opened' : ''}">${arrowDown}</span>
         </anypoint-icon-button>
       </div>
 
@@ -408,7 +411,9 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
         @overlay-closed="${this._dropdownClosed}"
         @overlay-opened="${this._dropdownOpened}"
         @select="${this._selectHandler}"
-        @deselect="${this._deselectHandler}">
+        @deselect="${this._deselectHandler}"
+        @activate="${this._activateHandler}"
+      >
         <div slot="dropdown-content" class="dropdown-content">
           <slot id="content" name="dropdown-content"></slot>
         </div>
@@ -1172,5 +1177,9 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     setTimeout(() => {
       node.removeAttribute('role');
     }, 1000);
+  }
+
+  _activateHandler() {
+    this.close();
   }
 }
