@@ -15,7 +15,7 @@ import { arrowDown } from './icons.js';
  * See README.md file for detailed documentation.
  */
 export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(LitElement)) {
-  static get styles() {
+  get styles() {
     return css`
     :host {
       /* Default size of an <input> */
@@ -371,7 +371,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     } = this;
 
     const renderValue = value || '';
-    return html`
+    return html`<style>${this.styles}</style>
     <div class="${_inputContainerClass}">
       <div class="${_labelClass}">
         <slot name="label"></slot>
