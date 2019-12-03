@@ -412,7 +412,6 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
         @overlay-opened="${this._dropdownOpened}"
         @select="${this._selectHandler}"
         @deselect="${this._deselectHandler}"
-        @activate="${this._activateHandler}"
       >
         <div slot="dropdown-content" class="dropdown-content">
           <slot id="content" name="dropdown-content"></slot>
@@ -420,10 +419,9 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       </anypoint-dropdown>
     </div>
     <div class="assistive-info">
-    ${infoMessage ? html`<p class="${_infoAddonClass}">${infoMessage}</p>` : undefined}
+    ${infoMessage ? html`<p class="${_infoAddonClass}">${infoMessage}</p>` : ''}
     ${invalidMessage ?
-      html`<p class="${_errorAddonClass}">${invalidMessage}</p>` :
-      undefined}
+      html`<p class="${_errorAddonClass}">${invalidMessage}</p>` : ''}
     </div>
     `;
   }
@@ -1177,9 +1175,5 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     setTimeout(() => {
       node.removeAttribute('role');
     }, 1000);
-  }
-
-  _activateHandler() {
-    this.close();
   }
 }
