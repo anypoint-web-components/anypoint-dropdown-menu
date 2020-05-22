@@ -4,11 +4,12 @@ import '@anypoint-web-components/anypoint-listbox/anypoint-listbox.js';
 import * as sinon from 'sinon/pkg/sinon-esm.js';
 import '../anypoint-dropdown-menu.js';
 
-const hasFormAssociatedElements = 'attachInternals' in document.createElement('span');
+const hasFormAssociatedElements =
+  'attachInternals' in document.createElement('span');
 
 describe('<anypoint-dropdown-menu>', () => {
   async function basicFixture() {
-    return await fixture(`<anypoint-dropdown-menu aria-label="Test">
+    return fixture(`<anypoint-dropdown-menu aria-label="Test">
       <label slot="label">Dinosaur</label>
       <div slot="dropdown-content">
         <div>item 1</div>
@@ -20,7 +21,7 @@ describe('<anypoint-dropdown-menu>', () => {
   }
 
   async function selectedFixture() {
-    return await fixture(`<anypoint-dropdown-menu aria-label="Test">
+    return fixture(`<anypoint-dropdown-menu aria-label="Test">
       <label slot="label">Selected dinosaur</label>
       <anypoint-listbox slot="dropdown-content" tabindex="-1" selected="1">
         <div>item 1</div>
@@ -32,7 +33,7 @@ describe('<anypoint-dropdown-menu>', () => {
   }
 
   async function labeledFixture() {
-    return await fixture(`<anypoint-dropdown-menu aria-label="Test">
+    return fixture(`<anypoint-dropdown-menu aria-label="Test">
       <label slot="label">Selected dinosaur</label>
       <anypoint-listbox slot="dropdown-content" tabindex="-1" selected="1">
         <div label="item1-label">item 1</div>
@@ -44,7 +45,7 @@ describe('<anypoint-dropdown-menu>', () => {
   }
 
   async function requiredFixture() {
-    return await fixture(`<anypoint-dropdown-menu aria-label="Test" required>
+    return fixture(`<anypoint-dropdown-menu aria-label="Test" required>
       <label slot="label">Selected dinosaur</label>
       <anypoint-listbox slot="dropdown-content" tabindex="-1">
         <div label="item1-label">item 1</div>
@@ -56,7 +57,7 @@ describe('<anypoint-dropdown-menu>', () => {
   }
 
   async function autoValidateFixture() {
-    return await fixture(`<anypoint-dropdown-menu aria-label="Test" required autovalidate>
+    return fixture(`<anypoint-dropdown-menu aria-label="Test" required autovalidate>
       <label slot="label">Selected dinosaur</label>
       <anypoint-listbox slot="dropdown-content" tabindex="-1">
         <div label="item1-label">item 1</div>
@@ -68,11 +69,13 @@ describe('<anypoint-dropdown-menu>', () => {
   }
 
   async function invalidMessageFixture() {
-    return await fixture(`<anypoint-dropdown-menu invalidmessage="test"></anypoint-dropdown-menu>`);
+    return fixture(
+      `<anypoint-dropdown-menu invalidmessage="test"></anypoint-dropdown-menu>`
+    );
   }
 
   async function disabledFixture() {
-    return await fixture(`<anypoint-dropdown-menu disabled>
+    return fixture(`<anypoint-dropdown-menu disabled>
       <label slot="label">Selected dinosaur</label>
       <anypoint-listbox slot="dropdown-content" tabindex="-1">
         <div label="item1-label">item 1</div>
@@ -84,7 +87,7 @@ describe('<anypoint-dropdown-menu>', () => {
   }
 
   async function formFixtrue() {
-    return await fixture(`
+    return fixture(`
     <form>
       <fieldset name="form-fiels">
         <anypoint-dropdown-menu name="formItem">
@@ -104,8 +107,11 @@ describe('<anypoint-dropdown-menu>', () => {
   function elementIsVisible(element) {
     const contentRect = element.getBoundingClientRect();
     const computedStyle = window.getComputedStyle(element);
-    return computedStyle.display !== 'none' && contentRect.width > 0 &&
-        contentRect.height > 0;
+    return (
+      computedStyle.display !== 'none' &&
+      contentRect.width > 0 &&
+      contentRect.height > 0
+    );
   }
 
   async function untilOpened(element) {
@@ -285,17 +291,19 @@ describe('<anypoint-dropdown-menu>', () => {
   });
 
   describe('validationStates', () => {
-    const states = [{
-      valid: false,
-      message: 'test'
-    }];
+    const states = [
+      {
+        valid: false,
+        message: 'test',
+      },
+    ];
 
     let element;
     beforeEach(async () => {
       element = await basicFixture();
     });
 
-    it('sets validationStates on element', function() {
+    it('sets validationStates on element', () => {
       element.validationStates = states;
       assert.deepEqual(element.validationStates, states);
     });
@@ -321,7 +329,7 @@ describe('<anypoint-dropdown-menu>', () => {
       assert.deepEqual(spy.args[0][0], states);
     });
 
-    it('sets hasValidationMessage when validationStates changes', function() {
+    it('sets hasValidationMessage when validationStates changes', () => {
       element.invalid = true;
       element.validationStates = states;
       assert.isTrue(element.hasValidationMessage);
@@ -341,48 +349,36 @@ describe('<anypoint-dropdown-menu>', () => {
     });
   });
 
-  describe('_infoAddonClass getter', function() {
+  describe('_infoAddonClass getter', () => {
     let element;
     beforeEach(async () => {
       element = await basicFixture();
     });
 
     it('returns default class', () => {
-      assert.equal(
-        element._infoAddonClass,
-        'info'
-      );
+      assert.equal(element._infoAddonClass, 'info');
     });
 
     it('returns default class when not invalid', () => {
       element.invalidMessage = 'test';
-      assert.equal(
-        element._infoAddonClass,
-        'info'
-      );
+      assert.equal(element._infoAddonClass, 'info');
     });
 
     it('returns label-hidden class when invalid', () => {
       element.invalidMessage = 'test';
       element.invalid = true;
-      assert.equal(
-        element._infoAddonClass,
-        'info label-hidden'
-      );
+      assert.equal(element._infoAddonClass, 'info label-hidden');
     });
   });
 
-  describe('_errorAddonClass getter', function() {
+  describe('_errorAddonClass getter', () => {
     let element;
     beforeEach(async () => {
       element = await basicFixture();
     });
 
     it('returns default class', () => {
-      assert.equal(
-        element._errorAddonClass,
-        'invalid label-hidden'
-      );
+      assert.equal(element._errorAddonClass, 'invalid label-hidden');
     });
 
     it('returns info-offset class when with info message', () => {
@@ -396,10 +392,7 @@ describe('<anypoint-dropdown-menu>', () => {
     it('returns visible class when invalid', () => {
       element.infoMessage = 'test';
       element.invalid = true;
-      assert.equal(
-        element._errorAddonClass,
-        'invalid info-offset'
-      );
+      assert.equal(element._errorAddonClass, 'invalid info-offset');
     });
   });
 
@@ -419,7 +412,7 @@ describe('<anypoint-dropdown-menu>', () => {
     it('sets value from passed item label property', async () => {
       const element = await basicFixture();
       element._selectedItemChanged({
-        label: 'test'
+        label: 'test',
       });
       assert.equal(element.value, 'test');
     });
@@ -457,7 +450,7 @@ describe('<anypoint-dropdown-menu>', () => {
     it('cancels passed event', async () => {
       const element = await basicFixture();
       const e = new CustomEvent('test', {
-        cancelable: true
+        cancelable: true,
       });
       element.toggle(e);
       assert.isTrue(e.defaultPrevented);
@@ -497,73 +490,76 @@ describe('<anypoint-dropdown-menu>', () => {
     });
   });
 
-  (hasFormAssociatedElements ? describe : describe.skip)('form-associated custom elements', () => {
-    describe('Internal basics', () => {
-      let element;
-      let form;
-      beforeEach(async () => {
-        form = await formFixtrue();
-        element = form.querySelector('anypoint-dropdown-menu');
+  (hasFormAssociatedElements ? describe : describe.skip)(
+    'form-associated custom elements',
+    () => {
+      describe('Internal basics', () => {
+        let element;
+        let form;
+        beforeEach(async () => {
+          form = await formFixtrue();
+          element = form.querySelector('anypoint-dropdown-menu');
+        });
+
+        it('initializes ElementInternals interface', () => {
+          assert.ok(element._internals);
+        });
+
+        it('has associated form', () => {
+          assert.equal(element.form, form);
+        });
+
+        it('the element is in the list of form elements', () => {
+          const elements = Array.from(form.elements);
+          assert.notEqual(elements.indexOf(element), -1);
+        });
       });
 
-      it('initializes ElementInternals interface', () => {
-        assert.ok(element._internals);
+      describe('Submitting the form', () => {
+        let element;
+        let form;
+        beforeEach(async () => {
+          form = await formFixtrue();
+          element = form.querySelector('anypoint-dropdown-menu');
+        });
+
+        it('set value in forms submission value', () => {
+          const spy = sinon.spy(element._internals, 'setFormValue');
+          element.value = 'test';
+          assert.isTrue(spy.called);
+        });
       });
 
-      it('has associated form', () => {
-        assert.equal(element.form, form);
+      describe('Resseting the form', () => {
+        let element;
+        let form;
+        beforeEach(async () => {
+          form = await formFixtrue();
+          element = form.querySelector('anypoint-dropdown-menu');
+        });
+
+        it('resets input value', () => {
+          form.reset();
+          assert.equal(element.value, '');
+        });
       });
 
-      it('the element is in the list of form elements', () => {
-        const elements = Array.from(form.elements);
-        assert.notEqual(elements.indexOf(element), -1);
-      });
-    });
+      describe('checkValidity()', () => {
+        let element;
+        let form;
+        beforeEach(async () => {
+          form = await formFixtrue();
+          element = form.querySelector('anypoint-dropdown-menu');
+        });
 
-    describe('Submitting the form', () => {
-      let element;
-      let form;
-      beforeEach(async () => {
-        form = await formFixtrue();
-        element = form.querySelector('anypoint-dropdown-menu');
+        it('calls internall checkValidity()', () => {
+          const spy = sinon.spy(element._internals, 'checkValidity');
+          element.checkValidity();
+          assert.isTrue(spy.called);
+        });
       });
-
-      it('set value in forms submission value', () => {
-        const spy = sinon.spy(element._internals, 'setFormValue');
-        element.value = 'test';
-        assert.isTrue(spy.called);
-      });
-    });
-
-    describe('Resseting the form', () => {
-      let element;
-      let form;
-      beforeEach(async () => {
-        form = await formFixtrue();
-        element = form.querySelector('anypoint-dropdown-menu');
-      });
-
-      it('resets input value', () => {
-        form.reset();
-        assert.equal(element.value, '');
-      });
-    });
-
-    describe('checkValidity()', () => {
-      let element;
-      let form;
-      beforeEach(async () => {
-        form = await formFixtrue();
-        element = form.querySelector('anypoint-dropdown-menu');
-      });
-
-      it('calls internall checkValidity()', () => {
-        const spy = sinon.spy(element._internals, 'checkValidity');
-        element.checkValidity();
-        assert.isTrue(spy.called);
-      });
-    });
-  });
+    }
+  );
 
   describe('_invalidChanged()', () => {
     let element;
@@ -658,70 +654,84 @@ describe('<anypoint-dropdown-menu>', () => {
       });
     });
 
-    (hasFormAssociatedElements ? describe : describe.skip)('disabled via fieldset', () => {
-      let element;
-      let form;
-      let fieldset;
-      beforeEach(async () => {
-        form = await formFixtrue();
-        element = form.querySelector('anypoint-dropdown-menu');
-        fieldset = form.querySelector('fieldset');
-      });
+    (hasFormAssociatedElements ? describe : describe.skip)(
+      'disabled via fieldset',
+      () => {
+        let element;
+        let form;
+        let fieldset;
+        beforeEach(async () => {
+          form = await formFixtrue();
+          element = form.querySelector('anypoint-dropdown-menu');
+          fieldset = form.querySelector('fieldset');
+        });
 
-      it('renders control disabled when fieldset is disabled', async () => {
-        fieldset.disabled = true;
-        await nextFrame();
-        const container = element.shadowRoot.querySelector('.input-container');
-        assert.isTrue(container.classList.contains('form-disabled'), 'container has disabled class');
-        const label = element.shadowRoot.querySelector('.label');
-        assert.isTrue(label.classList.contains('form-disabled'), 'label has disabled class');
-        const button = element.shadowRoot.querySelector('.trigger-button');
-        assert.isTrue(button.classList.contains('form-disabled'), 'button has disabled class');
-      });
+        it('renders control disabled when fieldset is disabled', async () => {
+          fieldset.disabled = true;
+          await nextFrame();
+          const container = element.shadowRoot.querySelector(
+            '.input-container'
+          );
+          assert.isTrue(
+            container.classList.contains('form-disabled'),
+            'container has disabled class'
+          );
+          const label = element.shadowRoot.querySelector('.label');
+          assert.isTrue(
+            label.classList.contains('form-disabled'),
+            'label has disabled class'
+          );
+          const button = element.shadowRoot.querySelector('.trigger-button');
+          assert.isTrue(
+            button.classList.contains('form-disabled'),
+            'button has disabled class'
+          );
+        });
 
-      it('dropdown has no disabled property set', async () => {
-        fieldset.disabled = true;
-        await nextFrame();
-        assert.isFalse(element.disabled);
-      });
+        it('dropdown has no disabled property set', async () => {
+          fieldset.disabled = true;
+          await nextFrame();
+          assert.isFalse(element.disabled);
+        });
 
-      it('disabled cannot be opened via open()', async () => {
-        fieldset.disabled = true;
-        await nextFrame();
-        element.open();
-        assert.isFalse(element.opened);
-      });
+        it('disabled cannot be opened via open()', async () => {
+          fieldset.disabled = true;
+          await nextFrame();
+          element.open();
+          assert.isFalse(element.opened);
+        });
 
-      it('disabled cannot be opened via opened property', async () => {
-        fieldset.disabled = true;
-        await nextFrame();
-        element.opened = true;
-        assert.isFalse(element.opened);
-      });
+        it('disabled cannot be opened via opened property', async () => {
+          fieldset.disabled = true;
+          await nextFrame();
+          element.opened = true;
+          assert.isFalse(element.opened);
+        });
 
-      it('disabled cannot be opened via click', async () => {
-        fieldset.disabled = true;
-        await nextFrame();
-        MockInteractions.tap(element);
-        assert.isFalse(element.opened);
-      });
+        it('disabled cannot be opened via click', async () => {
+          fieldset.disabled = true;
+          await nextFrame();
+          MockInteractions.tap(element);
+          assert.isFalse(element.opened);
+        });
 
-      it('restores state when disabled set to false', async () => {
-        fieldset.disabled = true;
-        await nextFrame();
-        fieldset.disabled = false;
-        await nextFrame();
-        element.open();
-        assert.isTrue(element.opened);
-      });
+        it('restores state when disabled set to false', async () => {
+          fieldset.disabled = true;
+          await nextFrame();
+          fieldset.disabled = false;
+          await nextFrame();
+          element.open();
+          assert.isTrue(element.opened);
+        });
 
-      it('closes overlay when disabling', async () => {
-        await untilOpened(element);
-        fieldset.disabled = true;
-        await nextFrame();
-        assert.isFalse(element.opened);
-      });
-    });
+        it('closes overlay when disabling', async () => {
+          await untilOpened(element);
+          fieldset.disabled = true;
+          await nextFrame();
+          assert.isFalse(element.opened);
+        });
+      }
+    );
   });
 
   describe('a11y', () => {
@@ -741,14 +751,20 @@ describe('<anypoint-dropdown-menu>', () => {
     it('sets aria-expanded on content element when opened', async () => {
       const element = await basicFixture();
       await untilOpened(element);
-      assert.equal(element.contentElement.getAttribute('aria-expanded'), 'true');
+      assert.equal(
+        element.contentElement.getAttribute('aria-expanded'),
+        'true'
+      );
     });
 
     it('sets aria-expanded on content element when closed', async () => {
       const element = await basicFixture();
       await untilOpened(element);
       element.opened = false;
-      assert.equal(element.contentElement.getAttribute('aria-expanded'), 'false');
+      assert.equal(
+        element.contentElement.getAttribute('aria-expanded'),
+        'false'
+      );
     });
 
     it('sets tabindex on the element', async () => {
@@ -757,7 +773,9 @@ describe('<anypoint-dropdown-menu>', () => {
     });
 
     it('respects existing tabindex on the element', async () => {
-      const element = await fixture(`<anypoint-dropdown-menu tabindex="1"></anypoint-listbox>`);
+      const element = await fixture(
+        `<anypoint-dropdown-menu tabindex="1"></anypoint-listbox>`
+      );
       assert.equal(element.getAttribute('tabindex'), '1');
     });
 
@@ -767,7 +785,9 @@ describe('<anypoint-dropdown-menu>', () => {
     });
 
     it('respects existing aria-haspopup on the element', async () => {
-      const element = await fixture(`<anypoint-dropdown-menu aria-haspopup="true"></anypoint-listbox>`);
+      const element = await fixture(
+        `<anypoint-dropdown-menu aria-haspopup="true"></anypoint-listbox>`
+      );
       assert.equal(element.getAttribute('aria-haspopup'), 'true');
     });
 

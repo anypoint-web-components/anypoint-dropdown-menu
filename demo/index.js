@@ -1,7 +1,6 @@
 import { html } from 'lit-html';
 import { ArcDemoPage } from '@advanced-rest-client/arc-demo-helper/ArcDemoPage.js';
 import '@advanced-rest-client/arc-demo-helper/arc-demo-helper.js';
-import '@polymer/iron-image/iron-image.js';
 import '@anypoint-web-components/anypoint-item/anypoint-item.js';
 import '@anypoint-web-components/anypoint-listbox/anypoint-listbox.js';
 import '@advanced-rest-client/arc-demo-helper/arc-interactive-demo.js';
@@ -10,7 +9,10 @@ import '@anypoint-web-components/anypoint-radio-button/anypoint-radio-button.js'
 import '@anypoint-web-components/anypoint-radio-button/anypoint-radio-group.js';
 import '../anypoint-dropdown-menu.js';
 
-const hasFormAssociatedElements = 'attachInternals' in document.createElement('span');
+/* eslint-disable no-continue */
+
+const hasFormAssociatedElements =
+  'attachInternals' in document.createElement('span');
 
 class ComponentDemo extends ArcDemoPage {
   constructor() {
@@ -23,7 +25,7 @@ class ComponentDemo extends ArcDemoPage {
       'demoNoLabelFloat',
       'demoRtl',
       'formFieldsDisabled',
-      'formMenuDisabled'
+      'formMenuDisabled',
     ]);
     this._componentName = 'anypoint-dropdown-menu';
     this.demoStates = ['Filled', 'Outlined', 'Anypoint'];
@@ -53,13 +55,9 @@ class ComponentDemo extends ArcDemoPage {
       'wannanosaurus',
       'xenoceratops',
       'yandusaurus',
-      'zephyrosaurus'
+      'zephyrosaurus',
     ];
-    this.minItems = [
-      'Allosaurus',
-      'Brontosaurus',
-      'Carcharodontosaurus'
-    ];
+    this.minItems = ['Allosaurus', 'Brontosaurus', 'Carcharodontosaurus'];
 
     this._formSubmit = this._formSubmit.bind(this);
     this._mainDemoStateHandler = this._mainDemoStateHandler.bind(this);
@@ -86,7 +84,7 @@ class ComponentDemo extends ArcDemoPage {
   _formSubmit(e) {
     e.preventDefault();
     const result = {};
-    const elements = e.target.elements;
+    const { elements } = e.target;
     let ignore = [];
     for (let i = 0; i < elements.length; i++) {
       const node = elements[i];
@@ -101,30 +99,20 @@ class ComponentDemo extends ArcDemoPage {
     this.formData = JSON.stringify(result, null, 2);
   }
 
-
   _headerControlsTemplate() {
     return html`${super._headerControlsTemplate()}
-    <div class="settings-action-item">
-      <paper-toggle-button checked @checked-changed="${this._stylesHandler}">Toggle styles</paper-toggle-button>
-    </div>`;
+      <div class="settings-action-item">
+        <paper-toggle-button checked @checked-changed="${this._stylesHandler}"
+          >Toggle styles</paper-toggle-button
+        >
+      </div>`;
   }
 
   _mainDemoStateHandler(e) {
     const state = e.detail.value;
-    switch (state) {
-      case 0:
-        this.demoOutlined = false;
-        this.demoCompatibility = false;
-        break;
-      case 1:
-        this.demoOutlined = true;
-        this.demoCompatibility = false;
-        break;
-      case 2:
-        this.demoOutlined = false;
-        this.demoCompatibility = true;
-        break;
-    }
+    this.demoState = state;
+    this.demoOutlined = state === 1;
+    this.demoCompatibility = state === 2;
   }
 
   _mainDemoAssistiveHandler(e) {
@@ -158,78 +146,84 @@ class ComponentDemo extends ArcDemoPage {
       demoInfo,
       demoError,
       demoRtl,
-      demoNoLabelFloat
+      demoNoLabelFloat,
     } = this;
     const infoMessage = demoInfo ? 'Assistive text label' : undefined;
     return html`<section class="documentation-section">
-    <h3>Interactive demo</h3>
-    <p>
-      This demo lets you preview the dropdown menu element with various
-      configuration options.
-    </p>
-    <arc-interactive-demo
-      .states="${demoStates}"
-      @state-chanegd="${this._mainDemoStateHandler}"
-      ?dark="${darkThemeActive}"
-    >
-      <anypoint-dropdown-menu
-        slot="content"
-        name="mainDemo"
-        title="Dropdown menu"
-        ?outlined="${demoOutlined}"
-        ?compatibility="${demoCompatibility}"
-        .infoMessage="${infoMessage}"
-        invalidmessage="This value is invalid"
-        ?invalid="${demoError}"
-        dir="${demoRtl ? 'rtl' : 'ltr'}"
-        ?noLabelFloat="${demoNoLabelFloat}"
+      <h3>Interactive demo</h3>
+      <p>
+        This demo lets you preview the dropdown menu element with various
+        configuration options.
+      </p>
+      <arc-interactive-demo
+        .states="${demoStates}"
+        @state-chanegd="${this._mainDemoStateHandler}"
+        ?dark="${darkThemeActive}"
+      >
+        <anypoint-dropdown-menu
+          slot="content"
+          name="mainDemo"
+          title="Dropdown menu"
+          ?outlined="${demoOutlined}"
+          ?compatibility="${demoCompatibility}"
+          .infoMessage="${infoMessage}"
+          invalidmessage="This value is invalid"
+          ?invalid="${demoError}"
+          dir="${demoRtl ? 'rtl' : 'ltr'}"
+          ?noLabelFloat="${demoNoLabelFloat}"
         >
-        <label slot="label">Select a dinosaur</label>
-        <anypoint-listbox slot="dropdown-content" tabindex="-1" ?compatibility="${demoCompatibility}">
-        ${this.items.map((item) => html`<anypoint-item>${item}</anypoint-item>`)}
-        </anypoint-listbox>
-      </anypoint-dropdown-menu>
+          <label slot="label">Select a dinosaur</label>
+          <anypoint-listbox
+            slot="dropdown-content"
+            tabindex="-1"
+            ?compatibility="${demoCompatibility}"
+          >
+            ${this.items.map(
+              (item) => html`<anypoint-item>${item}</anypoint-item>`
+            )}
+          </anypoint-listbox>
+        </anypoint-dropdown-menu>
 
-      <label slot="options" id="mainOptionsLabel">Options</label>
-      <anypoint-checkbox
-        aria-describedby="mainOptionsLabel"
-        slot="options"
-        name="demoNoLabelFloat"
-        @change="${this._toggleMainOption}"
-        >No label float</anypoint-checkbox
-      >
-      <anypoint-checkbox
-        aria-describedby="mainOptionsLabel"
-        slot="options"
-        name="demoRtl"
-        @change="${this._toggleMainOption}"
-        >Right-to-left</anypoint-checkbox
-      >
+        <label slot="options" id="mainOptionsLabel">Options</label>
+        <anypoint-checkbox
+          aria-describedby="mainOptionsLabel"
+          slot="options"
+          name="demoNoLabelFloat"
+          @change="${this._toggleMainOption}"
+          >No label float</anypoint-checkbox
+        >
+        <anypoint-checkbox
+          aria-describedby="mainOptionsLabel"
+          slot="options"
+          name="demoRtl"
+          @change="${this._toggleMainOption}"
+          >Right-to-left</anypoint-checkbox
+        >
 
-      <label slot="options" id="mainAssistiveLabel">Assistive text</label>
-      <anypoint-radio-group
-        slot="options"
-        selectable="anypoint-radio-button"
-        aria-labelledby="mainAssistiveLabel"
-      >
-        <anypoint-radio-button
-          @change="${this._mainDemoAssistiveHandler}"
-          checked
-          name="none"
-          >None</anypoint-radio-button
+        <label slot="options" id="mainAssistiveLabel">Assistive text</label>
+        <anypoint-radio-group
+          slot="options"
+          selectable="anypoint-radio-button"
+          aria-labelledby="mainAssistiveLabel"
         >
-        <anypoint-radio-button
-          @change="${this._mainDemoAssistiveHandler}"
-          name="info"
-          >Info message</anypoint-radio-button
-        >
-        <anypoint-radio-button
-          @change="${this._mainDemoAssistiveHandler}"
-          name="error"
-          >Error text</anypoint-radio-button
-        >
-      </anypoint-radio-group>
-    </arc-interactive-demo>
+          <anypoint-radio-button
+            @change="${this._mainDemoAssistiveHandler}"
+            checked
+            name="none"
+            >None</anypoint-radio-button
+          >
+          <anypoint-radio-button
+            @change="${this._mainDemoAssistiveHandler}"
+            name="info"
+            >Info message</anypoint-radio-button
+          >
+          <anypoint-radio-button
+            @change="${this._mainDemoAssistiveHandler}"
+            name="error"
+            >Error text</anypoint-radio-button
+          >
+        </anypoint-radio-group>
+      </arc-interactive-demo>
     </section>`;
   }
 
@@ -246,7 +240,8 @@ class ComponentDemo extends ArcDemoPage {
           Anypoint enabled UI in open source projects.
         </p>
         <p>
-          Exposed dropdown menus display the currently selected menu item above the menu.<br/>
+          Exposed dropdown menus display the currently selected menu item above
+          the menu.<br />
           They can be used only when a single menu item can be chosen at a time.
         </p>
       </section>
@@ -254,45 +249,53 @@ class ComponentDemo extends ArcDemoPage {
   }
 
   _usageTemplate() {
-    return html`
-      <section class="documentation-section">
-        <h2>Usage</h2>
-        <p>Anypoint dropdown menu comes with 3 predefied styles:</p>
-        <ul>
-          <li><b>Filled</b> (normal) - For low emphasis inputs</li>
-          <li><b>Outlined</b> - For high emphasis inputs</li>
-          <li>
-            <b>Compatibility</b> - To provide compatibility with Anypoint design
-          </li>
-        </ul>
+    return html` <section class="documentation-section">
+      <h2>Usage</h2>
+      <p>Anypoint dropdown menu comes with 3 predefied styles:</p>
+      <ul>
+        <li><b>Filled</b> (normal) - For low emphasis inputs</li>
+        <li><b>Outlined</b> - For high emphasis inputs</li>
+        <li>
+          <b>Compatibility</b> - To provide compatibility with Anypoint design
+        </li>
+      </ul>
 
-        <p>
-          See
-          <a href="https://material.io/design/components/menus.html#exposed-dropdown-menu"
-            >Exposed dropdown menu</a
-          >
-          documentation in Material Defign documentation for principles and
-          anatomy of dropdown menus.
-        </p>
+      <p>
+        See
+        <a
+          href="https://material.io/design/components/menus.html#exposed-dropdown-menu"
+          >Exposed dropdown menu</a
+        >
+        documentation in Material Defign documentation for principles and
+        anatomy of dropdown menus.
+      </p>
 
-        <h3>Selection</h3>
-        <p>
-          The element does not provide an interface for list item selection.
-          <code>anypoint-listbox</code>, which is suggested component to render a list of options,
-          has <code>selected</code> attribute which should be used to preselect an item.
-        </p>
+      <h3>Selection</h3>
+      <p>
+        The element does not provide an interface for list item selection.
+        <code>anypoint-listbox</code>, which is suggested component to render a
+        list of options, has <code>selected</code> attribute which should be
+        used to preselect an item.
+      </p>
 
-        <anypoint-dropdown-menu aria-owns="preSelectedList">
-          <label slot="label" id="preSelectedLabel">Pre-selected dinosaur</label>
-          <anypoint-listbox slot="dropdown-content" tabindex="-1" selected="1" id="preSelectedList">
-          ${this.minItems.map((item) => html`<anypoint-item>${item}</anypoint-item>`)}
-          </anypoint-listbox>
-        </anypoint-dropdown-menu>
+      <anypoint-dropdown-menu aria-owns="preSelectedList">
+        <label slot="label" id="preSelectedLabel">Pre-selected dinosaur</label>
+        <anypoint-listbox
+          slot="dropdown-content"
+          tabindex="-1"
+          selected="1"
+          id="preSelectedList"
+        >
+          ${this.minItems.map(
+            (item) => html`<anypoint-item>${item}</anypoint-item>`
+          )}
+        </anypoint-listbox>
+      </anypoint-dropdown-menu>
 
-        <details>
-            <summary>Code example</summary>
-            <code>
-              <pre>
+      <details>
+        <summary>Code example</summary>
+        <code>
+          <pre>
               &lt;anypoint-dropdown-menu&gt;
                 &lt;label slot="label"&gt;Pre-selected dinosaur&lt;/label&gt;
                 &lt;anypoint-listbox slot="dropdown-content" selected="1"&gt;
@@ -301,25 +304,35 @@ class ComponentDemo extends ArcDemoPage {
                   &lt;anypoint-item label="Carcharodontosaurus"&gt;Carcharodontosaurus&lt;/anypoint-item&gt;
                 &lt;/anypoint-listbox&gt;
               &lt;/anypoint-dropdown-menu&gt;
-              </pre>
-            </code>
-        </details>
+              </pre
+          >
+        </code>
+      </details>
 
-        <p>
-          The <code>anypoint-listbox</code> component also allows to select an item by it's attribute
-          by setting <code>attrforselected</code> attribute.
-        </p>
-        <anypoint-dropdown-menu>
-          <label slot="label">Attribute as selection value</label>
-          <anypoint-listbox slot="dropdown-content" tabindex="-1" attrforselected="label" selected="Brontosaurus">
-          ${this.minItems.map((item) => html`<anypoint-item label="${item}">${item}</anypoint-item>`)}
-          </anypoint-listbox>
-        </anypoint-dropdown-menu>
+      <p>
+        The <code>anypoint-listbox</code> component also allows to select an
+        item by it's attribute by setting
+        <code>attrforselected</code> attribute.
+      </p>
+      <anypoint-dropdown-menu>
+        <label slot="label">Attribute as selection value</label>
+        <anypoint-listbox
+          slot="dropdown-content"
+          tabindex="-1"
+          attrforselected="label"
+          selected="Brontosaurus"
+        >
+          ${this.minItems.map(
+            (item) =>
+              html`<anypoint-item label="${item}">${item}</anypoint-item>`
+          )}
+        </anypoint-listbox>
+      </anypoint-dropdown-menu>
 
-        <details>
-            <summary>Code example</summary>
-            <code>
-              <pre>
+      <details>
+        <summary>Code example</summary>
+        <code>
+          <pre>
               &lt;anypoint-dropdown-menu&gt;
                 &lt;label slot="label"&gt;Attribute as selection value&lt;/label&gt;
                 &lt;anypoint-listbox slot="dropdown-content" attrforselected="label" selected="Brontosaurus"&gt;
@@ -328,25 +341,29 @@ class ComponentDemo extends ArcDemoPage {
                   &lt;anypoint-item label="Carcharodontosaurus"&gt;Carcharodontosaurus&lt;/anypoint-item&gt;
                 &lt;/anypoint-listbox&gt;
               &lt;/anypoint-dropdown-menu&gt;
-              </pre>
-            </code>
-        </details>
+              </pre
+          >
+        </code>
+      </details>
 
-        <h3>Right-to-left languages</h3>
-        <p>
-          Use <code>dir</code> attribute to render the component in a right-to-left type language.
-        </p>
-        <anypoint-dropdown-menu dir="rtl">
-          <label slot="label">Select a dinosaur</label>
-          <anypoint-listbox slot="dropdown-content" tabindex="-1">
-          ${this.minItems.map((item) => html`<anypoint-item>${item}</anypoint-item>`)}
-          </anypoint-listbox>
-        </anypoint-dropdown-menu>
+      <h3>Right-to-left languages</h3>
+      <p>
+        Use <code>dir</code> attribute to render the component in a
+        right-to-left type language.
+      </p>
+      <anypoint-dropdown-menu dir="rtl">
+        <label slot="label">Select a dinosaur</label>
+        <anypoint-listbox slot="dropdown-content" tabindex="-1">
+          ${this.minItems.map(
+            (item) => html`<anypoint-item>${item}</anypoint-item>`
+          )}
+        </anypoint-listbox>
+      </anypoint-dropdown-menu>
 
-        <details>
-            <summary>Code example</summary>
-            <code>
-              <pre>
+      <details>
+        <summary>Code example</summary>
+        <code>
+          <pre>
               &lt;anypoint-dropdown-menu dir="rtl"&gt;
                 &lt;label slot="label"&gt;Select a dinosaur&lt;/label&gt;
                 &lt;anypoint-listbox slot="dropdown-content"&gt;
@@ -355,31 +372,34 @@ class ComponentDemo extends ArcDemoPage {
                   &lt;anypoint-item label="Carcharodontosaurus"&gt;Carcharodontosaurus&lt;/anypoint-item&gt;
                 &lt;/anypoint-listbox&gt;
               &lt;/anypoint-dropdown-menu&gt;
-              </pre>
-            </code>
-        </details>
+              </pre
+          >
+        </code>
+      </details>
 
-        <h3>List direction</h3>
-        <p>
-          The list can be opened to the bottom (default) or to the top.
-        </p>
-        <p>
-          Use the <code>dynamicAlign</code> property if the position cannot be determined
-          beforehand.
-        </p>
+      <h3>List direction</h3>
+      <p>
+        The list can be opened to the bottom (default) or to the top.
+      </p>
+      <p>
+        Use the <code>dynamicAlign</code> property if the position cannot be
+        determined beforehand.
+      </p>
 
-        <h4>Vertical align: bottom</h4>
-        <anypoint-dropdown-menu verticalalign="bottom">
-          <label slot="label">Select a dinosaur</label>
-          <anypoint-listbox slot="dropdown-content" tabindex="-1">
-          ${this.minItems.map((item) => html`<anypoint-item>${item}</anypoint-item>`)}
-          </anypoint-listbox>
-        </anypoint-dropdown-menu>
+      <h4>Vertical align: bottom</h4>
+      <anypoint-dropdown-menu verticalalign="bottom">
+        <label slot="label">Select a dinosaur</label>
+        <anypoint-listbox slot="dropdown-content" tabindex="-1">
+          ${this.minItems.map(
+            (item) => html`<anypoint-item>${item}</anypoint-item>`
+          )}
+        </anypoint-listbox>
+      </anypoint-dropdown-menu>
 
-        <details>
-            <summary>Code example</summary>
-            <code>
-              <pre>
+      <details>
+        <summary>Code example</summary>
+        <code>
+          <pre>
               &lt;anypoint-dropdown-menu verticalalign="bottom"&gt;
                 &lt;label slot="label"&gt;Select a dinosaur&lt;/label&gt;
                 &lt;anypoint-listbox slot="dropdown-content"&gt;
@@ -388,22 +408,25 @@ class ComponentDemo extends ArcDemoPage {
                   &lt;anypoint-item label="Carcharodontosaurus"&gt;Carcharodontosaurus&lt;/anypoint-item&gt;
                 &lt;/anypoint-listbox&gt;
               &lt;/anypoint-dropdown-menu&gt;
-              </pre>
-            </code>
-        </details>
+              </pre
+          >
+        </code>
+      </details>
 
-        <h4>Dynamic align</h4>
-        <anypoint-dropdown-menu dynamicalign>
-          <label slot="label">Select a dinosaur</label>
-          <anypoint-listbox slot="dropdown-content" tabindex="-1">
-          ${this.minItems.map((item) => html`<anypoint-item>${item}</anypoint-item>`)}
-          </anypoint-listbox>
-        </anypoint-dropdown-menu>
+      <h4>Dynamic align</h4>
+      <anypoint-dropdown-menu dynamicalign>
+        <label slot="label">Select a dinosaur</label>
+        <anypoint-listbox slot="dropdown-content" tabindex="-1">
+          ${this.minItems.map(
+            (item) => html`<anypoint-item>${item}</anypoint-item>`
+          )}
+        </anypoint-listbox>
+      </anypoint-dropdown-menu>
 
-        <details>
-            <summary>Code example</summary>
-            <code>
-              <pre>
+      <details>
+        <summary>Code example</summary>
+        <code>
+          <pre>
               &lt;anypoint-dropdown-menu dynamicalign&gt;
                 &lt;label slot="label"&gt;Select a dinosaur&lt;/label&gt;
                 &lt;anypoint-listbox slot="dropdown-content"&gt;
@@ -412,42 +435,44 @@ class ComponentDemo extends ArcDemoPage {
                   &lt;anypoint-item label="Carcharodontosaurus"&gt;Carcharodontosaurus&lt;/anypoint-item&gt;
                 &lt;/anypoint-listbox&gt;
               &lt;/anypoint-dropdown-menu&gt;
-              </pre>
-            </code>
-        </details>
-      </section>`;
+              </pre
+          >
+        </code>
+      </details>
+    </section>`;
   }
 
   _formsTemplate() {
-    const {
-      darkThemeActive,
-      formFieldsDisabled,
-      formMenuDisabled
-    } = this;
+    const { darkThemeActive, formFieldsDisabled, formMenuDisabled } = this;
+    const nativeFormStates = ['Native form'];
     return html`
       <section class="documentation-section">
         <h2>Working with forms</h2>
         <p>
-          Anypoint dropdown menu support basic form states like <code>disabled</code> or <code>invalid</code>.
+          Anypoint dropdown menu support basic form states like
+          <code>disabled</code> or <code>invalid</code>.
         </p>
 
         <h3>Disabled menu</h3>
         <p>
-          When disabled, the user cannot interact with the control. Form associated with the
-          component will ignore it's value when generating form values.
+          When disabled, the user cannot interact with the control. Form
+          associated with the component will ignore it's value when generating
+          form values.
         </p>
 
         <anypoint-dropdown-menu disabled>
           <label slot="label">Select a dinosaur</label>
           <anypoint-listbox slot="dropdown-content" tabindex="-1">
-          ${this.items.map((item) => html`<anypoint-item>${item}</anypoint-item>`)}
+            ${this.items.map(
+              (item) => html`<anypoint-item>${item}</anypoint-item>`
+            )}
           </anypoint-listbox>
         </anypoint-dropdown-menu>
 
         <details>
-            <summary>Code example</summary>
-            <code>
-              <pre>
+          <summary>Code example</summary>
+          <code>
+            <pre>
               &lt;anypoint-dropdown-menu disabled&gt;
                 &lt;label slot="label"&gt;Select a dinosaur&lt;/label&gt;
                 &lt;anypoint-listbox slot="dropdown-content"&gt;
@@ -456,26 +481,30 @@ class ComponentDemo extends ArcDemoPage {
                   &lt;anypoint-item label="Carcharodontosaurus"&gt;Carcharodontosaurus&lt;/anypoint-item&gt;
                 &lt;/anypoint-listbox&gt;
               &lt;/anypoint-dropdown-menu&gt;
-              </pre>
-            </code>
+              </pre
+            >
+          </code>
         </details>
 
         <h3>Invalid selection</h3>
         <p>
-          When invalid the component renders error colors and, if defiend, an error message.
+          When invalid the component renders error colors and, if defiend, an
+          error message.
         </p>
 
         <anypoint-dropdown-menu invalid>
           <label slot="label">Select a dinosaur</label>
           <anypoint-listbox slot="dropdown-content" tabindex="-1" selected="1">
-          ${this.items.map((item) => html`<anypoint-item>${item}</anypoint-item>`)}
+            ${this.items.map(
+              (item) => html`<anypoint-item>${item}</anypoint-item>`
+            )}
           </anypoint-listbox>
         </anypoint-dropdown-menu>
 
         <details>
-            <summary>Code example</summary>
-            <code>
-              <pre>
+          <summary>Code example</summary>
+          <code>
+            <pre>
               &lt;anypoint-dropdown-menu invalid&gt;
                 &lt;label slot="label"&gt;Select a dinosaur&lt;/label&gt;
                 &lt;anypoint-listbox slot="dropdown-content" selected="1"&gt;
@@ -484,33 +513,37 @@ class ComponentDemo extends ArcDemoPage {
                   &lt;anypoint-item label="Carcharodontosaurus"&gt;Carcharodontosaurus&lt;/anypoint-item&gt;
                 &lt;/anypoint-listbox&gt;
               &lt;/anypoint-dropdown-menu&gt;
-              </pre>
-            </code>
+              </pre
+            >
+          </code>
         </details>
 
         <h3>Auto validation</h3>
         <p>
-          Set <code>autovalidate</code> and, for example, <code>required</code> proeprty to
-          automatically validate the input when selection change.
+          Set <code>autovalidate</code> and, for example,
+          <code>required</code> proeprty to automatically validate the input
+          when selection change.
         </p>
 
         <p>
-          Anypoint web components offers <code>ValidatorMixin</code> that allows to define
-          a custom element that validates an input field. This allows to reuse validation
-          logic accross different parts of the application.
+          Anypoint web components offers <code>ValidatorMixin</code> that allows
+          to define a custom element that validates an input field. This allows
+          to reuse validation logic accross different parts of the application.
         </p>
 
         <anypoint-dropdown-menu autovalidate required>
           <label slot="label">Select a dinosaur</label>
           <anypoint-listbox slot="dropdown-content" tabindex="-1">
-          ${this.items.map((item) => html`<anypoint-item>${item}</anypoint-item>`)}
+            ${this.items.map(
+              (item) => html`<anypoint-item>${item}</anypoint-item>`
+            )}
           </anypoint-listbox>
         </anypoint-dropdown-menu>
 
         <details>
-            <summary>Code example</summary>
-            <code>
-              <pre>
+          <summary>Code example</summary>
+          <code>
+            <pre>
               &lt;anypoint-dropdown-menu autovalidate required&gt;
                 &lt;label slot="label"&gt;Select a dinosaur&lt;/label&gt;
                 &lt;anypoint-listbox slot="dropdown-content"&gt;
@@ -519,42 +552,57 @@ class ComponentDemo extends ArcDemoPage {
                   &lt;anypoint-item label="Carcharodontosaurus"&gt;Carcharodontosaurus&lt;/anypoint-item&gt;
                 &lt;/anypoint-listbox&gt;
               &lt;/anypoint-dropdown-menu&gt;
-              </pre>
-            </code>
+              </pre
+            >
+          </code>
         </details>
 
         <h3>Form-associated custom elements</h3>
         <p>
-          Form-associated custom elements enable web authors to define and create
-          custom elements which participate in form submission.
-
-          Learn more: <a href="https://www.chromestatus.com/feature/4708990554472448" target="_blank">Chrome status</a>
+          Form-associated custom elements enable web authors to define and
+          create custom elements which participate in form submission. Learn
+          more:
+          <a
+            href="https://www.chromestatus.com/feature/4708990554472448"
+            target="_blank"
+            >Chrome status</a
+          >
         </p>
 
-        ${hasFormAssociatedElements ?
-          html`<p>Your browser support this API</p>` :
-          html`<p>Your browser <b>does not</b> support this API</p>`}
+        ${hasFormAssociatedElements
+          ? html`<p>Your browser support this API</p>`
+          : html`<p>Your browser <b>does not</b> support this API</p>`}
         <arc-interactive-demo
-          states='["Native form"]'
+          .states="${nativeFormStates}"
           ?dark="${darkThemeActive}"
         >
-          <form enctype="application/json" @submit="${this._formSubmit}" slot="content">
+          <form
+            enctype="application/json"
+            @submit="${this._formSubmit}"
+            slot="content"
+          >
             <fieldset ?disabled="${formFieldsDisabled}">
               <legend>Form fields group</legend>
-              <anypoint-dropdown-menu required name="dino" ?disabled="${formMenuDisabled}">
+              <anypoint-dropdown-menu
+                required
+                name="dino"
+                ?disabled="${formMenuDisabled}"
+              >
                 <label slot="label">Select a dinosaur</label>
                 <anypoint-listbox slot="dropdown-content" tabindex="-1">
-                ${this.items.map((item) => html`<anypoint-item>${item}</anypoint-item>`)}
+                  ${this.items.map(
+                    (item) => html`<anypoint-item>${item}</anypoint-item>`
+                  )}
                 </anypoint-listbox>
               </anypoint-dropdown-menu>
-              <br/>
-              <label for="fieldsetInput">Input inside fieldset</label><br/>
+              <br />
+              <label for="fieldsetInput">Input inside fieldset</label><br />
               <input type="text" name="textInput" id="fieldsetInput" />
             </fieldset>
-            <label for="outsideInput">Input outside fieldset</label><br/>
-            <input type="text" name="textInput2" id="outsideInput" /><br/>
-            <input type="reset" value="Reset">
-            <input type="submit" value="Submit">
+            <label for="outsideInput">Input outside fieldset</label><br />
+            <input type="text" name="textInput2" id="outsideInput" /><br />
+            <input type="reset" value="Reset" />
+            <input type="submit" value="Submit" />
           </form>
 
           <label slot="options" id="formOptionsLabel">Options</label>
@@ -572,11 +620,11 @@ class ComponentDemo extends ArcDemoPage {
             @change="${this._toggleMainOption}"
             >Disable dropdown</anypoint-checkbox
           >
-
         </arc-interactive-demo>
 
-        ${this.formData ? html`<b>Form values</b><output>${this.formData}</output>`:undefined}
-
+        ${this.formData
+          ? html`<b>Form values</b><output>${this.formData}</output>`
+          : undefined}
       </section>
     `;
   }
@@ -585,9 +633,9 @@ class ComponentDemo extends ArcDemoPage {
     return html`<section class="documentation-section">
       <h2>Assistive text</h2>
       <p>
-        Assistive text allows the user to better understand what kind of selection is
-        required. It can be an info message or invalid message when invalid
-        input has been detected.
+        Assistive text allows the user to better understand what kind of
+        selection is required. It can be an info message or invalid message when
+        invalid input has been detected.
       </p>
 
       <h3>Info message</h3>
@@ -600,7 +648,9 @@ class ComponentDemo extends ArcDemoPage {
       <anypoint-dropdown-menu infomessage="Will be added to your order.">
         <label slot="label">Select a dinosaur</label>
         <anypoint-listbox slot="dropdown-content" tabindex="-1">
-        ${this.items.map((item) => html`<anypoint-item>${item}</anypoint-item>`)}
+          ${this.items.map(
+            (item) => html`<anypoint-item>${item}</anypoint-item>`
+          )}
         </anypoint-listbox>
       </anypoint-dropdown-menu>
 
@@ -617,25 +667,36 @@ class ComponentDemo extends ArcDemoPage {
         example <code>Selection is required</code>.
       </p>
 
-      <anypoint-dropdown-menu invalidmessage="Dino is required with the order" invalid required>
+      <anypoint-dropdown-menu
+        invalidmessage="Dino is required with the order"
+        invalid
+        required
+      >
         <label slot="label">Select a dinosaur</label>
         <anypoint-listbox slot="dropdown-content" tabindex="-1">
-        ${this.items.map((item) => html`<anypoint-item>${item}</anypoint-item>`)}
+          ${this.items.map(
+            (item) => html`<anypoint-item>${item}</anypoint-item>`
+          )}
         </anypoint-listbox>
       </anypoint-dropdown-menu>
 
       <h3>Invalid and info message</h3>
       <p>
-        Error message has higher priority and info message is hidden when error is rendered.
+        Error message has higher priority and info message is hidden when error
+        is rendered.
       </p>
 
       <anypoint-dropdown-menu
         invalidmessage="Dino is required with the order"
         infomessage="Will be added to your order."
-        invalid required>
+        invalid
+        required
+      >
         <label slot="label">Select a dinosaur</label>
         <anypoint-listbox slot="dropdown-content" tabindex="-1">
-        ${this.items.map((item) => html`<anypoint-item>${item}</anypoint-item>`)}
+          ${this.items.map(
+            (item) => html`<anypoint-item>${item}</anypoint-item>`
+          )}
         </anypoint-listbox>
       </anypoint-dropdown-menu>
     </section>`;
@@ -644,10 +705,8 @@ class ComponentDemo extends ArcDemoPage {
   contentTemplate() {
     return html`
       <h2>Anypoint dropdown menu</h2>
-      ${this._demoTemplate()}
-      ${this._introductionTemplate()}
-      ${this._usageTemplate()}
-      ${this._formsTemplate()}
+      ${this._demoTemplate()} ${this._introductionTemplate()}
+      ${this._usageTemplate()} ${this._formsTemplate()}
       ${this._assistiveTemplate()}
     `;
   }

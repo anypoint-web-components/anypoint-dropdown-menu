@@ -4,40 +4,36 @@ const merge = require('deepmerge');
 
 module.exports = (config) => {
   config.set(
-      merge(createDefaultConfig(config), {
-        files: [
+    merge(createDefaultConfig(config), {
+      files: [
         // runs all files ending with .test in the test folder,
         // can be overwritten by passing a --grep flag. examples:
         //
         // npm run test -- --grep test/foo/bar.test.js
         // npm run test -- --grep test/bar/*
-          {
-            pattern: config.grep ? config.grep : 'test/**/*.test.js',
-            type: 'module'
-          },
-          {
-            pattern: require.resolve('web-animations-js/web-animations-next.min.js'),
-            type: 'js'
-          }
-        ],
-
-        // see the karma-esm docs for all options
-        esm: {
-        // if you are using 'bare module imports' you will need this option
-          nodeResolve: true
+        {
+          pattern: config.grep ? config.grep : 'test/**/*.test.js',
+          type: 'module',
         },
+      ],
 
-        coverageIstanbulReporter: {
-          thresholds: {
-            global: {
-              statements: 80,
-              branches: 80,
-              functions: 89,
-              lines: 80
-            }
-          }
-        }
-      })
+      // see the karma-esm docs for all options
+      esm: {
+        // if you are using 'bare module imports' you will need this option
+        nodeResolve: true,
+      },
+
+      coverageIstanbulReporter: {
+        thresholds: {
+          global: {
+            statements: 80,
+            branches: 80,
+            functions: 89,
+            lines: 80,
+          },
+        },
+      },
+    })
   );
   return config;
 };

@@ -1,9 +1,15 @@
-import { html, css, LitElement } from 'lit-element';
-import { ControlStateMixin } from '@anypoint-web-components/anypoint-control-mixins/control-state-mixin.js';
-import { ValidatableMixin } from '@anypoint-web-components/validatable-mixin/validatable-mixin.js';
+import { html, LitElement } from 'lit-element';
+import { ControlStateMixin } from '@anypoint-web-components/anypoint-control-mixins';
+import { ValidatableMixin } from '@anypoint-web-components/validatable-mixin';
 import '@anypoint-web-components/anypoint-dropdown/anypoint-dropdown.js';
 import '@anypoint-web-components/anypoint-button/anypoint-icon-button.js';
 import { arrowDown } from './icons.js';
+import componentStyles from './Styles.js';
+
+/* eslint-disable no-plusplus */
+/* eslint-disable class-methods-use-this */
+/** @typedef {import('lit-element').TemplateResult} TemplateResult */
+
 /**
  * Accessible dropdown menu for Anypoint platform.
  *
@@ -14,417 +20,13 @@ import { arrowDown } from './icons.js';
  *
  * See README.md file for detailed documentation.
  */
-export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(LitElement)) {
+export class AnypointDropdownMenu extends ValidatableMixin(
+  ControlStateMixin(LitElement)
+) {
   get styles() {
-    return css`
-    :host {
-      /* Default size of an <input> */
-      width: 200px;
-      display: inline-block;
-      position: relative;
-      text-align: left;
-      outline: none;
-      height: 56px;
-      box-sizing: border-box;
-      font-size: 1rem;
-      /* Anypoint UI controls margin in forms */
-      margin: 16px 8px;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    .trigger-button.form-disabled {
-      pointer-events: none;
-      opacity: var(--anypoint-dropdown-menu-disabled-opacity, 0.43);
-    }
-
-    .label.resting.form-disabled, {
-      opacity: var(--anypoint-dropdown-menu-disabled-opacity, 0.43);
-    }
-
-    :host([nolabelfloat]) {
-      height: 40px;
-    }
-
-    .input-container {
-      position: relative;
-      height: 100%;
-      /* width: inherit; */
-      background-color: var(--anypoint-dropdown-menu-background-color, #F5F5F5);
-
-      border: 1px var(--anypoint-dropdown-menu-border-color, transparent) solid;
-      border-radius: 4px 4px 0 0;
-      border-bottom-width: 1px;
-      border-bottom-style: solid;
-      border-bottom-color: var(--anypoint-dropdown-menu-border-bottom-color, #8e8e8e);
-      transition: border-bottom-color 0.22s linear;
-      transform-origin: center center;
-
-      cursor: default;
-    }
-
-    :host([invalid]) .input-container,
-    :host(:invalid) .input-container {
-      border-bottom: 1px solid var(--anypoint-dropdown-error-color, var(--error-color)) !important;
-    }
-
-    .input-container.form-disabled {
-      opacity: var(--anypoint-dropdown-menu-disabled-opacity, 0.43);
-      border-bottom: 1px dashed var(--anypoint-dropdown-menu-color, var(--secondary-text-color));
-    }
-
-    :host([opened]) .input-container,
-    :host([focused]) .input-container,
-    :host(:focus) .input-container {
-      border-bottom-color: var(--anypoint-dropdown-menu-hover-border-color, var(--anypoint-color-coreBlue3));
-    }
-
-    .input-wrapper {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      height: 100%;
-      position: relative;
-    }
-
-    .input {
-      flex: 1;
-      margin: 12px 0px 0px 8px;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      max-width: calc(100% - 40px);
-    }
-
-    :host(:dir(rtl)) .input {
-      text-align: right;
-      margin: 0px 8px 0px 0px;
-    }
-
-    :host([dir="rtl"]) .input {
-      text-align: right;
-      margin: 12px 8px 0px 0px;
-    }
-
-    :host([nolabelfloat]) .input {
-      margin-top: 0 !important;
-    }
-
-    .input-spacer {
-      visibility: hidden;
-      margin-left: -12px;
-    }
-
-    .label {
-      position: absolute;
-      transition: transform 0.12s ease-in-out, max-width 0.12s ease-in-out;
-      will-change: transform;
-      border-radius: 3px;
-      margin: 0;
-      padding: 0;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      z-index: 1;
-      max-width: calc(100% - 16px);
-      text-overflow: clip;
-      color: var(--anypoint-dropdown-menu-label-color, #616161);
-      transform-origin: left top;
-      left: 8px;
-      top: calc(100% / 2 - 8px);
-      font-size: 1rem;
-    }
-
-    :host(:dir(rtl)) .label {
-      text-align: right;
-      right: 8px;
-      left: auto;
-    }
-    /* Not every browser support syntax above and for those who doesn't
-      this style has to be repeated or it won't be applied. */
-    :host([dir="rtl"]) .label {
-      text-align: right;
-      right: 8px;
-      left: auto;
-      transform-origin: right top;
-    }
-
-    .label.resting {
-      transform: translateY(0) scale(1);
-    }
-
-    .label.floating {
-      transform: translateY(-80%) scale(0.75);
-      max-width: calc(100% + 20%);
-    }
-
-    :host([nolabelfloat]:not([compatibility])) .label.floating {
-      display: none !important;
-    }
-
-    :host([invalid]) .label,
-    :host(:invalid) .label {
-      color: var(--anypoint-dropdown-error-color, var(--error-color)) !important;
-    }
-
-    .trigger-icon {
-      transform: rotate(0);
-      transition: transform 0.12s ease-in-out;
-      will-change: transform;
-      color: var(--anypoint-dropdown-menu-label-color, #616161);
-      fill: currentColor;
-      display: inline-block;
-      width: 24px;
-      height: 24px;
-    }
-
-    .trigger-icon.opened {
-      transform: rotate(-180deg);
-    }
-
-    :host([opened]) .trigger-icon,
-    :host([focused]) .trigger-icon,
-    :host(:focus) .trigger-icon {
-      color: var(--anypoint-dropdown-menu-trigger-icon-active-color, var(--primary-color));
-    }
-
-    anypoint-dropdown {
-      margin-top: 58px;
-      width: auto;
-    }
-
-    .dropdown-content {
-      box-shadow: var(--anypoiont-dropdown-shaddow);
-    }
-
-    :host([verticalalign="bottom"]) anypoint-dropdown {
-      margin-bottom: 56px;
-      margin-top: auto;
-    }
-
-    :host([nolabelfloat]) anypoint-dropdown {
-      margin-top: 40px;
-    }
-
-    .assistive-info {
-      overflow: hidden;
-      margin-top: -2px;
-      height: 20px;
-      position: absolute;
-    }
-
-    .invalid,
-    .info {
-      padding: 0;
-      margin: 0 0 0 8px;
-      font-size: .875rem;
-      transition: transform 0.12s ease-in-out;
-    }
-
-    .info {
-      color: var(--anypoint-dropdown-menu-info-message-color, #616161);
-    }
-
-    .info.label-hidden {
-      transform: translateY(-200%);
-    }
-
-    .invalid {
-      color: var(--anypoint-dropdown-menu-error-color, var(--error-color));
-    }
-
-    .invalid.label-hidden,
-    .invalid.info-offset.label-hidden {
-      transform: translateY(-200%);
-    }
-
-    .invalid.info-offset {
-      transform: translateY(-100%);
-    }
-
-    /* Outlined theme */
-    :host([outlined]) .input-container {
-      border: 1px var(--anypoint-dropdown-menu-border-color, #8e8e8e) solid;
-      background-color: var(--anypoint-dropdown-menu-background-color, #fff);
-      border-radius: 4px;
-      transition: border-bottom-color 0.22s linear;
-    }
-
-    :host([outlined]) .input {
-      margin-top: 0;
-    }
-
-    :host([outlined]) .label.resting {
-      margin-top: 0;
-      top: calc(100% / 2 - 8px);
-    }
-
-    :host([outlined]) .label.floating {
-      background-color: var(--anypoint-dropdown-menu-label-background-color, white);
-      transform: translateY(-130%) scale(0.75);
-      max-width: 120%;
-      padding: 0 2px;
-      left: 6px;
-    }
-
-    :host([outlined][invalid]) .input-container,
-    :host([outlined]:invalid) .input-container {
-      border: 1px solid var(--anypoint-dropdown-error-color, var(--error-color)) !important;
-    }
-
-    /* Anypoint compatibility theme */
-
-    :host([compatibility]) {
-      height: 40px;
-      margin-top: 20px;
-    }
-
-    :host([compatibility]) .input-container {
-      border: none;
-      border-left: 2px var(--anypoint-dropdown-menu-border-color, #8e8e8e) solid;
-      border-right: 2px var(--anypoint-dropdown-menu-border-color, #8e8e8e) solid;
-      border-radius: 0;
-      box-sizing: border-box;
-    }
-
-    :host([compatibility][focused]) .input-container,
-    :host([compatibility]:hover) .input-container {
-      border-left-color: var(--anypoint-dropdown-menu-compatibility-focus-border-color, #58595a);
-      border-right-color: var(--anypoint-dropdown-menu-compatibility-focus-border-color, #58595a);
-      background-color: var(--anypoint-dropdown-menu-compatibility-focus-background-color, #f9fafb);
-    }
-
-    :host([compatibility][invalid]) .input-container {
-      border-left-color: var(--anypoint-dropdown-menu-error-color, var(--error-color));
-      border-right-color: var(--anypoint-dropdown-menu-error-color, var(--error-color));
-      border-bottom: none !important;
-    }
-
-    :host([compatibility]) .label {
-      font-size: .875rem;
-      left: -2px;
-      top: -18px;
-      transform: none;
-      font-weight: 500;
-      color: var(--anypoint-dropdown-menu-compatibility-label-color, #616161);
-    }
-
-    :host([compatibility]) anypoint-dropdown {
-      margin-top: 40px;
-    }
-
-    :host([compatibility]) .input {
-      margin-top: 0;
-    }
-
-    :host([compatibility]) .invalid,
-    :host([compatibility]) .info {
-      margin-left: 0px;
-    }
-
-    :host([nolabelfloat][compatibility]) {
-      margin-top: 0px;
-    }
-
-    :host([compatibility]) anypoint-dropdown {
-      border-bottom: 2px var(--anypoint-dropdown-menu-border-color, #E0E0E0) solid;
-      border-top: 2px var(--anypoint-dropdown-menu-border-color, #E0E0E0) solid;
-    }
-
-    :host([compatibility]) .dropdown-content {
-      box-shadow: none;
-    }
-
-    :host([nolabelfloat][compatibility]) .label.resting {
-      top: calc(100% / 2 - 8px);
-      left: 10px;
-      font-size: 1rem;
-    }
-    `;
+    return componentStyles;
   }
 
-  render() {
-    const {
-      opened,
-      horizontalAlign,
-      verticalAlign,
-      dynamicAlign,
-      horizontalOffset,
-      verticalOffset,
-      noOverlap,
-      openAnimationConfig,
-      closeAnimationConfig,
-      noAnimations,
-      allowOutsideScroll,
-      restoreFocusOnClose,
-      value,
-      invalidMessage,
-      infoMessage,
-      compatibility,
-      _labelClass,
-      _errorAddonClass,
-      _infoAddonClass,
-      _triggerClass,
-      _inputContainerClass
-    } = this;
-
-    const renderValue = value || '';
-    return html`<style>${this.styles}</style>
-    <div class="${_inputContainerClass}">
-      <div class="${_labelClass}">
-        <slot name="label"></slot>
-      </div>
-
-      <div class="input-wrapper">
-        <div class="input">
-          ${renderValue}
-          <span class="input-spacer">&nbsp;</span>
-        </div>
-        <anypoint-icon-button
-          @click="${this.toggle}"
-          aria-label="Toggles dropdown menu"
-          tabindex="-1"
-          aria-label="Toggles dropdown menu"
-          class="${_triggerClass}"
-          ?compatibility="${compatibility}"
-        >
-          <span class="trigger-icon ${opened ? 'opened' : ''}">${arrowDown}</span>
-        </anypoint-icon-button>
-      </div>
-
-      <anypoint-dropdown
-        .opened="${opened}"
-        .horizontalAlign="${horizontalAlign}"
-        .verticalAlign="${verticalAlign}"
-        .dynamicAlign="${dynamicAlign}"
-        .horizontalOffset="${horizontalOffset}"
-        .verticalOffset="${verticalOffset}"
-        .noOverlap="${noOverlap}"
-        .openAnimationConfig="${openAnimationConfig}"
-        .closeAnimationConfig="${closeAnimationConfig}"
-        .noAnimations="${noAnimations}"
-        .allowOutsideScroll="${allowOutsideScroll}"
-        .restoreFocusOnClose="${restoreFocusOnClose}"
-        ?compatibility="${compatibility}"
-        @overlay-closed="${this._dropdownClosed}"
-        @overlay-opened="${this._dropdownOpened}"
-        @select="${this._selectHandler}"
-        @deselect="${this._deselectHandler}"
-      >
-        <div slot="dropdown-content" class="dropdown-content">
-          <slot id="content" name="dropdown-content"></slot>
-        </div>
-      </anypoint-dropdown>
-    </div>
-    <div class="assistive-info">
-    ${infoMessage ? html`<p class="${_infoAddonClass}">${infoMessage}</p>` : ''}
-    ${invalidMessage ?
-      html`<p class="${_errorAddonClass}">${invalidMessage}</p>` : ''}
-    </div>
-    `;
-  }
   /**
    * For form-associated custom elements. Marks this custom element
    * as form enabled element.
@@ -432,12 +34,13 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
   static get formAssociated() {
     return true;
   }
+
   /**
    * When form-associated custom elements are supported in the browser it
    * returns `<form>` element associated with this constol.
    */
   get form() {
-    return this._internals && this._internals.form || null;
+    return (this._internals && this._internals.form) || null;
   }
 
   get validationStates() {
@@ -457,11 +60,13 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     }
     this._hasValidationMessage = !!(value && value.length);
     this._validationStatesChanged(value);
-    this.dispatchEvent(new CustomEvent('validationstates-changed', {
-      detail: {
-        value
-      }
-    }));
+    this.dispatchEvent(
+      new CustomEvent('validationstates-changed', {
+        detail: {
+          value,
+        },
+      })
+    );
   }
 
   get hasValidationMessage() {
@@ -484,11 +89,13 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       this.requestUpdate('hasValidationMessage', old);
     }
     this.__hasValidationMessage = value;
-    this.dispatchEvent(new CustomEvent('hasvalidationmessage-changed', {
-      detail: {
-        value
-      }
-    }));
+    this.dispatchEvent(
+      new CustomEvent('hasvalidationmessage-changed', {
+        detail: {
+          value,
+        },
+      })
+    );
   }
 
   get autoValidate() {
@@ -606,14 +213,17 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     this._opened = value;
     this.requestUpdate('opened', old);
     this._openedChanged(value);
-    this.dispatchEvent(new CustomEvent('opened-changed', {
-      detail: {
-        value
-      }
-    }));
+    this.dispatchEvent(
+      new CustomEvent('opened-changed', {
+        detail: {
+          value,
+        },
+      })
+    );
   }
+
   /**
-   * @return {?Element} The content element that is contained by the dropdown menu, if any.
+   * @return {HTMLElement=} The content element that is contained by the dropdown menu, if any.
    */
   get contentElement() {
     const slot = this.shadowRoot.querySelector('slot[name="dropdown-content"]');
@@ -824,7 +434,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       /**
        * When set the control is rendered as disabled form control.
        */
-      disabled: { type: Boolean, reflect: true }
+      disabled: { type: Boolean, reflect: true },
     };
   }
 
@@ -876,6 +486,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     this.removeEventListener('keydown', this._onKeydown);
     this.removeEventListener('focus', this._focusHandler);
   }
+
   /**
    * When form-associated custom elements are supported in the browser it
    * is called when for disabled state changed.
@@ -889,6 +500,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     }
     this.requestUpdate('_formDisabled', old);
   }
+
   /**
    * When form-associated custom elements are supported in the browser it
    * is called when the form has been reset
@@ -902,6 +514,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     }
     this._internals.setFormValue('');
   }
+
   /**
    * When form-associated custom elements are supported in the browser it
    * is called when the form state has been restored
@@ -914,19 +527,20 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
 
   firstUpdated() {
     this._openedChanged(this.opened);
-    const contentElement = this.contentElement;
+    const { contentElement } = this;
     const item = contentElement && contentElement.selectedItem;
     if (item) {
       this._selectedItem = item;
     }
   }
+
   /**
    * Handler for `click` event.
    * Opens the list of the click originated from the shadow DOM.
    * @param {MouseEvent} e
    */
   _clickHandler(e) {
-    const path = e.path || e.composedPath && e.composedPath();
+    const path = e.path || (e.composedPath && e.composedPath());
     /* istanbul ignore if */
     if (!path) {
       return;
@@ -938,6 +552,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       e.stopPropagation();
     }
   }
+
   /**
    * Focuses on the listbox, if available.
    */
@@ -947,6 +562,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       node.focus();
     }
   }
+
   /**
    * Handler for the `focus` event.
    * Focuses on the listbox when opened.
@@ -956,6 +572,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       this._focusContent();
     }
   }
+
   /**
    * Handler for the keydown event.
    * @param {KeyboardEvent} e
@@ -969,6 +586,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       this._onEscKey(e);
     }
   }
+
   /**
    * Handler for ArrowDown button press.
    * Opens the list if it's not open and focuses on the list otherwise.
@@ -986,6 +604,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     e.preventDefault();
     e.stopPropagation();
   }
+
   /**
    * Handler for ArrowUp button press.
    * Opens the list if it's not open and focuses on the list otherwise.
@@ -1003,6 +622,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     e.preventDefault();
     e.stopPropagation();
   }
+
   /**
    * Handler for Escape button press.
    * Closes the list if it's open.
@@ -1012,6 +632,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       this.opened = false;
     }
   }
+
   /**
    * Compute the label for the dropdown given a selected item.
    *
@@ -1021,15 +642,18 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
   _selectedItemChanged(selectedItem) {
     let value = '';
     if (selectedItem) {
-      value = selectedItem.label || selectedItem.getAttribute('label') ||
+      value =
+        selectedItem.label ||
+        selectedItem.getAttribute('label') ||
         selectedItem.textContent.trim();
     }
     this.value = value;
   }
+
   /**
    * Toggles `opened` state.
    *
-   * @param {?MouseEvent} e When set it cancels the event
+   * @param {MouseEvent=} e When set it cancels the event
    */
   toggle(e) {
     if (this.disabled || this._formDisabled) {
@@ -1051,6 +675,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     }
     this.opened = true;
   }
+
   /**
    * Hide the dropdown content.
    */
@@ -1075,9 +700,12 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       return;
     }
     if (this.invalid) {
-      this._internals.setValidity({
-        customError: true
-      }, 'Please select a value.');
+      this._internals.setValidity(
+        {
+          customError: true,
+        },
+        'Please select a value.'
+      );
     } else {
       this._internals.setValidity({});
     }
@@ -1095,6 +723,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
   _deselectHandler() {
     this._selectedItem = null;
   }
+
   /**
    * Returns false if the element is required and does not have a selection,
    * and true otherwise.
@@ -1103,7 +732,12 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
    * and the element has a valid selection.
    */
   _getValidity() {
-    return (this.disabled || this._formDisabled) || !this.required || (this.required && !!this.value);
+    return (
+      this.disabled ||
+      this._formDisabled ||
+      !this.required ||
+      (this.required && !!this.value)
+    );
   }
 
   _openedChanged(opened) {
@@ -1116,8 +750,12 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
   }
 
   checkValidity() {
-    return this._getValidity() && ((this._internals && this._internals.checkValidity()) || true);
+    return (
+      this._getValidity() &&
+      ((this._internals && this._internals.checkValidity()) || true)
+    );
   }
+
   /**
    * Called when validation states changed.
    * Validation states are set by validatable mixin and is a result of calling
@@ -1126,7 +764,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
    *
    * See `ValidatableMixin` for more information.
    *
-   * @param {?Array<Object>} states
+   * @param {object[]=} states
    */
   _validationStatesChanged(states) {
     if (!states || !states.length) {
@@ -1140,6 +778,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     }
     this.invalidMessage = parts.join('. ');
   }
+
   /**
    * Calles when `autoValidate` changed
    * @param {Boolean} value
@@ -1149,6 +788,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       this.validate();
     }
   }
+
   /**
    * From `ValidatableMixin`
    * @param {Boolean} value Current invalid sate
@@ -1175,5 +815,118 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     setTimeout(() => {
       node.removeAttribute('role');
     }, 1000);
+  }
+
+  /**
+   * @return {TemplateResult} Main render function.
+   */
+  render() {
+    const { _inputContainerClass } = this;
+    return html`<style>
+        ${this.styles}
+      </style>
+      <div class="${_inputContainerClass}">
+        ${this._labelTemplate()} ${this._inputTemplate()}
+        ${this._dropdownTemplate()}
+      </div>
+      ${this._assistiveTemplate()} `;
+  }
+
+  /**
+   * @return {TemplateResult} Template for the floating label element.
+   */
+  _labelTemplate() {
+    const { _labelClass } = this;
+    return html` <div class="${_labelClass}">
+      <slot name="label"></slot>
+    </div>`;
+  }
+
+  /**
+   * @return {TemplateResult} Template for the input (like) element.
+   */
+  _inputTemplate() {
+    const { opened, compatibility, value, _triggerClass } = this;
+    const renderValue = value || '';
+    return html`<div class="input-wrapper">
+      <div class="input">
+        ${renderValue}
+        <span class="input-spacer">&nbsp;</span>
+      </div>
+      <anypoint-icon-button
+        @click="${this.toggle}"
+        aria-label="Toggles dropdown menu"
+        tabindex="-1"
+        class="${_triggerClass}"
+        ?compatibility="${compatibility}"
+      >
+        <span class="trigger-icon ${opened ? 'opened' : ''}">${arrowDown}</span>
+      </anypoint-icon-button>
+    </div>`;
+  }
+
+  /**
+   * @return {TemplateResult} Template for the dropdown element.
+   */
+  _dropdownTemplate() {
+    const {
+      opened,
+      horizontalAlign,
+      verticalAlign,
+      dynamicAlign,
+      horizontalOffset,
+      verticalOffset,
+      noOverlap,
+      openAnimationConfig,
+      closeAnimationConfig,
+      noAnimations,
+      allowOutsideScroll,
+      restoreFocusOnClose,
+      compatibility,
+    } = this;
+
+    return html`<anypoint-dropdown
+      .opened="${opened}"
+      .horizontalAlign="${horizontalAlign}"
+      .verticalAlign="${verticalAlign}"
+      .dynamicAlign="${dynamicAlign}"
+      .horizontalOffset="${horizontalOffset}"
+      .verticalOffset="${verticalOffset}"
+      .noOverlap="${noOverlap}"
+      .openAnimationConfig="${openAnimationConfig}"
+      .closeAnimationConfig="${closeAnimationConfig}"
+      .noAnimations="${noAnimations}"
+      .allowOutsideScroll="${allowOutsideScroll}"
+      .restoreFocusOnClose="${restoreFocusOnClose}"
+      ?compatibility="${compatibility}"
+      @overlay-closed="${this._dropdownClosed}"
+      @overlay-opened="${this._dropdownOpened}"
+      @select="${this._selectHandler}"
+      @deselect="${this._deselectHandler}"
+    >
+      <div slot="dropdown-content" class="dropdown-content">
+        <slot id="content" name="dropdown-content"></slot>
+      </div>
+    </anypoint-dropdown>`;
+  }
+
+  /**
+   * @return {TemplateResult} Template for the assistive labels.
+   */
+  _assistiveTemplate() {
+    const {
+      infoMessage,
+      invalidMessage,
+      _errorAddonClass,
+      _infoAddonClass,
+    } = this;
+    return html`<div class="assistive-info">
+      ${infoMessage
+        ? html`<p class="${_infoAddonClass}">${infoMessage}</p>`
+        : ''}
+      ${invalidMessage
+        ? html`<p class="${_errorAddonClass}">${invalidMessage}</p>`
+        : ''}
+    </div>`;
   }
 }
