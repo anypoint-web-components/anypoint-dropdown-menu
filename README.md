@@ -1,6 +1,6 @@
 [![Published on NPM](https://img.shields.io/npm/v/@anypoint-web-components/anypoint-dropdown-menu.svg)](https://www.npmjs.com/package/@anypoint-web-components/anypoint-dropdown-menu)
 
-[![Build Status](https://travis-ci.org/anypoint-web-components/anypoint-dropdown-menu.svg?branch=stage)](https://travis-ci.org/anypoint-web-components/anypoint-dropdown-menu)
+[![Build Status](https://travis-ci.com/anypoint-web-components/anypoint-dropdown-menu.svg)](https://travis-ci.com/anypoint-web-components/anypoint-dropdown-menu)
 
 # anypoint-dropdown-menu
 
