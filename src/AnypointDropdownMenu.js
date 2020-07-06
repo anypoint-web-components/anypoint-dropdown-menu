@@ -80,7 +80,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(
         </div>
 
         <anypoint-dropdown
-          fitPositionTarget="${fitPositionTarget}"
+          .fitPositionTarget="${fitPositionTarget}"
           .opened="${opened}"
           .horizontalAlign="${horizontalAlign}"
           .verticalAlign="${verticalAlign}"
