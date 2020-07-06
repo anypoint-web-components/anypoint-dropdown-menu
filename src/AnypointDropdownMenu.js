@@ -49,6 +49,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(
       _infoAddonClass,
       _triggerClass,
       _inputContainerClass,
+      fitPositionTarget,
     } = this;
 
     const renderValue = value || '';
@@ -79,6 +80,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(
         </div>
 
         <anypoint-dropdown
+          .fitPositionTarget="${fitPositionTarget}"
           .opened="${opened}"
           .horizontalAlign="${horizontalAlign}"
           .verticalAlign="${verticalAlign}"
@@ -522,6 +524,11 @@ export class AnypointDropdownMenu extends ValidatableMixin(
        * When set the control is rendered as disabled form control.
        */
       disabled: { type: Boolean, reflect: true },
+      /**
+       * It will fit dropdown content width to dropdown selector
+       * Default value is false.
+       */
+      fitPositionTarget: { type: Boolean },
     };
   }
 
@@ -543,6 +550,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(
     this.infoMessage = undefined;
     this.noLabelFloat = false;
     this.required = false;
+    this.fitPositionTarget = false;
 
     this._clickHandler = this._clickHandler.bind(this);
     this._onKeydown = this._onKeydown.bind(this);
