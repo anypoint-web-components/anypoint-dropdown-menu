@@ -276,7 +276,11 @@ export default css`
 
   :host([compatibility]) {
     height: 40px;
-    margin-top: 20px;
+    margin-top: 25px;
+  }
+
+  :host([compatibility]) .label.compatibility {
+    top: -22px;
   }
 
   :host([compatibility]) .input-container {
