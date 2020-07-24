@@ -51,7 +51,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(
       _inputContainerClass,
       fitPositionTarget,
     } = this;
-    console.log('LABEL CLASS', _labelClass);
+
     const renderValue = value || '';
     return html`<style>
         ${this.styles}
