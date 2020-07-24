@@ -228,6 +228,9 @@ export class AnypointDropdownMenu extends ValidatableMixin(
     if (this._formDisabled || this.disabled) {
       klas += ' form-disabled';
     }
+    if (this.compatibility) {
+      klas += ' compatibility';
+    }
     return klas;
   }
 
