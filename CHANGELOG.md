@@ -294,3 +294,36 @@
 * test new property [f3053ed](https://github.com/anypoint-web-components/anypoint-dropdown-menu/commit/f3053ed3c8d3e1f9f7033254608638d94ad459c2) by Carolina Wright
 
 
+<a name="0.1.17"></a>
+## [0.1.17](https://github.com/anypoint-web-components/anypoint-dropdown-menu/compare/0.1.15...0.1.17) (2020-07-24)
+
+### Build
+
+* bump version [744053f](https://github.com/anypoint-web-components/anypoint-dropdown-menu/commit/744053f9c6dc05bdbdac6ba6b039da35f41e40dc) by Carolina Wright
+* bump version [29886c6](https://github.com/anypoint-web-components/anypoint-dropdown-menu/commit/29886c6a1b940a28c218dc6d61490394fdfbe2e3) by Carolina Wright
+
+
+### Update
+
+* [ci skip] automated merge master->stage. syncing main branches [e3e4660](https://github.com/anypoint-web-components/anypoint-dropdown-menu/commit/e3e4660c2ec87ad67765ee927e1132e9230b77f8) by Ci agent
+* ignore .idea folder [978db91](https://github.com/anypoint-web-components/anypoint-dropdown-menu/commit/978db91ee17de9845027863d54c4a8e73508f850) by Carolina Wright
+* [ci skip] automated merge master->stage. syncing main branches [d2a75cc](https://github.com/anypoint-web-components/anypoint-dropdown-menu/commit/d2a75cceac8d1c49435e41ad76e127f6a2a913ab) by Ci agent
+
+
+### Features
+
+* add new property fitPositionTarget to fit content width to container [aef4c64](https://github.com/anypoint-web-components/anypoint-dropdown-menu/commit/aef4c640b2f4779a43754da93a8c0f8d2cc0685c) by Carolina Wright
+
+
+### Bug Fixes
+
+* remove log [484c8fd](https://github.com/anypoint-web-components/anypoint-dropdown-menu/commit/484c8fde6d90a3d7c773832299c0c76c3156f3af) by Carolina Wright
+* label too close to menu [58caddd](https://github.com/anypoint-web-components/anypoint-dropdown-menu/commit/58caddd8210106620c31251cf014ccc096e3927c) by Carolina Wright
+* property usage [7de6d3a](https://github.com/anypoint-web-components/anypoint-dropdown-menu/commit/7de6d3ad689fb650e1e039c28954930707944ba0) by Carolina Wright
+
+
+### Testing
+
+* test new property [f3053ed](https://github.com/anypoint-web-components/anypoint-dropdown-menu/commit/f3053ed3c8d3e1f9f7033254608638d94ad459c2) by Carolina Wright
+
+
