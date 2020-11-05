@@ -50,6 +50,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(
       _triggerClass,
       _inputContainerClass,
       fitPositionTarget,
+      name,
     } = this;
 
     const renderValue = value || '';
@@ -57,7 +58,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(
         ${this.styles}
       </style>
       <div class="${_inputContainerClass}">
-        <div class="${_labelClass}">
+        <div class="${_labelClass}" id="${name}">
           <slot name="label"></slot>
         </div>
 
@@ -98,6 +99,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(
           @overlay-opened="${this._dropdownOpened}"
           @select="${this._selectHandler}"
           @deselect="${this._deselectHandler}"
+          aria-labelledby="${name}"
         >
           <div slot="dropdown-content" class="dropdown-content">
             <slot id="content" name="dropdown-content"></slot>
@@ -482,7 +484,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(
       invalidMessage: { type: String },
       /**
        * Assistive text value.
-       * Rendered beflow the input.
+       * Rendered below the input.
        */
       infoMessage: { type: String },
       /**
