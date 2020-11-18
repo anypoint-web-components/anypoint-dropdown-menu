@@ -327,3 +327,29 @@
 * test new property [f3053ed](https://github.com/anypoint-web-components/anypoint-dropdown-menu/commit/f3053ed3c8d3e1f9f7033254608638d94ad459c2) by Carolina Wright
 
 
+<a name="0.1.18"></a>
+## [0.1.18](https://github.com/anypoint-web-components/anypoint-dropdown-menu/compare/0.1.16...0.1.18) (2020-11-18)
+
+### Build
+
+* bump version [eaed20d](https://github.com/anypoint-web-components/anypoint-dropdown-menu/commit/eaed20d29957e65a52816b62b6fb550d27d212b2) by Carolina Wright
+* bump version [744053f](https://github.com/anypoint-web-components/anypoint-dropdown-menu/commit/744053f9c6dc05bdbdac6ba6b039da35f41e40dc) by Carolina Wright
+
+
+### Update
+
+* [ci skip] automated merge master->stage. syncing main branches [8253afb](https://github.com/anypoint-web-components/anypoint-dropdown-menu/commit/8253afb579c60c9a8c9f1d02c7c0cce0f7b45dda) by Ci agent
+* [ci skip] automated merge master->stage. syncing main branches [e3e4660](https://github.com/anypoint-web-components/anypoint-dropdown-menu/commit/e3e4660c2ec87ad67765ee927e1132e9230b77f8) by Ci agent
+
+
+### Features
+
+* APIC-475 relate label with dropdown [5fcd2f2](https://github.com/anypoint-web-components/anypoint-dropdown-menu/commit/5fcd2f2810111a4902ee123fd76ef4b6000386e7) by Carolina Wright
+
+
+### Bug Fixes
+
+* remove log [484c8fd](https://github.com/anypoint-web-components/anypoint-dropdown-menu/commit/484c8fde6d90a3d7c773832299c0c76c3156f3af) by Carolina Wright
+* label too close to menu [58caddd](https://github.com/anypoint-web-components/anypoint-dropdown-menu/commit/58caddd8210106620c31251cf014ccc096e3927c) by Carolina Wright
+
+
