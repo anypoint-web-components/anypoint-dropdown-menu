@@ -1,7 +1,7 @@
 {
   "name": "@anypoint-web-components/anypoint-dropdown-menu",
   "description": "Accessible dropdown menu for Anypoint platform",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "license": "Apache-2.0",
   "main": "index.js",
   "module": "index.js",
