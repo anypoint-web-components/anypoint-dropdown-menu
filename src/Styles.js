@@ -191,7 +191,8 @@ export default css`
   }
 
   .dropdown-content {
-    box-shadow: var(--anypoiont-dropdown-shaddow);
+    box-shadow: var(--anypoint-dropdown-shadow, var(--anypoiont-dropdown-shaddow));
+    border-radius: var(--anypoint-dropdown-border-radius);
   }
 
   :host([verticalalign='bottom']) anypoint-dropdown {

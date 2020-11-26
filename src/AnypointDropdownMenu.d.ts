@@ -229,6 +229,11 @@ export declare class AnypointDropdownMenu extends ValidatableMixin(ControlStateM
    * @attribute
    */
   disabled: boolean;
+  /**
+   * Fits the dropdown content width to the dropdown selector. Default to `false`.
+   * @attribute
+   */
+  fitPositionTarget: boolean;
 
   constructor();
 

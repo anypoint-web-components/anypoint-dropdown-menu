@@ -97,6 +97,11 @@
           "type": "boolean"
         },
         {
+          "name": "fitPositionTarget",
+          "description": "Fits the dropdown content width to the dropdown selector. Default to `false`.",
+          "type": "boolean"
+        },
+        {
           "name": "validator",
           "description": "Name of the validator or validators to use.\nIf the element should be validated by more than one validator then separate names with\nspace. See docs for `ValidatorMixin` for description of how to define a\nvalidator.",
           "type": "string"
@@ -260,6 +265,12 @@
           "name": "noLabelFloat",
           "attribute": "noLabelFloat",
           "description": "When set the label is rendered only when not selected state.\nIt is useful when using the dropdown in an application menu bar.",
+          "type": "boolean"
+        },
+        {
+          "name": "fitPositionTarget",
+          "attribute": "fitPositionTarget",
+          "description": "Fits the dropdown content width to the dropdown selector. Default to `false`.",
           "type": "boolean"
         },
         {

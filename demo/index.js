@@ -23,10 +23,12 @@ class ComponentDemo extends ArcDemoPage {
       'demoNoLabelFloat',
       'demoRtl',
       'formFieldsDisabled',
-      'formMenuDisabled'
+      'formMenuDisabled',
+      'fitPositionTarget',
     ]);
     this._componentName = 'anypoint-dropdown-menu';
     this.demoStates = ['Filled', 'Outlined', 'Anypoint'];
+    this.fitPositionTarget = false;
     this.items = [
       'Allosaurus',
       'Brontosaurus',
@@ -111,20 +113,8 @@ class ComponentDemo extends ArcDemoPage {
 
   _mainDemoStateHandler(e) {
     const state = e.detail.value;
-    switch (state) {
-      case 0:
-        this.demoOutlined = false;
-        this.demoCompatibility = false;
-        break;
-      case 1:
-        this.demoOutlined = true;
-        this.demoCompatibility = false;
-        break;
-      case 2:
-        this.demoOutlined = false;
-        this.demoCompatibility = true;
-        break;
-    }
+    this.demoOutlined = state === 1;
+    this.demoCompatibility = state === 2;
   }
 
   _mainDemoAssistiveHandler(e) {
@@ -158,7 +148,8 @@ class ComponentDemo extends ArcDemoPage {
       demoInfo,
       demoError,
       demoRtl,
-      demoNoLabelFloat
+      demoNoLabelFloat,
+      fitPositionTarget,
     } = this;
     const infoMessage = demoInfo ? 'Assistive text label' : undefined;
     return html`<section class="documentation-section">
@@ -179,11 +170,12 @@ class ComponentDemo extends ArcDemoPage {
         ?outlined="${demoOutlined}"
         ?compatibility="${demoCompatibility}"
         .infoMessage="${infoMessage}"
-        invalidmessage="This value is invalid"
+        invalidMessage="This value is invalid"
         ?invalid="${demoError}"
         dir="${demoRtl ? 'rtl' : 'ltr'}"
         ?noLabelFloat="${demoNoLabelFloat}"
-        >
+        ?fitPositionTarget="${fitPositionTarget}"
+      >
         <label slot="label">Select a dinosaur</label>
         <anypoint-listbox slot="dropdown-content" tabindex="-1" ?compatibility="${demoCompatibility}">
         ${this.items.map((item) => html`<anypoint-item>${item}</anypoint-item>`)}
@@ -196,15 +188,19 @@ class ComponentDemo extends ArcDemoPage {
         slot="options"
         name="demoNoLabelFloat"
         @change="${this._toggleMainOption}"
-        >No label float</anypoint-checkbox
-      >
+      >No label float</anypoint-checkbox>
       <anypoint-checkbox
         aria-describedby="mainOptionsLabel"
         slot="options"
         name="demoRtl"
         @change="${this._toggleMainOption}"
-        >Right-to-left</anypoint-checkbox
-      >
+      >Right-to-left</anypoint-checkbox>
+      <anypoint-checkbox
+        aria-describedby="mainOptionsLabel"
+        slot="options"
+        name="fitPositionTarget"
+        @change="${this._toggleMainOption}"
+      >Fit target</anypoint-checkbox>
 
       <label slot="options" id="mainAssistiveLabel">Assistive text</label>
       <anypoint-radio-group

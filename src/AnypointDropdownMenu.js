@@ -222,55 +222,55 @@ export class AnypointDropdownMenu extends ValidatableMixin(
 
   get _labelClass() {
     const labelFloating = !!this.value;
-    let klas = 'label';
+    let className = 'label';
     if (labelFloating && this.noLabelFloat) {
-      klas += ' hidden';
+      className += ' hidden';
     } else {
-      klas += labelFloating ? ' floating' : ' resting';
+      className += labelFloating ? ' floating' : ' resting';
     }
     if (this._formDisabled || this.disabled) {
-      klas += ' form-disabled';
+      className += ' form-disabled';
     }
     if (this.compatibility) {
-      klas += ' compatibility';
+      className += ' compatibility';
     }
-    return klas;
+    return className;
   }
 
   get _infoAddonClass() {
-    let klas = 'info';
+    let className = 'info';
     const isInvalidWithMessage = !!this.invalidMessage && this.invalid;
     if (isInvalidWithMessage) {
-      klas += ' label-hidden';
+      className += ' label-hidden';
     }
-    return klas;
+    return className;
   }
 
   get _errorAddonClass() {
-    let klas = 'invalid';
+    let className = 'invalid';
     if (!this.invalid) {
-      klas += ' label-hidden';
+      className += ' label-hidden';
     }
     if (this.infoMessage) {
-      klas += ' info-offset';
+      className += ' info-offset';
     }
-    return klas;
+    return className;
   }
 
   get _triggerClass() {
-    let klas = 'trigger-button';
+    let className = 'trigger-button';
     if (this._formDisabled || this.disabled) {
-      klas += ' form-disabled';
+      className += ' form-disabled';
     }
-    return klas;
+    return className;
   }
 
   get _inputContainerClass() {
-    let klas = 'input-container';
+    let className = 'input-container';
     if (this._formDisabled || this.disabled) {
-      klas += ' form-disabled';
+      className += ' form-disabled';
     }
-    return klas;
+    return className;
   }
 
   get selectedItem() {
@@ -531,8 +531,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(
        */
       disabled: { type: Boolean, reflect: true },
       /**
-       * It will fit dropdown content width to dropdown selector
-       * Default value is false.
+       * Fits the dropdown content width to the dropdown selector. Default to `false`.
        */
       fitPositionTarget: { type: Boolean },
     };
