@@ -353,3 +353,24 @@
 * label too close to menu [58caddd](https://github.com/anypoint-web-components/anypoint-dropdown-menu/commit/58caddd8210106620c31251cf014ccc096e3927c) by Carolina Wright
 
 
+<a name="0.1.19"></a>
+## [0.1.19](https://github.com/anypoint-web-components/anypoint-dropdown-menu/compare/0.1.17...0.1.19) (2020-11-26)
+
+### Build
+
+* bump version [eaed20d](https://github.com/anypoint-web-components/anypoint-dropdown-menu/commit/eaed20d29957e65a52816b62b6fb550d27d212b2) by Carolina Wright
+
+
+### Update
+
+* updating types [06192fa](https://github.com/anypoint-web-components/anypoint-dropdown-menu/commit/06192fa0a0d78d40eee138069b48f1fa88273bc4) by Pawel Psztyc
+* updgrading test runner [627b444](https://github.com/anypoint-web-components/anypoint-dropdown-menu/commit/627b444f212dbac5f27cfadf12340ebea3259b4c) by Pawel Psztyc
+* [ci skip] automated merge master->stage. syncing main branches [a8df7f1](https://github.com/anypoint-web-components/anypoint-dropdown-menu/commit/a8df7f172abf63cdeb3557f9739d02d50bc4cc77) by Ci agent
+* [ci skip] automated merge master->stage. syncing main branches [8253afb](https://github.com/anypoint-web-components/anypoint-dropdown-menu/commit/8253afb579c60c9a8c9f1d02c7c0cce0f7b45dda) by Ci agent
+
+
+### Features
+
+* APIC-475 relate label with dropdown [5fcd2f2](https://github.com/anypoint-web-components/anypoint-dropdown-menu/commit/5fcd2f2810111a4902ee123fd76ef4b6000386e7) by Carolina Wright
+
+
