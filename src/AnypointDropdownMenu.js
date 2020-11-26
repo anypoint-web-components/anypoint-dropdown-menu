@@ -6,6 +6,8 @@ import '@anypoint-web-components/anypoint-button/anypoint-icon-button.js';
 import { arrowDown } from './icons.js';
 import DropdownStyles from './Styles.js';
 
+/** @typedef {import('@anypoint-web-components/validatable-mixin/src/ValidatableMixin').ValidationResult} ValidationResult */
+
 /* eslint-disable class-methods-use-this */
 /* eslint-disable no-plusplus */
 
@@ -94,9 +96,8 @@ export class AnypointDropdownMenu extends ValidatableMixin(
           .noAnimations="${noAnimations}"
           .allowOutsideScroll="${allowOutsideScroll}"
           .restoreFocusOnClose="${restoreFocusOnClose}"
-          ?compatibility="${compatibility}"
-          @overlay-closed="${this._dropdownClosed}"
-          @overlay-opened="${this._dropdownOpened}"
+          @closed="${this._dropdownClosed}"
+          @opened="${this._dropdownOpened}"
           @select="${this._selectHandler}"
           @deselect="${this._deselectHandler}"
           aria-labelledby="${name}"
@@ -126,7 +127,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(
 
   /**
    * When form-associated custom elements are supported in the browser it
-   * returns `<form>` element associated with this constol.
+   * returns `<form>` element associated with this control.
    */
   get form() {
     return (this._internals && this._internals.form) || null;
@@ -238,8 +239,8 @@ export class AnypointDropdownMenu extends ValidatableMixin(
 
   get _infoAddonClass() {
     let klas = 'info';
-    const isInavlidWithMessage = !!this.invalidMessage && this.invalid;
-    if (isInavlidWithMessage) {
+    const isInvalidWithMessage = !!this.invalidMessage && this.invalid;
+    if (isInvalidWithMessage) {
       klas += ' label-hidden';
     }
     return klas;
@@ -549,6 +550,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(
     this.verticalOffset = 0;
     this.restoreFocusOnClose = false;
     this.value = '';
+    this.name = undefined;
 
     this.openAnimationConfig = undefined;
     this.closeAnimationConfig = undefined;
@@ -579,7 +581,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(
     if (!this.hasAttribute('aria-haspopup')) {
       this.setAttribute('aria-haspopup', 'listbox');
     }
-    // aria-expanded is set with `opened` flag which is initialzed in the cosntructor.
+    // aria-expanded is set with `opened` flag which is initialized in the constructor.
     this.addEventListener('click', this._clickHandler);
     this.addEventListener('keydown', this._onKeydown);
     this.addEventListener('focus', this._focusHandler);
@@ -753,8 +755,8 @@ export class AnypointDropdownMenu extends ValidatableMixin(
   _selectedItemChanged(selectedItem) {
     let value = '';
     if (selectedItem) {
-      // @ts-ignore
       value =
+      // @ts-ignore
         selectedItem.label ||
         selectedItem.getAttribute('label') ||
         selectedItem.textContent.trim();
@@ -765,7 +767,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(
   /**
    * Toggles `opened` state.
    *
-   * @param {?MouseEvent} e When set it cancels the event
+   * @param {MouseEvent=} e When set it cancels the event
    */
   toggle(e) {
     if (this.disabled || this._formDisabled) {
@@ -876,7 +878,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(
    *
    * See `ValidatableMixin` for more information.
    *
-   * @param {?Array<Object>} states
+   * @param {ValidationResult[]} states
    */
   _validationStatesChanged(states) {
     if (!states || !states.length) {
@@ -892,7 +894,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(
   }
 
   /**
-   * Calles when `autoValidate` changed
+   * Calls when `autoValidate` changed
    * @param {Boolean} value
    */
   _autoValidateChanged(value) {

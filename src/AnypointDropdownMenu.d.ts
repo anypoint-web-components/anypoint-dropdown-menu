@@ -1,6 +1,10 @@
 import { TemplateResult, LitElement, CSSResult } from 'lit-element';
 import { ControlStateMixin } from '@anypoint-web-components/anypoint-control-mixins';
 import { ValidatableMixin } from '@anypoint-web-components/validatable-mixin';
+import { ValidationResult } from '@anypoint-web-components/validatable-mixin/src/ValidatableMixin';
+
+export type VerticalAlign = 'top' | 'bottom' | 'middle' | 'auto';
+export type HorizontalAlign = 'left' | 'right' | 'center' | 'auto';
 
 /**
  * Accessible dropdown menu for Anypoint platform.
@@ -11,8 +15,12 @@ import { ValidatableMixin } from '@anypoint-web-components/validatable-mixin';
  * support.
  *
  * See README.md file for detailed documentation.
+ * 
+ * @fires validationstates-changed
+ * @fires hasvalidationmessage-changed
+ * @fires opened-changed
  */
-export declare class AnypointDropdownMenu {
+export declare class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(LitElement)) {
   readonly styles: CSSResult;
 
   render(): TemplateResult;
@@ -21,34 +29,34 @@ export declare class AnypointDropdownMenu {
    * For form-associated custom elements. Marks this custom element
    * as form enabled element.
    */
-  static readonly formAssociated: true;
+  static get formAssociated(): true;
 
   /**
    * When form-associated custom elements are supported in the browser it
-   * returns `<form>` element associated with this constol.
+   * returns `<form>` element associated with this control.
    */
-  readonly form: HTMLFormElement|null;
+  get form(): HTMLFormElement|null;
 
-  readonly hasValidationMessage: boolean;
+  get hasValidationMessage(): boolean;
 
-  readonly _labelClass(): string;
+  get _labelClass(): string;
 
-  readonly _infoAddonClass(): string;
+  get _infoAddonClass(): string;
 
-  readonly _errorAddonClass(): string;
+  get _errorAddonClass(): string;
 
-  readonly _triggerClass(): string;
+  get _triggerClass(): string;
 
-  readonly _inputContainerClass: string;
+  get _inputContainerClass(): string;
 
-  readonly selectedItem: HTMLElement|undefined;
+  get selectedItem(): HTMLElement|undefined;
 
   _selectedItem: HTMLElement|undefined;
 
   /**
    * @returns The content element that is contained by the dropdown menu, if any.
    */
-  readonly contentElement: HTMLElement|null;
+  get contentElement(): HTMLElement|null;
 
   /**
    * An animation config. If provided, this will be used to animate the
@@ -68,6 +76,7 @@ export declare class AnypointDropdownMenu {
   /**
    * Set to true to disable animations when opening and closing the
    * dropdown.
+   * @attribute
    */
   noAnimations: boolean;
   /**
@@ -77,20 +86,22 @@ export declare class AnypointDropdownMenu {
    * to the dropdown when it opens.
    * This property is a shortcut to set `scrollAction` to lock or refit.
    * Prefer directly setting the `scrollAction` property.
+   * @attribute
    */
   allowOutsideScroll: boolean;
   /**
    * The orientation against which to align the element vertically
    * relative to the `positionTarget`. Possible values are "top", "bottom",
    * "middle", "auto".
+   * @attribute
    */
-  verticalAlign: string;
+  verticalAlign: VerticalAlign;
   /**
    * The orientation against which to align the element horizontally
-   * relative to the `positionTarget`. Possible values are "left", "right",
-   * "center", "auto".
+   * relative to the `positionTarget`. Possible values are "left", "right", "center", "auto".
+   * @attribute
    */
-  horizontalAlign: string;
+  horizontalAlign: HorizontalAlign;
   /**
    * A pixel value that will be added to the position calculated for the
    * given `verticalAlign`, in the direction of alignment. You can think
@@ -104,6 +115,7 @@ export declare class AnypointDropdownMenu {
    * Conversely if `verticalAlign` is "bottom", this offset will increase
    * or decrease the distance to the bottom side of the screen: a negative
    * offset will move the dropdown downwards; a positive one, upwards.
+   * @attribute
    */
   verticalOffset: number;
   /**
@@ -119,21 +131,25 @@ export declare class AnypointDropdownMenu {
    * Conversely if `horizontalAlign` is "right", this offset will increase
    * or decrease the distance to the right side of the screen: a negative
    * offset will move the dropdown to the right; a positive one, to the left.
+   * @attribute
    */
   horizontalOffset: number;
   /**
    * If true, it will use `horizontalAlign` and `verticalAlign` values as
    * preferred alignment and if there's not enough space, it will pick the
    * values which minimize the cropping.
+   * @attribute
    */
   dynamicAlign: boolean;
   /**
    * True if the list is currently displayed.
+   * @attribute
    */
   opened: boolean;
   /**
    * Selected item value calculated as it's (in order) label property, label
    * attribute, and `innerText` value.
+   * @attribute
    */
   value: string;
   /**
@@ -141,24 +157,29 @@ export declare class AnypointDropdownMenu {
    * Note, form-associated custom elements may not be supported as first
    * implementation was released in Chrome M77 in July 2019. It may require
    * using custom form element to gather form data.
+   * @attribute
    */
   name: string;
   /**
    * When set it marks the element as required. Calling the `validate`
    * function will mark this control as invalid when no value is selected.
+   * @attribute
    */
   required: boolean;
   /**
    * Automatically calls `validate()` function when dropdown closes.
+   * @attribute
    */
   autoValidate: boolean;
   /**
    * The error message to display when the input is invalid.
+   * @attribute
    */
   invalidMessage: string;
   /**
    * Assistive text value.
-   * Rendered beflow the input.
+   * Rendered below the input.
+   * @attribute
    */
   infoMessage: string;
   /**
@@ -171,7 +192,7 @@ export declare class AnypointDropdownMenu {
    *
    * This property is `undefined` if `validator` is not set.
    */
-  validationStates: object[],
+  validationStates: ValidationResult[];
   /**
    * Value computed from `invalidMessage`, `invalid` and `validationStates`.
    * True if the validation message should be displayed.
@@ -180,14 +201,17 @@ export declare class AnypointDropdownMenu {
   /**
    * Will position the list around the button without overlapping
    * it.
+   * @attribute
    */
   noOverlap: boolean;
   /**
    * Enables outlined theme.
+   * @attribute
    */
   outlined: boolean;
   /**
    * Enables compatibility with Anypoint components.
+   * @attribute
    */
   compatibility: boolean;
   /**
@@ -197,10 +221,12 @@ export declare class AnypointDropdownMenu {
   /**
    * When set the label is rendered only when not selected state.
    * It is useful when using the dropdown in an application menu bar.
+   * @attribute
    */
   noLabelFloat: boolean;
   /**
    * When set the control is rendered as disabled form control.
+   * @attribute
    */
   disabled: boolean;
 
@@ -333,10 +359,10 @@ export declare class AnypointDropdownMenu {
    *
    * See `ValidatableMixin` for more information.
    */
-  _validationStatesChanged(states: Object[]): void;
+  _validationStatesChanged(states: ValidationResult[]): void;
 
   /**
-   * Calles when `autoValidate` changed
+   * Calls when `autoValidate` changed
    */
   _autoValidateChanged(value: boolean): void;
 
@@ -349,6 +375,6 @@ export declare class AnypointDropdownMenu {
   _ensureInvalidAlertSate(invalid: boolean): void;
 }
 
-export declare interface AnypointDropdownMenu extends ValidatableMixin, ControlStateMixin, LitElement {
+// export declare interface AnypointDropdownMenu extends ValidatableMixin, ControlStateMixin, LitElement {
 
-}
+// }

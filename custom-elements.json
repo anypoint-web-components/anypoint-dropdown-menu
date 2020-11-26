@@ -1,0 +1,316 @@
+{
+  "version": "experimental",
+  "tags": [
+    {
+      "name": "anypoint-dropdown-menu",
+      "path": "./anypoint-dropdown-menu.js",
+      "description": "Accessible dropdown menu for Anypoint platform.\n\nThe element works perfectly with `anypoint-listbox` which together creates an\naccessible list of options. The listbox can be replaced by any other element\nthat support similar functionality but make sure it has an appropriate aria\nsupport.\n\nSee README.md file for detailed documentation.",
+      "attributes": [
+        {
+          "name": "noAnimations",
+          "description": "Set to true to disable animations when opening and closing the\ndropdown.",
+          "type": "boolean"
+        },
+        {
+          "name": "allowOutsideScroll",
+          "description": "By default, the dropdown will constrain scrolling on the page\nto itself when opened.\nSet to true in order to prevent scroll from being constrained\nto the dropdown when it opens.\nThis property is a shortcut to set `scrollAction` to lock or refit.\nPrefer directly setting the `scrollAction` property.",
+          "type": "boolean"
+        },
+        {
+          "name": "verticalAlign",
+          "description": "The orientation against which to align the element vertically\nrelative to the `positionTarget`. Possible values are \"top\", \"bottom\",\n\"middle\", \"auto\".",
+          "type": "VerticalAlign"
+        },
+        {
+          "name": "horizontalAlign",
+          "description": "The orientation against which to align the element horizontally\nrelative to the `positionTarget`. Possible values are \"left\", \"right\", \"center\", \"auto\".",
+          "type": "HorizontalAlign"
+        },
+        {
+          "name": "verticalOffset",
+          "description": "A pixel value that will be added to the position calculated for the\ngiven `verticalAlign`, in the direction of alignment. You can think\nof it as increasing or decreasing the distance to the side of the\nscreen given by `verticalAlign`.\n\nIf `verticalAlign` is \"top\" or \"middle\", this offset will increase or\ndecrease the distance to the top side of the screen: a negative offset\nwill move the dropdown upwards; a positive one, downwards.\n\nConversely if `verticalAlign` is \"bottom\", this offset will increase\nor decrease the distance to the bottom side of the screen: a negative\noffset will move the dropdown downwards; a positive one, upwards.",
+          "type": "number"
+        },
+        {
+          "name": "horizontalOffset",
+          "description": "A pixel value that will be added to the position calculated for the\ngiven `horizontalAlign`, in the direction of alignment. You can think\nof it as increasing or decreasing the distance to the side of the\nscreen given by `horizontalAlign`.\n\nIf `horizontalAlign` is \"left\" or \"center\", this offset will increase or\ndecrease the distance to the left side of the screen: a negative offset\nwill move the dropdown to the left; a positive one, to the right.\n\nConversely if `horizontalAlign` is \"right\", this offset will increase\nor decrease the distance to the right side of the screen: a negative\noffset will move the dropdown to the right; a positive one, to the left.",
+          "type": "number"
+        },
+        {
+          "name": "dynamicAlign",
+          "description": "If true, it will use `horizontalAlign` and `verticalAlign` values as\npreferred alignment and if there's not enough space, it will pick the\nvalues which minimize the cropping.",
+          "type": "boolean"
+        },
+        {
+          "name": "opened",
+          "description": "True if the list is currently displayed.",
+          "type": "boolean"
+        },
+        {
+          "name": "value",
+          "description": "Selected item value calculated as it's (in order) label property, label\nattribute, and `innerText` value.",
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "description": "Name of the form control.\nNote, form-associated custom elements may not be supported as first\nimplementation was released in Chrome M77 in July 2019. It may require\nusing custom form element to gather form data.",
+          "type": "string"
+        },
+        {
+          "name": "required",
+          "description": "When set it marks the element as required. Calling the `validate`\nfunction will mark this control as invalid when no value is selected.",
+          "type": "boolean"
+        },
+        {
+          "name": "autoValidate",
+          "description": "Automatically calls `validate()` function when dropdown closes.",
+          "type": "boolean"
+        },
+        {
+          "name": "invalidMessage",
+          "description": "The error message to display when the input is invalid.",
+          "type": "string"
+        },
+        {
+          "name": "infoMessage",
+          "description": "Assistive text value.\nRendered below the input.",
+          "type": "string"
+        },
+        {
+          "name": "noOverlap",
+          "description": "Will position the list around the button without overlapping\nit.",
+          "type": "boolean"
+        },
+        {
+          "name": "outlined",
+          "description": "Enables outlined theme.",
+          "type": "boolean"
+        },
+        {
+          "name": "compatibility",
+          "description": "Enables compatibility with Anypoint components.",
+          "type": "boolean"
+        },
+        {
+          "name": "noLabelFloat",
+          "description": "When set the label is rendered only when not selected state.\nIt is useful when using the dropdown in an application menu bar.",
+          "type": "boolean"
+        },
+        {
+          "name": "validator",
+          "description": "Name of the validator or validators to use.\nIf the element should be validated by more than one validator then separate names with\nspace. See docs for `ValidatorMixin` for description of how to define a\nvalidator.",
+          "type": "string"
+        },
+        {
+          "name": "invalid",
+          "description": "True if the last call to `validate` is invalid.",
+          "type": "boolean"
+        },
+        {
+          "name": "disabled",
+          "description": "When set the control is rendered as disabled form control.",
+          "type": "boolean"
+        },
+        {
+          "name": "focused",
+          "description": "If true the element currently has focus.",
+          "type": "boolean"
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult"
+        },
+        {
+          "name": "form",
+          "description": "When form-associated custom elements are supported in the browser it\nreturns `<form>` element associated with this control.",
+          "type": "HTMLFormElement | null"
+        },
+        {
+          "name": "hasValidationMessage",
+          "type": "boolean"
+        },
+        {
+          "name": "selectedItem",
+          "type": "HTMLElement | undefined"
+        },
+        {
+          "name": "contentElement",
+          "type": "HTMLElement | null"
+        },
+        {
+          "name": "openAnimationConfig",
+          "description": "An animation config. If provided, this will be used to animate the\nopening of the dropdown. Pass an Array for multiple animations.\nSee `neon-animation` documentation for more animation configuration\ndetails.",
+          "type": "Object"
+        },
+        {
+          "name": "closeAnimationConfig",
+          "description": "An animation config. If provided, this will be used to animate the\nclosing of the dropdown. Pass an Array for multiple animations.\nSee `neon-animation` documentation for more animation configuration\ndetails.",
+          "type": "Object"
+        },
+        {
+          "name": "noAnimations",
+          "attribute": "noAnimations",
+          "description": "Set to true to disable animations when opening and closing the\ndropdown.",
+          "type": "boolean"
+        },
+        {
+          "name": "allowOutsideScroll",
+          "attribute": "allowOutsideScroll",
+          "description": "By default, the dropdown will constrain scrolling on the page\nto itself when opened.\nSet to true in order to prevent scroll from being constrained\nto the dropdown when it opens.\nThis property is a shortcut to set `scrollAction` to lock or refit.\nPrefer directly setting the `scrollAction` property.",
+          "type": "boolean"
+        },
+        {
+          "name": "verticalAlign",
+          "attribute": "verticalAlign",
+          "description": "The orientation against which to align the element vertically\nrelative to the `positionTarget`. Possible values are \"top\", \"bottom\",\n\"middle\", \"auto\".",
+          "type": "VerticalAlign"
+        },
+        {
+          "name": "horizontalAlign",
+          "attribute": "horizontalAlign",
+          "description": "The orientation against which to align the element horizontally\nrelative to the `positionTarget`. Possible values are \"left\", \"right\", \"center\", \"auto\".",
+          "type": "HorizontalAlign"
+        },
+        {
+          "name": "verticalOffset",
+          "attribute": "verticalOffset",
+          "description": "A pixel value that will be added to the position calculated for the\ngiven `verticalAlign`, in the direction of alignment. You can think\nof it as increasing or decreasing the distance to the side of the\nscreen given by `verticalAlign`.\n\nIf `verticalAlign` is \"top\" or \"middle\", this offset will increase or\ndecrease the distance to the top side of the screen: a negative offset\nwill move the dropdown upwards; a positive one, downwards.\n\nConversely if `verticalAlign` is \"bottom\", this offset will increase\nor decrease the distance to the bottom side of the screen: a negative\noffset will move the dropdown downwards; a positive one, upwards.",
+          "type": "number"
+        },
+        {
+          "name": "horizontalOffset",
+          "attribute": "horizontalOffset",
+          "description": "A pixel value that will be added to the position calculated for the\ngiven `horizontalAlign`, in the direction of alignment. You can think\nof it as increasing or decreasing the distance to the side of the\nscreen given by `horizontalAlign`.\n\nIf `horizontalAlign` is \"left\" or \"center\", this offset will increase or\ndecrease the distance to the left side of the screen: a negative offset\nwill move the dropdown to the left; a positive one, to the right.\n\nConversely if `horizontalAlign` is \"right\", this offset will increase\nor decrease the distance to the right side of the screen: a negative\noffset will move the dropdown to the right; a positive one, to the left.",
+          "type": "number"
+        },
+        {
+          "name": "dynamicAlign",
+          "attribute": "dynamicAlign",
+          "description": "If true, it will use `horizontalAlign` and `verticalAlign` values as\npreferred alignment and if there's not enough space, it will pick the\nvalues which minimize the cropping.",
+          "type": "boolean"
+        },
+        {
+          "name": "opened",
+          "attribute": "opened",
+          "description": "True if the list is currently displayed.",
+          "type": "boolean"
+        },
+        {
+          "name": "value",
+          "attribute": "value",
+          "description": "Selected item value calculated as it's (in order) label property, label\nattribute, and `innerText` value.",
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "attribute": "name",
+          "description": "Name of the form control.\nNote, form-associated custom elements may not be supported as first\nimplementation was released in Chrome M77 in July 2019. It may require\nusing custom form element to gather form data.",
+          "type": "string"
+        },
+        {
+          "name": "required",
+          "attribute": "required",
+          "description": "When set it marks the element as required. Calling the `validate`\nfunction will mark this control as invalid when no value is selected.",
+          "type": "boolean"
+        },
+        {
+          "name": "autoValidate",
+          "attribute": "autoValidate",
+          "description": "Automatically calls `validate()` function when dropdown closes.",
+          "type": "boolean"
+        },
+        {
+          "name": "invalidMessage",
+          "attribute": "invalidMessage",
+          "description": "The error message to display when the input is invalid.",
+          "type": "string"
+        },
+        {
+          "name": "infoMessage",
+          "attribute": "infoMessage",
+          "description": "Assistive text value.\nRendered below the input.",
+          "type": "string"
+        },
+        {
+          "name": "noOverlap",
+          "attribute": "noOverlap",
+          "description": "Will position the list around the button without overlapping\nit.",
+          "type": "boolean"
+        },
+        {
+          "name": "outlined",
+          "attribute": "outlined",
+          "description": "Enables outlined theme.",
+          "type": "boolean"
+        },
+        {
+          "name": "compatibility",
+          "attribute": "compatibility",
+          "description": "Enables compatibility with Anypoint components.",
+          "type": "boolean"
+        },
+        {
+          "name": "legacy",
+          "type": "boolean",
+          "deprecatedMessage": "Use `compatibility` instead"
+        },
+        {
+          "name": "noLabelFloat",
+          "attribute": "noLabelFloat",
+          "description": "When set the label is rendered only when not selected state.\nIt is useful when using the dropdown in an application menu bar.",
+          "type": "boolean"
+        },
+        {
+          "name": "validator",
+          "attribute": "validator",
+          "description": "Name of the validator or validators to use.\nIf the element should be validated by more than one validator then separate names with\nspace. See docs for `ValidatorMixin` for description of how to define a\nvalidator.",
+          "type": "string"
+        },
+        {
+          "name": "validationStates",
+          "description": "After calling `validate()` this will be populated by latest result of the test for each\nvalidator. Result item will contain following properties:\n\n- validator {String} Name of the validator\n- valid {Boolean} Result of the test\n- message {String} Error message, populated only if `valid` equal `false`\n\nThis property is `undefined` if `validator` is not set.",
+          "type": "ValidationResult[]"
+        },
+        {
+          "name": "invalid",
+          "attribute": "invalid",
+          "description": "True if the last call to `validate` is invalid.",
+          "type": "boolean"
+        },
+        {
+          "name": "disabled",
+          "attribute": "disabled",
+          "description": "When set the control is rendered as disabled form control.",
+          "type": "boolean"
+        },
+        {
+          "name": "focused",
+          "attribute": "focused",
+          "description": "If true the element currently has focus.",
+          "type": "boolean"
+        }
+      ],
+      "events": [
+        {
+          "name": "validationstates-changed"
+        },
+        {
+          "name": "hasvalidationmessage-changed"
+        },
+        {
+          "name": "opened-changed"
+        },
+        {
+          "name": "focusedchange",
+          "description": "When the `focused` property has changed"
+        },
+        {
+          "name": "disabledchange",
+          "description": "When the `disabled` property has changed"
+        }
+      ]
+    }
+  ]
+}
