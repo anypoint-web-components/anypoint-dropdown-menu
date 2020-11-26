@@ -374,3 +374,19 @@
 * APIC-475 relate label with dropdown [5fcd2f2](https://github.com/anypoint-web-components/anypoint-dropdown-menu/commit/5fcd2f2810111a4902ee123fd76ef4b6000386e7) by Carolina Wright
 
 
+<a name="0.1.20"></a>
+## [0.1.20](https://github.com/anypoint-web-components/anypoint-dropdown-menu/compare/0.1.18...0.1.20) (2020-11-26)
+
+### Update
+
+* [ci skip] automated merge master->stage. syncing main branches [33845a3](https://github.com/anypoint-web-components/anypoint-dropdown-menu/commit/33845a30ca594eb4456e73cea34ff15baaafc53b) by Ci agent
+* updating types [06192fa](https://github.com/anypoint-web-components/anypoint-dropdown-menu/commit/06192fa0a0d78d40eee138069b48f1fa88273bc4) by Pawel Psztyc
+* updgrading test runner [627b444](https://github.com/anypoint-web-components/anypoint-dropdown-menu/commit/627b444f212dbac5f27cfadf12340ebea3259b4c) by Pawel Psztyc
+* [ci skip] automated merge master->stage. syncing main branches [a8df7f1](https://github.com/anypoint-web-components/anypoint-dropdown-menu/commit/a8df7f172abf63cdeb3557f9739d02d50bc4cc77) by Ci agent
+
+
+### Documentation
+
+* adding fitPositionTarget to types [4dee947](https://github.com/anypoint-web-components/anypoint-dropdown-menu/commit/4dee9472875c791da159be9dd58edfe98c845a95) by Pawel Psztyc
+
+
