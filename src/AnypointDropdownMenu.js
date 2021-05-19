@@ -21,9 +21,7 @@ import DropdownStyles from './Styles.js';
  *
  * See README.md file for detailed documentation.
  */
-export class AnypointDropdownMenu extends ValidatableMixin(
-  ControlStateMixin(LitElement)
-) {
+export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(LitElement)) {
   get styles() {
     return DropdownStyles;
   }
@@ -758,6 +756,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(
       // @ts-ignore
         selectedItem.label ||
         selectedItem.getAttribute('label') ||
+        selectedItem.getAttribute('data-label') ||
         selectedItem.textContent.trim();
     }
     this.value = value;

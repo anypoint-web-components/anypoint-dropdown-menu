@@ -1,7 +1,3 @@
-[![Published on NPM](https://img.shields.io/npm/v/@anypoint-web-components/anypoint-dropdown-menu.svg)](https://www.npmjs.com/package/@anypoint-web-components/anypoint-dropdown-menu)
-
-[![Build Status](https://travis-ci.com/anypoint-web-components/anypoint-dropdown-menu.svg)](https://travis-ci.com/anypoint-web-components/anypoint-dropdown-menu)
-
 # anypoint-dropdown-menu
 
 This component is based on Material Design menu and adjusted for Anypoint platform components.
@@ -14,9 +10,10 @@ They can be used only when a single menu item can be chosen at a time.
 ## Styling options
 
 The element has three built-in themes:
--   Material Design - Filled
--   Material Design - Outlined
--   Anypoint Design - Compatibility
+
+- Material Design - Filled
+- Material Design - Outlined
+- Anypoint Design - Compatibility
 
 By default the input renders `filled` dropdown list.
 
@@ -32,11 +29,13 @@ Anypoint ready styles are rendered when `compatibility` property is set.
 
 OSS application should not use Anypoint based styling as it's protected by MuleSoft copyrights. This property is reserved for OSS applications embedded in the Anypoint platform.
 
+[![Published on NPM](https://img.shields.io/npm/v/@anypoint-web-components/anypoint-dropdown-menu.svg)](https://www.npmjs.com/package/@anypoint-web-components/anypoint-dropdown-menu)
+
 ## Usage
 
 ### Installation
 
-```
+```sh
 npm install --save @anypoint-web-components/anypoint-dropdown
 ```
 
@@ -46,13 +45,15 @@ npm install --save @anypoint-web-components/anypoint-dropdown
 <html>
   <head>
     <script type="module">
-      import '@anypoint-web-components/anypoint-dropdown/anypoint-dropdown.js';
-      import '@anypoint-web-components/anypoint-listbox/anypoint-listbox.js';
-      import '@anypoint-web-components/anypoint-item/anypoint-item.js';
+      import "@anypoint-web-components/anypoint-dropdown/anypoint-dropdown.js";
+      import "@anypoint-web-components/anypoint-listbox/anypoint-listbox.js";
+      import "@anypoint-web-components/anypoint-item/anypoint-item.js";
     </script>
   </head>
   <body>
-    <anypoint-dropdown-menu aria-label="Select dinosaur from the list of available options">
+    <anypoint-dropdown-menu
+      aria-label="Select dinosaur from the list of available options"
+    >
       <label slot="label">Selected dinosaur</label>
       <anypoint-listbox slot="dropdown-content" tabindex="-1">
         <anypoint-item>item 1</anypoint-item>
@@ -72,16 +73,18 @@ It is possible to use different element than `anypoint-listbox`. The replacement
 
 When the user selects one of the options in the dropdown menu the list is closed and the rendered label is one of the following (in order):
 
--   `label` property of the selected item
--   `label` attribute if the selected item
--   `innerText` of the selected item
+- `label` property of the selected item
+- `label` or `data-label` attribute io the selected item
+- `innerText` of the selected item
 
 The same value is set as `value` property.
 
 The selection can be controlled by setting `selected` attribute/property on the `anypoint-listbox` or the element implementing `AnypointMenuMixin`.
 
 ```html
-<anypoint-dropdown-menu aria-label="Select dinosaur from the list of available options">
+<anypoint-dropdown-menu
+  aria-label="Select dinosaur from the list of available options"
+>
   <label slot="label">Selected dinosaur</label>
   <anypoint-listbox slot="dropdown-content" tabindex="-1" selected="0">
     <anypoint-item label="My item 1">item 1</anypoint-item>
@@ -122,7 +125,11 @@ Do not try to put too detailed information. The user should be able to scan the 
 Error message should help the user recover from the error state. Use clear message with simple instructions of how to fix the problem, for example `Only letters are allowed`.
 
 ```html
-<anypoint-dropdown-menu invalidmessage="This value is required" invalid required>
+<anypoint-dropdown-menu
+  invalidmessage="This value is required"
+  invalid
+  required
+>
   <label slot="label">Select a dinosaur</label>
   <anypoint-listbox slot="dropdown-content" tabindex="-1">
     <anypoint-item>item 1</anypoint-item>
@@ -161,7 +168,7 @@ The `autoValidate` option allows to automatically call validate function when va
 
 ## Accessibility
 
-The element works perfectly with `anypoint-listbox` which together creates an accessible list of options. The listbox can be replaced by any other element  that support similar functionality but make sure it has an appropriate aria support.
+The element works perfectly with `anypoint-listbox` which together creates an accessible list of options. The listbox can be replaced by any other element that support similar functionality but make sure it has an appropriate aria support.
 
 ## Development
 

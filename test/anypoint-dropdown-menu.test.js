@@ -1,13 +1,18 @@
 import { fixture, assert, nextFrame, aTimeout } from '@open-wc/testing';
 import * as MockInteractions from '@polymer/iron-test-helpers/mock-interactions.js';
 import '@anypoint-web-components/anypoint-listbox/anypoint-listbox.js';
-import * as sinon from 'sinon/pkg/sinon-esm.js';
+import sinon from 'sinon';
 import '../anypoint-dropdown-menu.js';
 
 const hasFormAssociatedElements =
   'attachInternals' in document.createElement('span');
 
+/** @typedef {import('../').AnypointDropdownMenu} AnypointDropdownMenu */
+
 describe('<anypoint-dropdown-menu>', () => {
+  /**
+   * @returns {Promise<AnypointDropdownMenu>}
+   */
   async function basicFixture() {
     return fixture(`<anypoint-dropdown-menu aria-label="Test">
       <label slot="label">Dinosaur</label>
@@ -20,6 +25,9 @@ describe('<anypoint-dropdown-menu>', () => {
     `);
   }
 
+  /**
+   * @returns {Promise<AnypointDropdownMenu>}
+   */
   async function selectedFixture() {
     return fixture(`<anypoint-dropdown-menu aria-label="Test">
       <label slot="label">Selected dinosaur</label>
@@ -32,6 +40,9 @@ describe('<anypoint-dropdown-menu>', () => {
     `);
   }
 
+  /**
+   * @returns {Promise<AnypointDropdownMenu>}
+   */
   async function labeledFixture() {
     return fixture(`<anypoint-dropdown-menu aria-label="Test">
       <label slot="label">Selected dinosaur</label>
@@ -39,11 +50,15 @@ describe('<anypoint-dropdown-menu>', () => {
         <div label="item1-label">item 1</div>
         <div label="item2-label">item 2</div>
         <div label="item3-label">item 3</div>
+        <div data-label="item4-label">item 5</div>
       </div>
     </anypoint-listbox>
     `);
   }
 
+  /**
+   * @returns {Promise<AnypointDropdownMenu>}
+   */
   async function requiredFixture() {
     return fixture(`<anypoint-dropdown-menu aria-label="Test" required>
       <label slot="label">Selected dinosaur</label>
@@ -56,8 +71,11 @@ describe('<anypoint-dropdown-menu>', () => {
     `);
   }
 
+  /**
+   * @returns {Promise<AnypointDropdownMenu>}
+   */
   async function autoValidateFixture() {
-    return fixture(`<anypoint-dropdown-menu aria-label="Test" required autovalidate>
+    return fixture(`<anypoint-dropdown-menu aria-label="Test" required autoValidate>
       <label slot="label">Selected dinosaur</label>
       <anypoint-listbox slot="dropdown-content" tabindex="-1">
         <div label="item1-label">item 1</div>
@@ -68,12 +86,18 @@ describe('<anypoint-dropdown-menu>', () => {
     `);
   }
 
+  /**
+   * @returns {Promise<AnypointDropdownMenu>}
+   */
   async function invalidMessageFixture() {
     return fixture(
-      `<anypoint-dropdown-menu invalidmessage="test"></anypoint-dropdown-menu>`
+      `<anypoint-dropdown-menu invalidMessage="test"></anypoint-dropdown-menu>`
     );
   }
 
+  /**
+   * @returns {Promise<AnypointDropdownMenu>}
+   */
   async function disabledFixture() {
     return fixture(`<anypoint-dropdown-menu disabled>
       <label slot="label">Selected dinosaur</label>
@@ -86,10 +110,13 @@ describe('<anypoint-dropdown-menu>', () => {
     `);
   }
 
-  async function formFixtrue() {
+  /**
+   * @returns {Promise<AnypointDropdownMenu>}
+   */
+  async function formFixture() {
     return fixture(`
     <form>
-      <fieldset name="form-fiels">
+      <fieldset name="form-fields">
         <anypoint-dropdown-menu name="formItem">
           <label slot="label">Selected dinosaur</label>
           <anypoint-listbox slot="dropdown-content" tabindex="-1" selected="1">
@@ -104,6 +131,9 @@ describe('<anypoint-dropdown-menu>', () => {
     </form>`);
   }
 
+  /**
+   * @returns {Promise<AnypointDropdownMenu>}
+   */
   async function unfitFixture() {
     return fixture(`<anypoint-dropdown-menu fitPositionTarget>
       <label slot="label">Selected dinosaur</label>
@@ -178,7 +208,7 @@ describe('<anypoint-dropdown-menu>', () => {
       assert.isTrue(elementIsVisible(node));
     });
 
-    it('hiddes the content on outside click', async () => {
+    it('hides the content on outside click', async () => {
       const element = await basicFixture();
       await untilOpened(element);
       MockInteractions.tap(document.body);
@@ -293,8 +323,17 @@ describe('<anypoint-dropdown-menu>', () => {
       assert.equal(element.value, 'item2-label');
     });
 
+    it('sets the value from the data-label attribute', async () => {
+      const element = await labeledFixture();
+      await untilOpened(element);
+      const node = element.querySelector('div[data-label="item4-label"]');
+      MockInteractions.tap(node);
+      assert.equal(element.value, 'item4-label');
+    });
+
     it('deactivates item when list has no selection', async () => {
       const element = await selectedFixture();
+      // @ts-ignore
       element.contentElement.selected = -1;
       assert.equal(element.selectedItem, null);
     });
@@ -421,9 +460,9 @@ describe('<anypoint-dropdown-menu>', () => {
   describe('_selectedItemChanged()', () => {
     it('sets value from passed item label property', async () => {
       const element = await basicFixture();
-      element._selectedItemChanged({
-        label: 'test',
-      });
+      const item = document.createElement('div');
+      item.setAttribute('label', 'test');
+      element._selectedItemChanged(item);
       assert.equal(element.value, 'test');
     });
 
@@ -462,6 +501,7 @@ describe('<anypoint-dropdown-menu>', () => {
       const e = new CustomEvent('test', {
         cancelable: true,
       });
+      // @ts-ignore
       element.toggle(e);
       assert.isTrue(e.defaultPrevented);
     });
@@ -507,7 +547,7 @@ describe('<anypoint-dropdown-menu>', () => {
         let element;
         let form;
         beforeEach(async () => {
-          form = await formFixtrue();
+          form = await formFixture();
           element = form.querySelector('anypoint-dropdown-menu');
         });
 
@@ -529,7 +569,7 @@ describe('<anypoint-dropdown-menu>', () => {
         let element;
         let form;
         beforeEach(async () => {
-          form = await formFixtrue();
+          form = await formFixture();
           element = form.querySelector('anypoint-dropdown-menu');
         });
 
@@ -544,7 +584,7 @@ describe('<anypoint-dropdown-menu>', () => {
         let element;
         let form;
         beforeEach(async () => {
-          form = await formFixtrue();
+          form = await formFixture();
           element = form.querySelector('anypoint-dropdown-menu');
         });
 
@@ -558,7 +598,7 @@ describe('<anypoint-dropdown-menu>', () => {
         let element;
         let form;
         beforeEach(async () => {
-          form = await formFixtrue();
+          form = await formFixture();
           element = form.querySelector('anypoint-dropdown-menu');
         });
 
@@ -671,7 +711,7 @@ describe('<anypoint-dropdown-menu>', () => {
         let form;
         let fieldset;
         beforeEach(async () => {
-          form = await formFixtrue();
+          form = await formFixture();
           element = form.querySelector('anypoint-dropdown-menu');
           fieldset = form.querySelector('fieldset');
         });

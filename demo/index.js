@@ -3,6 +3,7 @@ import { ArcDemoPage } from '@advanced-rest-client/arc-demo-helper/ArcDemoPage.j
 import '@advanced-rest-client/arc-demo-helper/arc-demo-helper.js';
 import '@polymer/iron-image/iron-image.js';
 import '@anypoint-web-components/anypoint-item/anypoint-item.js';
+import '@anypoint-web-components/anypoint-item/anypoint-item-body.js';
 import '@anypoint-web-components/anypoint-listbox/anypoint-listbox.js';
 import '@advanced-rest-client/arc-demo-helper/arc-interactive-demo.js';
 import '@anypoint-web-components/anypoint-checkbox/anypoint-checkbox.js';
@@ -88,7 +89,7 @@ class ComponentDemo extends ArcDemoPage {
   _formSubmit(e) {
     e.preventDefault();
     const result = {};
-    const elements = e.target.elements;
+    const { elements } = e.target;
     let ignore = [];
     for (let i = 0; i < elements.length; i++) {
       const node = elements[i];
@@ -96,19 +97,12 @@ class ComponentDemo extends ArcDemoPage {
         ignore = [...ignore, ...elements[0].elements];
       }
       if (!node.name || node.disabled || ignore.indexOf(node) !== -1) {
+        // eslint-disable-next-line no-continue
         continue;
       }
       result[node.name] = node.value;
     }
     this.formData = JSON.stringify(result, null, 2);
-  }
-
-
-  _headerControlsTemplate() {
-    return html`${super._headerControlsTemplate()}
-    <div class="settings-action-item">
-      <paper-toggle-button checked @checked-changed="${this._stylesHandler}">Toggle styles</paper-toggle-button>
-    </div>`;
   }
 
   _mainDemoStateHandler(e) {
@@ -253,7 +247,7 @@ class ComponentDemo extends ArcDemoPage {
     return html`
       <section class="documentation-section">
         <h2>Usage</h2>
-        <p>Anypoint dropdown menu comes with 3 predefied styles:</p>
+        <p>Anypoint dropdown menu comes with 3 predefined styles:</p>
         <ul>
           <li><b>Filled</b> (normal) - For low emphasis inputs</li>
           <li><b>Outlined</b> - For high emphasis inputs</li>
@@ -267,7 +261,7 @@ class ComponentDemo extends ArcDemoPage {
           <a href="https://material.io/design/components/menus.html#exposed-dropdown-menu"
             >Exposed dropdown menu</a
           >
-          documentation in Material Defign documentation for principles and
+          documentation in Material Design documentation for principles and
           anatomy of dropdown menus.
         </p>
 
@@ -389,7 +383,7 @@ class ComponentDemo extends ArcDemoPage {
         </details>
 
         <h4>Dynamic align</h4>
-        <anypoint-dropdown-menu dynamicalign>
+        <anypoint-dropdown-menu dynamicAlign>
           <label slot="label">Select a dinosaur</label>
           <anypoint-listbox slot="dropdown-content" tabindex="-1">
           ${this.minItems.map((item) => html`<anypoint-item>${item}</anypoint-item>`)}
@@ -400,7 +394,7 @@ class ComponentDemo extends ArcDemoPage {
             <summary>Code example</summary>
             <code>
               <pre>
-              &lt;anypoint-dropdown-menu dynamicalign&gt;
+              &lt;anypoint-dropdown-menu dynamicAlign&gt;
                 &lt;label slot="label"&gt;Select a dinosaur&lt;/label&gt;
                 &lt;anypoint-listbox slot="dropdown-content"&gt;
                   &lt;anypoint-item label="Allosaurus"&gt;Allosaurus&lt;/anypoint-item&gt;
@@ -637,6 +631,36 @@ class ComponentDemo extends ArcDemoPage {
     </section>`;
   }
 
+  _valuesTemplate() {
+    return html`<section class="documentation-section">
+      <h2>Value setting</h2>
+      <p>
+        You can set the value of the dropdown menu by setting the following on the list items:
+      </p>
+
+      <ul>
+        <li>The <code>label</code> or <code>data-label</code> attribute</li>
+        <li>The <code>label</code> property</li>
+        <li>The text content of the selected item</li>
+      </ul>
+
+      <anypoint-dropdown-menu infoMessage="Will be added to your order.">
+        <label slot="label">Select a dinosaur</label>
+        <anypoint-listbox slot="dropdown-content" tabindex="-1">
+          <anypoint-item label="Value 1">Value 1 from the label</anypoint-item>
+          <anypoint-item data-label="Value 2">Value 2 from the data-label</anypoint-item>
+          <anypoint-item>The inner text</anypoint-item>
+          <anypoint-item data-label="from data-label">
+            <anypoint-item-body twoLine>
+              <div>First line</div>
+              <div data-secondary>Second line</div>
+            </anypoint-item-body>
+          </anypoint-item>
+        </anypoint-listbox>
+      </anypoint-dropdown-menu>
+    </section>`;
+  }
+
   contentTemplate() {
     return html`
       <h2>Anypoint dropdown menu</h2>
@@ -645,9 +669,9 @@ class ComponentDemo extends ArcDemoPage {
       ${this._usageTemplate()}
       ${this._formsTemplate()}
       ${this._assistiveTemplate()}
+      ${this._valuesTemplate()}
     `;
   }
 }
 const instance = new ComponentDemo();
 instance.render();
-window.demo = instance;
