@@ -344,7 +344,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     this._value = value;
     this.requestUpdate('value', old);
     /* istanbul ignore else */
-    if (this._internals) {
+    if (this._internals && this._internals.setFormValue){
       this._internals.setFormValue(value);
     }
   }
@@ -620,7 +620,9 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       // @ts-ignore
       node.selected = undefined;
     }
-    this._internals.setFormValue('');
+    if (this._internals && this._internals.setFormValue){
+      this._internals.setFormValue('');
+    }
   }
 
   /**
@@ -630,7 +632,9 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
    * @param {String} state Restored value
    */
   formStateRestoreCallback(state) {
-    this._internals.setFormValue(state);
+    if (this._internals && this._internals.setFormValue) {
+      this._internals.setFormValue(state);
+    }
   }
 
   firstUpdated() {
@@ -808,7 +812,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
   }
 
   _updateNativeValidationState() {
-    if (!this._internals) {
+    if (!this._internals || !this._internals.setValidity) {
       return;
     }
     if (this.invalid) {
@@ -864,7 +868,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
   checkValidity() {
     return (
       this._getValidity() &&
-      ((this._internals && this._internals.checkValidity()) || true)
+      ((this._internals && this._internals.checkValidity && this._internals.checkValidity()) || true)
     );
   }
 
