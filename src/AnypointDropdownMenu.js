@@ -115,22 +115,6 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
       </div> `;
   }
 
-  /**
-   * For form-associated custom elements. Marks this custom element
-   * as form enabled element.
-   */
-  static get formAssociated() {
-    return true;
-  }
-
-  /**
-   * When form-associated custom elements are supported in the browser it
-   * returns `<form>` element associated with this control.
-   */
-  get form() {
-    return (this._internals && this._internals.form) || null;
-  }
-
   get validationStates() {
     return this._validationStates;
   }
@@ -343,10 +327,6 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     }
     this._value = value;
     this.requestUpdate('value', old);
-    /* istanbul ignore else */
-    if (this._internals && this._internals.setFormValue){
-      this._internals.setFormValue(value);
-    }
   }
 
   get disabled() {
@@ -559,12 +539,6 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     this._clickHandler = this._clickHandler.bind(this);
     this._onKeydown = this._onKeydown.bind(this);
     this._focusHandler = this._focusHandler.bind(this);
-    /* istanbul ignore else */
-    // @ts-ignore
-    if (this.attachInternals) {
-      // @ts-ignore
-      this._internals = this.attachInternals();
-    }
   }
 
   connectedCallback() {
@@ -619,21 +593,6 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     if (node) {
       // @ts-ignore
       node.selected = undefined;
-    }
-    if (this._internals && this._internals.setFormValue){
-      this._internals.setFormValue('');
-    }
-  }
-
-  /**
-   * When form-associated custom elements are supported in the browser it
-   * is called when the form state has been restored
-   *
-   * @param {String} state Restored value
-   */
-  formStateRestoreCallback(state) {
-    if (this._internals && this._internals.setFormValue) {
-      this._internals.setFormValue(state);
     }
   }
 
@@ -806,25 +765,8 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
     this.opened = false;
     if (this.autoValidate) {
       this.validate(this.value);
-      this._updateNativeValidationState();
     }
     this.focus();
-  }
-
-  _updateNativeValidationState() {
-    if (!this._internals || !this._internals.setValidity) {
-      return;
-    }
-    if (this.invalid) {
-      this._internals.setValidity(
-        {
-          customError: true,
-        },
-        'Please select a value.'
-      );
-    } else {
-      this._internals.setValidity({});
-    }
   }
 
   _dropdownOpened() {
@@ -866,10 +808,7 @@ export class AnypointDropdownMenu extends ValidatableMixin(ControlStateMixin(Lit
   }
 
   checkValidity() {
-    return (
-      this._getValidity() &&
-      ((this._internals && this._internals.checkValidity && this._internals.checkValidity()) || true)
-    );
+    return this._getValidity();
   }
 
   /**

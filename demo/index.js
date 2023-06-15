@@ -11,8 +11,6 @@ import '@anypoint-web-components/anypoint-radio-button/anypoint-radio-button.js'
 import '@anypoint-web-components/anypoint-radio-button/anypoint-radio-group.js';
 import '../anypoint-dropdown-menu.js';
 
-const hasFormAssociatedElements = 'attachInternals' in document.createElement('span');
-
 class ComponentDemo extends ArcDemoPage {
   constructor() {
     super();
@@ -521,9 +519,6 @@ class ComponentDemo extends ArcDemoPage {
           Learn more: <a href="https://www.chromestatus.com/feature/4708990554472448" target="_blank">Chrome status</a>
         </p>
 
-        ${hasFormAssociatedElements ?
-          html`<p>Your browser support this API</p>` :
-          html`<p>Your browser <b>does not</b> support this API</p>`}
         <arc-interactive-demo
           states='["Native form"]'
           ?dark="${darkThemeActive}"
