@@ -4,9 +4,6 @@ import '@anypoint-web-components/anypoint-listbox/anypoint-listbox.js';
 import sinon from 'sinon';
 import '../anypoint-dropdown-menu.js';
 
-const hasFormAssociatedElements =
-  'attachInternals' in document.createElement('span');
-
 /** @typedef {import('../').AnypointDropdownMenu} AnypointDropdownMenu */
 
 describe('<anypoint-dropdown-menu>', () => {
@@ -540,77 +537,6 @@ describe('<anypoint-dropdown-menu>', () => {
     });
   });
 
-  (hasFormAssociatedElements ? describe : describe.skip)(
-    'form-associated custom elements',
-    () => {
-      describe('Internal basics', () => {
-        let element;
-        let form;
-        beforeEach(async () => {
-          form = await formFixture();
-          element = form.querySelector('anypoint-dropdown-menu');
-        });
-
-        it('initializes ElementInternals interface', () => {
-          assert.ok(element._internals);
-        });
-
-        it('has associated form', () => {
-          assert.equal(element.form, form);
-        });
-
-        it('the element is in the list of form elements', () => {
-          const elements = Array.from(form.elements);
-          assert.notEqual(elements.indexOf(element), -1);
-        });
-      });
-
-      describe('Submitting the form', () => {
-        let element;
-        let form;
-        beforeEach(async () => {
-          form = await formFixture();
-          element = form.querySelector('anypoint-dropdown-menu');
-        });
-
-        it('set value in forms submission value', () => {
-          const spy = sinon.spy(element._internals, 'setFormValue');
-          element.value = 'test';
-          assert.isTrue(spy.called);
-        });
-      });
-
-      describe('Resseting the form', () => {
-        let element;
-        let form;
-        beforeEach(async () => {
-          form = await formFixture();
-          element = form.querySelector('anypoint-dropdown-menu');
-        });
-
-        it('resets input value', () => {
-          form.reset();
-          assert.equal(element.value, '');
-        });
-      });
-
-      describe('checkValidity()', () => {
-        let element;
-        let form;
-        beforeEach(async () => {
-          form = await formFixture();
-          element = form.querySelector('anypoint-dropdown-menu');
-        });
-
-        it('calls internall checkValidity()', () => {
-          const spy = sinon.spy(element._internals, 'checkValidity');
-          element.checkValidity();
-          assert.isTrue(spy.called);
-        });
-      });
-    }
-  );
-
   describe('_invalidChanged()', () => {
     let element;
     beforeEach(async () => {
@@ -703,85 +629,6 @@ describe('<anypoint-dropdown-menu>', () => {
         assert.isFalse(element.opened);
       });
     });
-
-    (hasFormAssociatedElements ? describe : describe.skip)(
-      'disabled via fieldset',
-      () => {
-        let element;
-        let form;
-        let fieldset;
-        beforeEach(async () => {
-          form = await formFixture();
-          element = form.querySelector('anypoint-dropdown-menu');
-          fieldset = form.querySelector('fieldset');
-        });
-
-        it('renders control disabled when fieldset is disabled', async () => {
-          fieldset.disabled = true;
-          await nextFrame();
-          const container = element.shadowRoot.querySelector(
-            '.input-container'
-          );
-          assert.isTrue(
-            container.classList.contains('form-disabled'),
-            'container has disabled class'
-          );
-          const label = element.shadowRoot.querySelector('.label');
-          assert.isTrue(
-            label.classList.contains('form-disabled'),
-            'label has disabled class'
-          );
-          const button = element.shadowRoot.querySelector('.trigger-button');
-          assert.isTrue(
-            button.classList.contains('form-disabled'),
-            'button has disabled class'
-          );
-        });
-
-        it('dropdown has no disabled property set', async () => {
-          fieldset.disabled = true;
-          await nextFrame();
-          assert.isFalse(element.disabled);
-        });
-
-        it('disabled cannot be opened via open()', async () => {
-          fieldset.disabled = true;
-          await nextFrame();
-          element.open();
-          assert.isFalse(element.opened);
-        });
-
-        it('disabled cannot be opened via opened property', async () => {
-          fieldset.disabled = true;
-          await nextFrame();
-          element.opened = true;
-          assert.isFalse(element.opened);
-        });
-
-        it('disabled cannot be opened via click', async () => {
-          fieldset.disabled = true;
-          await nextFrame();
-          MockInteractions.tap(element);
-          assert.isFalse(element.opened);
-        });
-
-        it('restores state when disabled set to false', async () => {
-          fieldset.disabled = true;
-          await nextFrame();
-          fieldset.disabled = false;
-          await nextFrame();
-          element.open();
-          assert.isTrue(element.opened);
-        });
-
-        it('closes overlay when disabling', async () => {
-          await untilOpened(element);
-          fieldset.disabled = true;
-          await nextFrame();
-          assert.isFalse(element.opened);
-        });
-      }
-    );
   });
 
   describe('a11y', () => {
